@@ -63,6 +63,8 @@ class Caves extends Phaser.Scene {
 
         this.load.spritesheet("edgeLeft", "../sprites/mapSprite/edgeLeft.png", { frameWidth: 128, frameHeight: 512 });
         this.load.spritesheet("edgeRight", "../sprites/mapSprite/edgeRight.png", { frameWidth: 128, frameHeight: 512 });
+        this.load.image("shadow", "../sprites/mapSprite/shadow.png")
+        
         
         // - - - add tilset - - -
         this.load.spritesheet("Tiles", "../sprites/tileSet/proceduralGen.png", { frameWidth: 16, frameHeight: 16 });
@@ -617,11 +619,16 @@ class Caves extends Phaser.Scene {
         // > camera 
         this.camCNTR = this.physics.add.sprite(8, 552).setSize(16, 16)
         this.edgeLeft = this.physics.add.sprite(-40, 552,"edgeLeft").setPipeline('Light2D').setSize(64,512).setImmovable(true);
-        this.edgeRight = this.physics.add.sprite(3208, 552,"edgeRight").setPipeline('Light2D').setSize(32,512).setImmovable(true);
+
+        this.edgeRight = this.physics.add.sprite(3208, 552,"edgeRight").setPipeline('Light2D').setSize(32,512).setImmovable(true).setDepth(5);
         this.edgeRightA = this.physics.add.sprite(3208+16, 552-64,).setPipeline('Light2D').setSize(64,254).setImmovable(true);
+        this.edgeRightB = this.physics.add.sprite(3208+32, 824).setPipeline('Light2D').setSize(96,254).setImmovable(true);
+        this.backToDrill = 
+        this.beginAGAIN = this.physics.add.sprite(3232, 656,"shadow").setPipeline('Light2D').setSize(48,96).setImmovable(true).setDepth(5);
+
         this.plateforme.add(this.physics.add.sprite(0, 576).setSize(48, 16)) // spawn plateforme
-        this.plateforme.add(this.physics.add.sprite(3168, 544).setSize(48, 16)) // spawn plateforme
-        
+        this.plateforme.add(this.physics.add.sprite(3168, 544).setSize(48, 16)) // end plateforme
+        this.chain.add(this.physics.add.sprite(3168, 662).setSize(16, 256))
 
         // ===== CAMERA =====
         this.cameras.main.setZoom(2);
@@ -649,6 +656,7 @@ class Caves extends Phaser.Scene {
 
         // ===== LIGHT ====
         this.startLight = this.lights.addLight(-20, 544, 75).setIntensity(2).setColor(0xfff8cf);
+        this.endLight = this.lights.addLight(3228, 502,140).setIntensity(2).setColor(0xfff8cf);
 
         this.lumiere1 = this.lights.addLight(this.player1.body.x, this.player1.body.y, 95).setIntensity(1).setColor(0xfff8cf);
 
@@ -658,7 +666,8 @@ class Caves extends Phaser.Scene {
 
         this.physics.add.collider(this.players, this.ground);
         this.physics.add.collider(this.players, this.edgeLeft);
-        this.physics.add.collider(this.players, this.edgeRight);
+        this.physics.add.collider(this.players, this.edgeRightA);
+        this.physics.add.collider(this.players, this.edgeRightB);
         this.physics.add.overlap(this.player1, this.ore1, this.pickUpA1, null, this);
         this.physics.add.overlap(this.player1, this.ore2, this.pickUpA2, null, this);
         this.physics.add.overlap(this.player1, this.ore3, this.pickUpA3, null, this);
@@ -968,7 +977,7 @@ class Caves extends Phaser.Scene {
                 //anim drill bas
                 this.dridrill1.anims.play("dridrillD1", true).setSize(3, 8)
                 drill.body.x = player.body.x + 6
-                drill.body.y = player.body.y + 6
+                drill.body.y = player.body.y + 8
             }
             else {
                 if (lr) {
