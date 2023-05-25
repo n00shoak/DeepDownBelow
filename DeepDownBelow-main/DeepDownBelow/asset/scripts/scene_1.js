@@ -840,7 +840,13 @@ class lobby extends Phaser.Scene {
                 delay: 2000, callback: () => {
                     console.log('0')
                     this.ready3 = false
-                    this.scene.start("drill")
+                    this.scene.start("drill", {
+                        playerAMOUNT: this.playerAMOUNT,
+                        player1READY: this.player1READY,
+                        player2READY: this.player2READY,
+                        player3READY: this.player3READY,
+                        player4READY: this.player4READY,
+                    });
                 },
             })
 

@@ -19,7 +19,7 @@ var config = {
     },
 
     // Ajout des differentes scenes dans le jeu
-    scene: [Caves]
+    scene: [lobby,Drill,Caves]
 };
 
 var game = new Phaser.Game(config);

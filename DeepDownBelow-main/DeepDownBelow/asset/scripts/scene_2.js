@@ -4,9 +4,13 @@ class Drill extends Phaser.Scene {
         super("drill");
     }
 
-    init() {
-        this.playerAMOUNT = 1// nombre de joueur
-        // liste des joeurs
+    init(data) {
+        this.playerAMOUNT = data.playerAMOUNT
+        this.player1READY = data.player1READY
+        this.player2READY = data.player2READY
+        this.player3READY = data.player3READY
+        this.player4READY = data.player4READY
+
         // minerais possédé par les joueurs
         // pv restant
         // toute les upgrade faites
@@ -343,14 +347,37 @@ class Drill extends Phaser.Scene {
         this.Drill_bore = this.physics.add.sprite(408, 504).setSize(100, 150);
 
         // ===== players ======
-        {
+        if (this.player1READY) {
             this.player1 = this.physics.add.sprite(280, 500, 'persoA');
             this.player1.body.setSize(20, 20);
             this.players.add(this.player1)
             this.chain_COL1 = this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
             this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme);
             this.persoA_state = 1
-            this.player1READY = true
+        }
+        if (this.player2READY) {
+            this.player2 = this.physics.add.sprite(280, 500, 'persoB');
+            this.player2.body.setSize(20, 20);
+            this.players.add(this.player2)
+            this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
+            this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme);
+            this.persoB_state = 1
+        }
+        if (this.player3READY) {
+            this.player3 = this.physics.add.sprite(280, 500, 'persoC');
+            this.player3.body.setSize(20, 20);
+            this.players.add(this.player3)
+            this.chain_COL3 = this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
+            this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme);
+            this.persoC_state = 1
+        }
+        if (this.player4READY) {
+            this.player4 = this.physics.add.sprite(280, 500, 'persoD');
+            this.player4.body.setSize(20, 20);
+            this.players.add(this.player4)
+            this.chain_COL4 = this.physics.add.overlap(this.player4, this.chain, this.chainRide, null, this);
+            this.plateformeCOL4 = this.physics.add.collider(this.player4, this.plateforme);
+            this.persoD_state = 1
         }
 
         // ===== COllIDER =====
@@ -360,7 +387,6 @@ class Drill extends Phaser.Scene {
         this.Layer_3.setCollisionByProperty({ estSolide: true });
         this.Layer_2.setCollisionByProperty({ estSolide: true });
 
-        this.physics.add.collider(this.players, this.layer_3);
         this.craftA = this.physics.add.overlap(this.players, this.Upgrade_Drill, this.upgradeA, null, this)
         this.fuelA = this.physics.add.overlap(this.players, this.Drill_bore, this.refuel1, null, this)
         this.OUT = this.physics.add.overlap(this.players, this.doorOut, this.Out3, null, this)
@@ -613,7 +639,7 @@ class Drill extends Phaser.Scene {
             if (this.__debug == true || this.__cam == true) { console.log(" ", "camm coordinate x:", this.camCNTR.body.x, "(", this.posA_x, "+", this.posB_x, "+", this.posC_x, ") / ", this.playerAMOUNT, "\n", "camm coordinate y:", this.camCNTR.body.y, "(", this.posA_y, "+", this.posB_y, "+", this.posC_y, ") / ", this.playerAMOUNT) }
         }
 
-        if (this.physics.overlap(this.players, this.ui)) {
+        /*if (this.physics.overlap(this.players, this.ui)) {
 
             if (!this.ready2) { this.ready1 = true }
             if (this.ready3) { this.ready1 = false }
@@ -621,10 +647,10 @@ class Drill extends Phaser.Scene {
 
             if (this.ready1 == true) {
                 console.log("3", this.ready1)
-                this.txtA.setFrame(0)
-                this.txtB.setFrame(0)
-                this.txtA.setVisible(true)
-                this.txtB.setVisible(true)
+                //this.txtA.setFrame(0)
+                //this.txtB.setFrame(0)
+                //this.txtA.setVisible(true)
+                //this.txtB.setVisible(true)
 
                 this.time.addEvent({
                     delay: 2000, callback: () => {
@@ -633,15 +659,13 @@ class Drill extends Phaser.Scene {
                     },
                 })
             }
-
-
         }
 
         if (this.physics.overlap(this.players, this.ui) && this.ready2 == true) {
             this.ready1 = false
-            this.txtA.setFrame(1)
-            this.txtB.setFrame(1)
-            console.log('2', this.ready2)
+            //this.txtA.setFrame(1)
+            //this.txtB.setFrame(1)
+            //console.log('2', this.ready2)
 
             this.time.addEvent({
                 delay: 2000, callback: () => {
@@ -659,12 +683,12 @@ class Drill extends Phaser.Scene {
             this.ready1 = false
             this.ready2 = false
 
-            this.txtA.setFrame(2)
-            this.txtB.setFrame(2)
-            console.log('1')
+           //this.txtA.setFrame(2)
+           //this.txtB.setFrame(2)
+            //console.log('1')
             this.time.addEvent({
                 delay: 2000, callback: () => {
-                    console.log('0')
+                    //console.log('0')
                     this.ready3 = false
                 },
             })
@@ -674,7 +698,7 @@ class Drill extends Phaser.Scene {
             this.ready1 = false
             this.ready2 = false
             this.ready3 = false
-        }
+        }*/
 
         // ===== UI =====
         if (this.warnerA && !this.physics.overlap(this.players, this.Upgrade_Drill)) {
@@ -698,10 +722,10 @@ class Drill extends Phaser.Scene {
             });
         }
 
-        if (!this.physics.overlap(this.players, this.doorOut)){
-            this.door_0 = false;this.door_1 = false;this.door_2 = false;
+        if (!this.physics.overlap(this.players, this.doorOut)) {
+            this.door_0 = false; this.door_1 = false; this.door_2 = false;
             this.doorOut.setFrame(0)
-            console.log("CANCEL")
+
         }
 
     }
@@ -882,7 +906,7 @@ class Drill extends Phaser.Scene {
     }
 
     refuel1() {
-        console.log('PROUT')
+
         this.tweens.add({
             targets: this.drill_state,
             alpha: 1,
@@ -918,11 +942,11 @@ class Drill extends Phaser.Scene {
                 },
             })
         }
-        
+
     }
 
-    Out1(){
-        if (this.physics.overlap(this.players, this.doorOut)  && !this.door_0) {
+    Out1() {
+        if (this.physics.overlap(this.players, this.doorOut) && !this.door_0) {
             // check if ALL player are there
             this.time.addEvent({
                 delay: 1000, callback: () => {
@@ -934,7 +958,7 @@ class Drill extends Phaser.Scene {
 
     }
 
-    Out0(){
+    Out0() {
         if (this.physics.overlap(this.players, this.doorOut)) {
             // check if ALL player are there
             this.time.addEvent({
@@ -944,5 +968,9 @@ class Drill extends Phaser.Scene {
                 },
             })
         }
+    }
+
+    toCave() {
+        this.scene.start("drill")
     }
 }
