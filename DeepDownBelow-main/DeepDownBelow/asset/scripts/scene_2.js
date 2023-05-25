@@ -5,16 +5,53 @@ class Drill extends Phaser.Scene {
     }
 
     init(data) {
+        // ===== DRILL SAVE =====
         this.playerAMOUNT = data.playerAMOUNT
         this.player1READY = data.player1READY
         this.player2READY = data.player2READY
         this.player3READY = data.player3READY
         this.player4READY = data.player4READY
 
-        // minerais possédé par les joueurs
-        // pv restant
-        // toute les upgrade faites
-        //état précédent de la drill
+        this.gadgetSelected1 = data.gadgetSelected1
+        this.gadgetSelected2 = data.gadgetSelected2
+        this.gadgetSelected3 = data.gadgetSelected3
+        this.gadgetSelected4 = data.gadgetSelected4
+
+        this.Inventory1_ID = data.Inventory1_ID
+        this.Inventory2_ID = data.Inventory2_ID
+        this.Inventory3_ID = data.Inventory3_ID
+        this.Inventory4_ID = data.Inventory4_ID
+
+        this.Inventory1_Amount = data.Inventory1_Amount
+        this.Inventory2_Amount = data.Inventory2_Amount
+        this.Inventory3_Amount = data.Inventory3_Amount
+        this.Inventory4_Amount = data.Inventory4_Amount
+
+        this.afk1 = data.afk1
+        this.afk2 = data.afk2
+        this.afk3 = data.afk3
+        this.afk4 = data.afk4
+
+        this.gloomJ1 = data.gloomJ1
+        this.gloomJ2 = data.gloomJ2
+        this.gloomJ3 = data.gloomJ3
+        this.gloomJ4 = data.gloomJ4
+
+        this.hurt1 = data.hurt1
+        this.hurt2 = data.hurt2
+        this.hurt3 = data.hurt3
+        this.hurt4 = data.hurt4
+
+        this.pvJ1 = data.pvJ1
+        this.pvJ2 = data.pvJ2
+        this.pvJ3 = data.pvJ3
+        this.pvJ4 = data.pvJ4
+
+        this.drill_Speed = data.drill_Speed
+        this.drill_Yield = data.drill_Yield
+
+        this.lampLevel = data.lampLevel // 0/3
+        this.scafoldingLevel = data.scafoldingLevel // 0/3
 
     }
 
@@ -127,7 +164,7 @@ class Drill extends Phaser.Scene {
 
         // > debug
         this.__debug = false
-        this.__state = false
+        this.__state = true
         this.__cam = false
     }
 
@@ -353,6 +390,7 @@ class Drill extends Phaser.Scene {
             this.players.add(this.player1)
             this.chain_COL1 = this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
             this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme);
+            this.craftA = this.physics.add.overlap(this.player1, this.Upgrade_Drill, this.upgradeA1, null, this)
             this.persoA_state = 1
         }
         if (this.player2READY) {
@@ -361,6 +399,7 @@ class Drill extends Phaser.Scene {
             this.players.add(this.player2)
             this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
             this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme);
+            this.craftB = this.physics.add.overlap(this.player2, this.Upgrade_Drill, this.upgradeA2, null, this)
             this.persoB_state = 1
         }
         if (this.player3READY) {
@@ -369,6 +408,7 @@ class Drill extends Phaser.Scene {
             this.players.add(this.player3)
             this.chain_COL3 = this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
             this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme);
+            this.craftC = this.physics.add.overlap(this.player3, this.Upgrade_Drill, this.upgradeA3, null, this)
             this.persoC_state = 1
         }
         if (this.player4READY) {
@@ -377,6 +417,7 @@ class Drill extends Phaser.Scene {
             this.players.add(this.player4)
             this.chain_COL4 = this.physics.add.overlap(this.player4, this.chain, this.chainRide, null, this);
             this.plateformeCOL4 = this.physics.add.collider(this.player4, this.plateforme);
+            this.craftD = this.physics.add.overlap(this.player4, this.Upgrade_Drill, this.upgradeA4, null, this)
             this.persoD_state = 1
         }
 
@@ -387,7 +428,6 @@ class Drill extends Phaser.Scene {
         this.Layer_3.setCollisionByProperty({ estSolide: true });
         this.Layer_2.setCollisionByProperty({ estSolide: true });
 
-        this.craftA = this.physics.add.overlap(this.players, this.Upgrade_Drill, this.upgradeA, null, this)
         this.fuelA = this.physics.add.overlap(this.players, this.Drill_bore, this.refuel1, null, this)
         this.OUT = this.physics.add.overlap(this.players, this.doorOut, this.Out3, null, this)
     }
@@ -639,66 +679,6 @@ class Drill extends Phaser.Scene {
             if (this.__debug == true || this.__cam == true) { console.log(" ", "camm coordinate x:", this.camCNTR.body.x, "(", this.posA_x, "+", this.posB_x, "+", this.posC_x, ") / ", this.playerAMOUNT, "\n", "camm coordinate y:", this.camCNTR.body.y, "(", this.posA_y, "+", this.posB_y, "+", this.posC_y, ") / ", this.playerAMOUNT) }
         }
 
-        /*if (this.physics.overlap(this.players, this.ui)) {
-
-            if (!this.ready2) { this.ready1 = true }
-            if (this.ready3) { this.ready1 = false }
-
-
-            if (this.ready1 == true) {
-                console.log("3", this.ready1)
-                //this.txtA.setFrame(0)
-                //this.txtB.setFrame(0)
-                //this.txtA.setVisible(true)
-                //this.txtB.setVisible(true)
-
-                this.time.addEvent({
-                    delay: 2000, callback: () => {
-                        this.ready2 = true
-                        this.ready1 = false
-                    },
-                })
-            }
-        }
-
-        if (this.physics.overlap(this.players, this.ui) && this.ready2 == true) {
-            this.ready1 = false
-            //this.txtA.setFrame(1)
-            //this.txtB.setFrame(1)
-            //console.log('2', this.ready2)
-
-            this.time.addEvent({
-                delay: 2000, callback: () => {
-                    this.ready3 = true
-                },
-            })
-
-        }
-        else if (this.ready1) {
-            this.ready1 = false
-            this.ready2 = false
-        }
-
-        if (this.physics.overlap(this.players, this.ui) && this.ready3 == true) {
-            this.ready1 = false
-            this.ready2 = false
-
-           //this.txtA.setFrame(2)
-           //this.txtB.setFrame(2)
-            //console.log('1')
-            this.time.addEvent({
-                delay: 2000, callback: () => {
-                    //console.log('0')
-                    this.ready3 = false
-                },
-            })
-
-        }
-        else {
-            this.ready1 = false
-            this.ready2 = false
-            this.ready3 = false
-        }*/
 
         // ===== UI =====
         if (this.warnerA && !this.physics.overlap(this.players, this.Upgrade_Drill)) {
@@ -806,7 +786,7 @@ class Drill extends Phaser.Scene {
 
     }
 
-    upgradeA(player) {
+    upgradeA1(player) {
 
         if (!this.used1) {
             this.warnerA = true
@@ -820,7 +800,8 @@ class Drill extends Phaser.Scene {
             });
         }
 
-        if (this.keyE.isDown) {
+        if (this.keyE.isDown && !this.used1) {
+            this.persoA_state = 3
             this.time.addEvent({
                 delay: 500, callback: () => {
                     if (!this.used1) {
@@ -847,7 +828,7 @@ class Drill extends Phaser.Scene {
 
         }
 
-        if (this.used1 == true) {
+        if (this.used1 == true && this.persoA_state == 3) {
             if (this.selection1 == 0) {
                 if (this.drill_Speed == 0) { this.UI_1.setFrame(0) }
                 if (this.drill_Speed == 1) { this.UI_1.setFrame(1) }
@@ -865,43 +846,331 @@ class Drill extends Phaser.Scene {
 
 
             // check for user :
-            if (player = this.player1) {
-                this.player1.setVelocityX(0)
-                this.persoA_state = 3
 
-                //level up
-                if (this.selection1 == 1 && Phaser.Input.Keyboard.JustDown(this.keyE) && this.drill_Yield < 4) {
-                    this.drill_Yield += 1
-                    console.log("Player 1 upgraded drill speed to level", this.drill_Yield)
-                } else if (this.selection1 == 0 && Phaser.Input.Keyboard.JustDown(this.keyE) && this.drill_Speed < 4) {
-                    this.drill_Speed += 1
-                    console.log("Player 1 upgraded drill speed to level", this.drill_Speed)
-                }
+            this.player1.setVelocityX(0)
+            this.persoA_state = 3
 
-
-                // change selection
-                if (this.selection1 == 0 && this.keyD.isDown) {
-                    this.selection1 = 1
-                    console.log("switch to drill yield", this.selection1)
-                }
-                if (this.selection1 == 1 && this.keyQ.isDown) {
-                    this.selection1 = 0
-                    console.log("switch to drill speed", this.selection1)
-                }
-
-                if (Phaser.Input.Keyboard.JustDown(this.keyA)) {
-                    this.persoA_state = 1
-                    this.used1 = false
-
-                    this.tweens.add({
-                        targets: this.UI_1,
-                        alpha: 0,
-                        duration: 300,
-                        ease: 'Linear',
-                        repeat: 0
-                    });
-                }
+            //level up
+            if (this.selection1 == 1 && Phaser.Input.Keyboard.JustDown(this.keyE) && this.drill_Yield < 4) {
+                this.drill_Yield += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Yield)
+            } else if (this.selection1 == 0 && Phaser.Input.Keyboard.JustDown(this.keyE) && this.drill_Speed < 4) {
+                this.drill_Speed += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Speed)
             }
+
+
+            // change selection
+            if (this.selection1 == 0 && this.keyD.isDown) {
+                this.selection1 = 1
+                console.log("switch to drill yield", this.selection1)
+            }
+            if (this.selection1 == 1 && this.keyQ.isDown) {
+                this.selection1 = 0
+                console.log("switch to drill speed", this.selection1)
+            }
+
+            if (Phaser.Input.Keyboard.JustDown(this.keyA)) {
+                this.persoA_state = 1
+                this.used1 = false
+
+                this.tweens.add({
+                    targets: this.UI_1,
+                    alpha: 0,
+                    duration: 300,
+                    ease: 'Linear',
+                    repeat: 0
+                });
+            }
+
+        }
+    }
+
+    upgradeA2(player) {
+
+        if (!this.used1) {
+            this.warnerA = true
+
+            this.tweens.add({
+                targets: this.HeyListen_1,
+                alpha: 1,
+                duration: 100,
+                ease: 'Linear',
+                repeat: 0
+            });
+        }
+
+        if (this.keyP.isDown && !this.used1) {
+            this.persoB_state = 3
+            this.time.addEvent({
+                delay: 500, callback: () => {
+                    if (!this.used1) {
+                        this.tweens.add({
+                            targets: this.HeyListen_1,
+                            alpha: 0,
+                            duration: 100,
+                            ease: 'Linear',
+                            repeat: 0
+                        });
+                        this.used1 = true
+
+                        this.tweens.add({
+                            targets: this.UI_1,
+                            alpha: 1,
+                            duration: 300,
+                            ease: 'Linear',
+                            repeat: 0
+                        });
+                        console.log("drill")
+                    }
+                },
+            })
+
+        }
+
+        if (this.used1 == true && this.persoB_state == 3) {
+            if (this.selection1 == 0) {
+                if (this.drill_Speed == 0) { this.UI_1.setFrame(0) }
+                if (this.drill_Speed == 1) { this.UI_1.setFrame(1) }
+                if (this.drill_Speed == 2) { this.UI_1.setFrame(2) }
+                if (this.drill_Speed == 3) { this.UI_1.setFrame(3) }
+                if (this.drill_Speed == 4) { this.UI_1.setFrame(4) }
+            }
+            if (this.selection1 == 1) {
+                if (this.drill_Yield == 0) { this.UI_1.setFrame(5) }
+                if (this.drill_Yield == 1) { this.UI_1.setFrame(6) }
+                if (this.drill_Yield == 2) { this.UI_1.setFrame(7) }
+                if (this.drill_Yield == 3) { this.UI_1.setFrame(8) }
+                if (this.drill_Yield == 4) { this.UI_1.setFrame(9) }
+            }
+            // check for user :
+            this.player2.setVelocityX(0)
+
+            //level up
+            if (this.selection1 == 1 && Phaser.Input.Keyboard.JustDown(this.keyP) && this.drill_Yield < 4) {
+                this.drill_Yield += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Yield)
+            } else if (this.selection1 == 0 && Phaser.Input.Keyboard.JustDown(this.keyP) && this.drill_Speed < 4) {
+                this.drill_Speed += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Speed)
+            }
+
+
+            // change selection
+            if (this.selection1 == 0 && this.keyM.isDown) {
+                this.selection1 = 1
+                console.log("switch to drill yield", this.selection1)
+            }
+            if (this.selection1 == 1 && this.keyK.isDown) {
+                this.selection1 = 0
+                console.log("switch to drill speed", this.selection1)
+            }
+
+            if (Phaser.Input.Keyboard.JustDown(this.keyI)) {
+                this.persoB_state = 1
+                this.used1 = false
+
+                this.tweens.add({
+                    targets: this.UI_1,
+                    alpha: 0,
+                    duration: 300,
+                    ease: 'Linear',
+                    repeat: 0
+                });
+            }
+
+        }
+    }
+
+    upgradeA3(player) {
+
+        if (!this.used1) {
+            this.warnerA = true
+
+            this.tweens.add({
+                targets: this.HeyListen_1,
+                alpha: 1,
+                duration: 100,
+                ease: 'Linear',
+                repeat: 0
+            });
+        }
+
+        if (this.key9.isDown && !this.used1) {
+            this.persoC_state = 3
+            this.time.addEvent({
+                delay: 500, callback: () => {
+                    if (!this.used1) {
+                        this.tweens.add({
+                            targets: this.HeyListen_1,
+                            alpha: 0,
+                            duration: 100,
+                            ease: 'Linear',
+                            repeat: 0
+                        });
+                        this.used1 = true
+
+                        this.tweens.add({
+                            targets: this.UI_1,
+                            alpha: 1,
+                            duration: 300,
+                            ease: 'Linear',
+                            repeat: 0
+                        });
+                        console.log("drill")
+                    }
+                },
+            })
+
+        }
+
+        if (this.used1 == true && this.persoC_state == 3) {
+            if (this.selection1 == 0) {
+                if (this.drill_Speed == 0) { this.UI_1.setFrame(0) }
+                if (this.drill_Speed == 1) { this.UI_1.setFrame(1) }
+                if (this.drill_Speed == 2) { this.UI_1.setFrame(2) }
+                if (this.drill_Speed == 3) { this.UI_1.setFrame(3) }
+                if (this.drill_Speed == 4) { this.UI_1.setFrame(4) }
+            }
+            if (this.selection1 == 1) {
+                if (this.drill_Yield == 0) { this.UI_1.setFrame(5) }
+                if (this.drill_Yield == 1) { this.UI_1.setFrame(6) }
+                if (this.drill_Yield == 2) { this.UI_1.setFrame(7) }
+                if (this.drill_Yield == 3) { this.UI_1.setFrame(8) }
+                if (this.drill_Yield == 4) { this.UI_1.setFrame(9) }
+            }
+            // check for user :
+            this.player3.setVelocityX(0)
+
+            //level up
+            if (this.selection1 == 1 && Phaser.Input.Keyboard.JustDown(this.key9) && this.drill_Yield < 4) {
+                this.drill_Yield += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Yield)
+            } else if (this.selection1 == 0 && Phaser.Input.Keyboard.JustDown(this.key9) && this.drill_Speed < 4) {
+                this.drill_Speed += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Speed)
+            }
+
+
+            // change selection
+            if (this.selection1 == 0 && this.key6.isDown) {
+                this.selection1 = 1
+                console.log("switch to drill yield", this.selection1)
+            }
+            if (this.selection1 == 1 && this.key4.isDown) {
+                this.selection1 = 0
+                console.log("switch to drill speed", this.selection1)
+            }
+
+            if (Phaser.Input.Keyboard.JustDown(this.key7)) {
+                this.persoC_state = 1
+                this.used1 = false
+
+                this.tweens.add({
+                    targets: this.UI_1,
+                    alpha: 0,
+                    duration: 300,
+                    ease: 'Linear',
+                    repeat: 0
+                });
+            }
+
+        }
+    }
+
+    upgradeA4(player) {
+
+        if (!this.used1) {
+            this.warnerA = true
+
+            this.tweens.add({
+                targets: this.HeyListen_1,
+                alpha: 1,
+                duration: 100,
+                ease: 'Linear',
+                repeat: 0
+            });
+        }
+
+        if (this.keySHIFT.isDown && !this.used1) {
+            this.persoD_state = 3
+            this.time.addEvent({
+                delay: 500, callback: () => {
+                    if (!this.used1) {
+                        this.tweens.add({
+                            targets: this.HeyListen_1,
+                            alpha: 0,
+                            duration: 100,
+                            ease: 'Linear',
+                            repeat: 0
+                        });
+                        this.used1 = true
+
+                        this.tweens.add({
+                            targets: this.UI_1,
+                            alpha: 1,
+                            duration: 300,
+                            ease: 'Linear',
+                            repeat: 0
+                        });
+                        console.log("drill")
+                    }
+                },
+            })
+
+        }
+
+        if (this.used1 == true && this.persoD_state == 3) {
+            if (this.selection1 == 0) {
+                if (this.drill_Speed == 0) { this.UI_1.setFrame(0) }
+                if (this.drill_Speed == 1) { this.UI_1.setFrame(1) }
+                if (this.drill_Speed == 2) { this.UI_1.setFrame(2) }
+                if (this.drill_Speed == 3) { this.UI_1.setFrame(3) }
+                if (this.drill_Speed == 4) { this.UI_1.setFrame(4) }
+            }
+            if (this.selection1 == 1) {
+                if (this.drill_Yield == 0) { this.UI_1.setFrame(5) }
+                if (this.drill_Yield == 1) { this.UI_1.setFrame(6) }
+                if (this.drill_Yield == 2) { this.UI_1.setFrame(7) }
+                if (this.drill_Yield == 3) { this.UI_1.setFrame(8) }
+                if (this.drill_Yield == 4) { this.UI_1.setFrame(9) }
+            }
+            // check for user :
+            this.player4.setVelocityX(0)
+
+            //level up
+            if (this.selection1 == 1 && Phaser.Input.Keyboard.JustDown(this.keySHIFT) && this.drill_Yield < 4) {
+                this.drill_Yield += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Yield)
+            } else if (this.selection1 == 0 && Phaser.Input.Keyboard.JustDown(this.keySHIFT) && this.drill_Speed < 4) {
+                this.drill_Speed += 1
+                console.log("Player 1 upgraded drill speed to level", this.drill_Speed)
+            }
+
+
+            // change selection
+            if (this.selection1 == 0 && this.keyRIGHT.isDown) {
+                this.selection1 = 1
+                console.log("switch to drill yield", this.selection1)
+            }
+            if (this.selection1 == 1 && this.keyLEFT.isDown) {
+                this.selection1 = 0
+                console.log("switch to drill speed", this.selection1)
+            }
+
+            if (Phaser.Input.Keyboard.JustDown(this.keyCTRL)) {
+                this.persoB_state = 1
+                this.used1 = false
+
+                this.tweens.add({
+                    targets: this.UI_1,
+                    alpha: 0,
+                    duration: 300,
+                    ease: 'Linear',
+                    repeat: 0
+                });
+            }
+
         }
     }
 
@@ -965,12 +1234,104 @@ class Drill extends Phaser.Scene {
                 delay: 1000, callback: () => {
                     this.doorOut.setFrame(4)
                     console.log("out")
+
+                    //check for init 
+                    if (this.Inventory1_ID == null) { this.Inventory1_ID = 0 }
+                    if (this.Inventory2_ID == null) { this.Inventory2_ID = 0 }
+                    if (this.Inventory3_ID == null) { this.Inventory3_ID = 0 }
+                    if (this.Inventory4_ID == null) { this.Inventory4_ID = 0 }
+
+                    if (this.gadgetSelected1 == null) { this.gadgetSelected1 = 1 }
+                    if (this.gadgetSelected2 == null) { this.gadgetSelected2 = 2 }
+                    if (this.gadgetSelected3 == null) { this.gadgetSelected3 = 0 }
+                    if (this.gadgetSelected4 == null) { this.gadgetSelected4 = 0 }
+
+                    if (this.Inventory1_Amount == null) { this.Inventory1_Amount = 0 }
+                    if (this.Inventory2_Amount == null) { this.Inventory2_Amount = 0 }
+                    if (this.Inventory3_Amount == null) { this.Inventory3_Amount = 0 }
+                    if (this.Inventory4_Amount == null) { this.Inventory4_Amount = 0 }
+
+                    if (this.afk1 == null) { this.afk1 = 0 }
+                    if (this.afk2 == null) { this.afk2 = 0 }
+                    if (this.afk3 == null) { this.afk3 = 0 }
+                    if (this.afk4 == null) { this.afk4 = 0 }
+
+                    if (this.gloomJ1 == null) { this.gloomJ1 = 0 }
+                    if (this.gloomJ2 == null) { this.gloomJ2 = 0 }
+                    if (this.gloomJ3 == null) { this.gloomJ3 = 0 }
+                    if (this.gloomJ4 == null) { this.gloomJ4 = 0 }
+
+                    if (this.hurt1 == null) { this.hurt1 = 0 }
+                    if (this.hurt2 == null) { this.hurt2 = 0 }
+                    if (this.hurt3 == null) { this.hurt3 = 0 }
+                    if (this.hurt4 == null) { this.hurt4 = 0 }
+
+                    if (this.pvJ1 == null) { this.pvJ1 = 99 }
+                    if (this.pvJ2 == null) { this.pvJ2 = 99 }
+                    if (this.pvJ3 == null) { this.pvJ3 = 99 }
+                    if (this.pvJ4 == null) { this.pvJ4 = 99 }
+
+                    if (this.drill_Speed == null) { this.drill_Speed = 0 }
+                    if (this.drill_Yield == null) { this.drill_Yield = 0 }
+                    if (this.lampLevel == null) { this.lampLevel = 0 }
+                    if (this.scafoldingLevel == null) { this.scafoldingLevel = 0 }
+
+
+
+                    this.toCave()
                 },
             })
         }
     }
 
     toCave() {
-        this.scene.start("drill")
+        this.scene.start("caves", {
+            playerAMOUNT: this.playerAMOUNT,
+            player1READY: this.player1READY,
+            player2READY: this.player2READY,
+            player3READY: this.player3READY,
+            player4READY: this.player4READY,
+
+            gadgetSelected1: this.gadgetSelected1,
+            gadgetSelected2: this.gadgetSelected2,
+            gadgetSelected3: this.gadgetSelected3,
+            gadgetSelected4: this.gadgetSelected4,
+
+            Inventory1_ID: this.Inventory1_ID,
+            Inventory2_ID: this.Inventory2_ID,
+            Inventory3_ID: this.Inventory3_ID,
+            Inventory4_ID: this.Inventory4_ID,
+
+            Inventory1_Amount: this.Inventory1_Amount,
+            Inventory2_Amount: this.Inventory2_Amount,
+            Inventory3_Amount: this.Inventory3_Amount,
+            Inventory4_Amount: this.Inventory4_Amount,
+
+            afk1: this.afk1,
+            afk2: this.afk2,
+            afk3: this.afk3,
+            afk4: this.afk4,
+
+            gloomJ1: this.gloomJ1,
+            gloomJ2: this.gloomJ2,
+            gloomJ3: this.gloomJ3,
+            gloomJ4: this.gloomJ4,
+
+            hurt1: this.hurt1,
+            hurt2: this.hurt2,
+            hurt3: this.hurt3,
+            hurt4: this.hurt4,
+
+            pvJ1: this.pvJ1,
+            pvJ2: this.pvJ2,
+            pvJ3: this.pvJ3,
+            pvJ4: this.pvJ4,
+
+            drill_Speed: this.drill_Speed,
+            drill_Yield: this.drill_Yield,
+
+            lampLevel: this.lampLevel, // 0/3
+            scafoldingLevel: this.scafoldingLevel,  // 0/3
+        });
     }
 }

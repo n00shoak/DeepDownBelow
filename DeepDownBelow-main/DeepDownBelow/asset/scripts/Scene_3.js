@@ -4,22 +4,66 @@ class Caves extends Phaser.Scene {
         super("caves");
     }
 
-    init() {
+    init(data) {
         // ===== DRILL SAVE =====
-        // nombre de joueur
-        // liste des joeurs
-        // minerais possédé par les joueurs
-        // pv restant
-        // toute les upgrade faites
-        // état précédent de la drill
+        this.playerAMOUNT = data.playerAMOUNT
+        this.player1READY = data.player1READY
+        this.player2READY = data.player2READY
+        this.player3READY = data.player3READY
+        this.player4READY = data.player4READY
 
-        // ===== MAP GENERATION =====
-        // max hauteur
-        // max largeur
-        // tile du biome utilisé
-        // bruit 
-        // réduction du bruit
+        this.gadgetSelected1 = data.gadgetSelected1
+        this.gadgetSelected2 = data.gadgetSelected2
+        this.gadgetSelected3 = data.gadgetSelected3
+        this.gadgetSelected4 = data.gadgetSelected4
 
+        this.Inventory1_ID = data.Inventory1_ID
+        this.Inventory2_ID = data.Inventory2_ID
+        this.Inventory3_ID = data.Inventory3_ID
+        this.Inventory4_ID = data.Inventory4_ID
+
+        this.Inventory1_Amount = data.Inventory1_Amount
+        this.Inventory2_Amount = data.Inventory2_Amount
+        this.Inventory3_Amount = data.Inventory3_Amount
+        this.Inventory4_Amount = data.Inventory4_Amount
+
+        this.afk1 = data.afk1
+        this.afk2 = data.afk2
+        this.afk3 = data.afk3
+        this.afk4 = data.afk4
+
+        this.gloomJ1 = data.gloomJ1
+        this.gloomJ2 = data.gloomJ2
+        this.gloomJ3 = data.gloomJ3
+        this.gloomJ4 = data.gloomJ4
+
+        this.hurt1 = data.hurt1
+        this.hurt2 = data.hurt2
+        this.hurt3 = data.hurt3
+        this.hurt4 = data.hurt4
+
+        this.pvJ1 = data.pvJ1
+        this.pvJ2 = data.pvJ2
+        this.pvJ3 = data.pvJ3
+        this.pvJ4 = data.pvJ4
+
+        this.drill_Speed = data.drill_Speed
+        this.drill_Yield = data.drill_Yield
+
+        this.lampLevel = data.lampLevel // 0/3
+        this.scafoldingLevel = data.scafoldingLevel // 0/3
+
+        //Map
+        this.map_Height = 3.5         //3
+        this.map_Length = 200       //150
+        this.map_Noise = 1          //1
+        this.map_Smooth = 3         //3
+        this.map_clif = 2           //1
+
+        this.ore_Rarity = 150        //40
+        this.ore_red = true
+        this.ore_blue = true
+        this.ore_green = true
     }
 
     preload() {
@@ -64,8 +108,8 @@ class Caves extends Phaser.Scene {
         this.load.spritesheet("edgeLeft", "../sprites/mapSprite/edgeLeft.png", { frameWidth: 128, frameHeight: 512 });
         this.load.spritesheet("edgeRight", "../sprites/mapSprite/edgeRight.png", { frameWidth: 128, frameHeight: 512 });
         this.load.image("shadow", "../sprites/mapSprite/shadow.png")
-        
-        
+
+
         // - - - add tilset - - -
         this.load.spritesheet("Tiles", "../sprites/tileSet/proceduralGen.png", { frameWidth: 16, frameHeight: 16 });
 
@@ -80,18 +124,6 @@ class Caves extends Phaser.Scene {
         this.posD_x
         this.posD_y
 
-        //Upgrades :
-        this.warnerA = false
-        this.used1 = false
-        this.selection1 = 0
-        this.drill_Speed = 0
-        this.drill_Yield = 0
-
-        this.lampLevel = 2 // 0/3
-        this.scafoldingLevel = 2 // 0/3
-
-        this.used2 = false
-
         //players stats :
         this.gravityA = 0
         this.gravityB = 0
@@ -99,10 +131,6 @@ class Caves extends Phaser.Scene {
         this.gravityD = 0
 
         //map var :
-        this.door_3 = false
-        this.door_2 = false
-        this.door_1 = false
-        this.door_0 = false
 
         this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
         this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
@@ -110,18 +138,6 @@ class Caves extends Phaser.Scene {
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
         this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
-
-        this.gadgetSelected1 = 2
-        this.Inventory1_ID = 0
-        this.Inventory1_Amount = 0
-
-        this.afk1 = 0;
-        this.gloomJ1 = 25
-
-        this.hurt1 = 0;
-        this.pvJ1 = 69
-
-        this.storageA = 0
 
         this.keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O)
         this.keyK = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K)
@@ -144,14 +160,14 @@ class Caves extends Phaser.Scene {
         this.keyCTRL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CTRL)
         this.keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT)
 
-        
+
 
         // > debug
         this.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B)
         this.__debug = false
         this.__state = false
         this.__cam = false
-        this.__inv = true
+        this.__inv = false
     }
 
     create() {
@@ -201,16 +217,7 @@ class Caves extends Phaser.Scene {
         this.biome = 0              // 0 1 2 / 3 4 5 / 6 7 8 / 9 10
 
         // ===== VAR =====
-        this.map_Height = 3.5         //3
-        this.map_Length = 200       //150
-        this.map_Noise = 1          //1
-        this.map_Smooth = 3         //3
-        this.map_clif = 2           //1
 
-        this.ore_Rarity = 150        //40
-        this.ore_red = true
-        this.ore_blue = true
-        this.ore_green = true
 
         this.rnd
         this.noise = 1
@@ -415,6 +422,49 @@ class Caves extends Phaser.Scene {
         for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0) { this.addTile((16 * i), 16 * 12) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile((16 * i), 16 * 11) } }
 
+        /*
+        for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile(16 * 50,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0) { this.addTile(16 * 49,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0) { this.addTile(16 * 48,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0) { this.addTile(16 * 47,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0) { this.addTile(16 * 46,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0) { this.addTile(16 * 45,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0) { this.addTile(16 * 44,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0) { this.addTile(16 * 43,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0) { this.addTile(16 * 42,(16 * i) ) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0) { this.addTile( 16 * 41,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0) { this.addTile( 16 * 40,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0) { this.addTile( 16 * 39,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0) { this.addTile( 16 * 38,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0) { this.addTile( 16 * 37,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0) { this.addTile( 16 * 36,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0) { this.addTile( 16 * 35,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0) { this.addTile( 16 * 34,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0) { this.addTile( 16 * 33,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0) { this.addTile( 16 * 32,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0) { this.addTile( 16 * 31,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0) { this.addTile( 16 * 30,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0) { this.addTile( 16 * 29,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0) { this.addTile( 16 * 28,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0) { this.addTile( 16 * 27,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0) { this.addTile( 16 * 26,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0) { this.addTile( 16 * 25,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0) { this.addTile( 16 * 24,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0) { this.addTile( 16 * 23,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0) { this.addTile( 16 * 22,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0) { this.addTile( 16 * 21,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0) { this.addTile( 16 * 20,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0) { this.addTile( 16 * 19,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0) { this.addTile( 16 * 18,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0) { this.addTile( 16 * 17,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0) { this.addTile( 16 * 16,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0) { this.addTile( 16 * 15,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0) { this.addTile( 16 * 14,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0) { this.addTile( 16 * 13,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0) { this.addTile( 16 * 12,(16 * i)) } }
+        for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile( 16 * 11,(16 * i)) } }
+        */
+
 
         //find free space on ground
         for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0 && this.line2[i] <= 0) { this.onTop(16 * i, 16 * 50) } }
@@ -618,14 +668,13 @@ class Caves extends Phaser.Scene {
         // ===== objects =====
         // > camera 
         this.camCNTR = this.physics.add.sprite(8, 552).setSize(16, 16)
-        this.edgeLeft = this.physics.add.sprite(-40, 552,"edgeLeft").setPipeline('Light2D').setSize(64,512).setImmovable(true);
+        this.edgeLeft = this.physics.add.sprite(-40, 552, "edgeLeft").setPipeline('Light2D').setSize(64, 512).setImmovable(true);
 
-        this.edgeRight = this.physics.add.sprite(3208, 552,"edgeRight").setPipeline('Light2D').setSize(32,512).setImmovable(true).setDepth(5);
-        this.edgeRightA = this.physics.add.sprite(3208+16, 552-64,).setPipeline('Light2D').setSize(64,254).setImmovable(true);
-        this.edgeRightB = this.physics.add.sprite(3208+32, 824).setPipeline('Light2D').setSize(96,254).setImmovable(true);
-        this.backToDrill = 
-        this.beginAGAIN = this.physics.add.sprite(3232, 656,"shadow").setPipeline('Light2D').setSize(48,96).setImmovable(true).setDepth(5);
-
+        this.edgeRight = this.physics.add.sprite(3208, 552, "edgeRight").setPipeline('Light2D').setSize(32, 512).setImmovable(true).setDepth(5);
+        this.edgeRightA = this.physics.add.sprite(3208 + 16, 552 - 64,).setPipeline('Light2D').setSize(64, 254).setImmovable(true);
+        this.edgeRightB = this.physics.add.sprite(3208 + 32, 824).setPipeline('Light2D').setSize(96, 254).setImmovable(true);
+        this.backToDrill = this.physics.add.sprite(3168, 502).setSize(64, 64)
+        this.beginAGAIN = this.physics.add.sprite(3232, 656, "shadow").setPipeline('Light2D').setSize(48, 96).setImmovable(true).setDepth(5);
         this.plateforme.add(this.physics.add.sprite(0, 576).setSize(48, 16)) // spawn plateforme
         this.plateforme.add(this.physics.add.sprite(3168, 544).setSize(48, 16)) // end plateforme
         this.chain.add(this.physics.add.sprite(3168, 662).setSize(16, 256))
@@ -636,7 +685,7 @@ class Caves extends Phaser.Scene {
         this.cameras.main.setLerp(0.04, 0.04);
 
         // ===== players ======
-        {
+        if (this.player1READY) {
             this.player1 = this.physics.add.sprite(8, 552, 'persoA').setScale(0.95, 0.95).setDepth(3);
             this.dridrill1 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill1)
             this.stockA = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
@@ -646,19 +695,63 @@ class Caves extends Phaser.Scene {
             this.chain_COL1 = this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
             this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme); this.plateformeCOL1.active = true
             this.persoA_state = 1
-            this.player1READY = true
-            this.playerAMOUNT = 1
-
-            this.drillingA = this.physics.add.overlap(this.dridrills, this.ground, this.drilling, null, this); this.drillingA.active = false
+            this.drillingA = this.physics.add.overlap(this.dridrill1, this.ground, this.drilling, null, this); this.drillingA.active = false
             this.vieJ1 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
             this.jauneJ1 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
+            this.lumiere1 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf);
+
+            this.physics.add.overlap(this.player1, this.ore1, this.pickUpA1, null, this);
+            this.physics.add.overlap(this.player1, this.ore2, this.pickUpA2, null, this);
+            this.physics.add.overlap(this.player1, this.ore3, this.pickUpA3, null, this);
+            this.physics.add.overlap(this.player1, this.ore4, this.pickUpA4, null, this);
+            this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
+        }
+        if (this.player2READY) {
+            this.player2 = this.physics.add.sprite(8, 552, 'persoB').setScale(0.95, 0.95).setDepth(3);
+            this.dridrill2 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill2)
+            this.stockB = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
+            this.player2.setPipeline('Light2D');
+            this.player2.body.setSize(16, 16);
+            this.players.add(this.player2)
+            this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
+            this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme); this.plateformeCOL2.active = true
+            this.persoB_state = 1
+            this.drillingB = this.physics.add.overlap(this.dridrill2, this.ground, this.drilling, null, this); this.drillingB.active = false
+            this.vieJ2 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
+            this.jauneJ2 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
+            this.lumiere2 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf);
+
+            this.physics.add.overlap(this.player2, this.ore1, this.pickUpB1, null, this);
+            this.physics.add.overlap(this.player2, this.ore2, this.pickUpB2, null, this);
+            this.physics.add.overlap(this.player2, this.ore3, this.pickUpB3, null, this);
+            this.physics.add.overlap(this.player2, this.ore4, this.pickUpB4, null, this);
+            this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
+        }
+        if (this.player3READY) {
+            this.player3 = this.physics.add.sprite(8, 552, 'persoC').setScale(0.95, 0.95).setDepth(3);
+            this.dridrill3 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill3)
+            this.stockC = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
+            this.player3.setPipeline('Light2D');
+            this.player3.body.setSize(16, 16);
+            this.players.add(this.player3)
+            this.chain_COL3 = this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
+            this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme); this.plateformeCOL3.active = true
+            this.persoC_state = 1
+            this.drillingC = this.physics.add.overlap(this.dridrill3, this.ground, this.drilling, null, this); this.drillingC.active = false
+            this.vieJ3 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
+            this.jauneJ3 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
+            this.lumiere3 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf);
+
+            this.physics.add.overlap(this.player3, this.ore1, this.pickUpC1, null, this);
+            this.physics.add.overlap(this.player3, this.ore2, this.pickUpC2, null, this);
+            this.physics.add.overlap(this.player3, this.ore3, this.pickUpC3, null, this);
+            this.physics.add.overlap(this.player3, this.ore4, this.pickUpC4, null, this);
+            this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
         }
 
         // ===== LIGHT ====
         this.startLight = this.lights.addLight(-20, 544, 75).setIntensity(2).setColor(0xfff8cf);
-        this.endLight = this.lights.addLight(3228, 502,140).setIntensity(2).setColor(0xfff8cf);
-
-        this.lumiere1 = this.lights.addLight(this.player1.body.x, this.player1.body.y, 95).setIntensity(1).setColor(0xfff8cf);
+        this.endLight = this.lights.addLight(3228, 502, 140).setIntensity(2).setColor(0xfff8cf);
 
         this.lights.enable().setAmbientColor(0x000000); // quand c'est pas éclairé
 
@@ -668,11 +761,9 @@ class Caves extends Phaser.Scene {
         this.physics.add.collider(this.players, this.edgeLeft);
         this.physics.add.collider(this.players, this.edgeRightA);
         this.physics.add.collider(this.players, this.edgeRightB);
-        this.physics.add.overlap(this.player1, this.ore1, this.pickUpA1, null, this);
-        this.physics.add.overlap(this.player1, this.ore2, this.pickUpA2, null, this);
-        this.physics.add.overlap(this.player1, this.ore3, this.pickUpA3, null, this);
-        this.physics.add.overlap(this.player1, this.ore4, this.pickUpA4, null, this);
-        this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
+        this.physics.add.overlap(this.players, this.beginAGAIN, this.toCave, null, this);
+        this.physics.add.overlap(this.players, this.backToDrill, this.toDrill, null, this);
+
 
         // ===== UI =====
 
@@ -686,16 +777,13 @@ class Caves extends Phaser.Scene {
         if (this.__inv || this.__debug) {
             //console.log("J1 :\n inv ID: ",this.Inventory1_ID,"\n inv Ammount: ",this.Inventory1_Amount)
         }
-        if(this.keyB.isDown){this.player1.body.x = -40 + 16 *200}
-
-        // ===== Lights ===== 
-        this.lumiere1.x = this.player1.body.x; this.lumiere1.y = this.player1.body.y
+        if (this.keyB.isDown) { this.player1.body.x = -40 + 16 * 200 }
 
         //====== CAM ======
         this.zoomAmount = this.cameras.main.zoom
 
-        if (this.player1READY) { this.Afar = Phaser.Math.Distance.Between(this.player1.x, this.player1.y + 50, this.camCNTR.x, this.camCNTR.y); } else (this.Afar = 0)
-        if (this.player2READY) { this.Bfar = Phaser.Math.Distance.Between(this.player2.x, this.player2.y + 50, this.camCNTR.x, this.camCNTR.y); } else (this.Bfar = 0)
+        if (this.player1READY) { this.Afar = Phaser.Math.Distance.Between(this.player1.x, this.player1.y + 50, this.camCNTR.x, this.camCNTR.y); this.lumiere1.x = this.player1.body.x; this.lumiere1.y = this.player1.body.y } else (this.Afar = 0)
+        if (this.player2READY) { this.Bfar = Phaser.Math.Distance.Between(this.player2.x, this.player2.y + 50, this.camCNTR.x, this.camCNTR.y); this.lumiere2.x = this.player2.body.x; this.lumiere2.y = this.player2.body.y } else (this.Bfar = 0)
         if (this.player3READY) { this.Cfar = Phaser.Math.Distance.Between(this.player3.x, this.player3.y + 50, this.camCNTR.x, this.camCNTR.y); } else (this.Cfar = 0)
         if (this.player4READY) { this.Dfar = Phaser.Math.Distance.Between(this.player4.x, this.player4.y + 50, this.camCNTR.x, this.camCNTR.y); } else (this.Dfar = 0)
 
@@ -834,6 +922,130 @@ class Caves extends Phaser.Scene {
             }
         }
 
+        // ====== PLAYER 2 ======
+
+        // - - - moving - - -
+        if (this.player2READY) {
+            if (this.persoB_state == 0) {       // dead state
+
+            }
+            else if (this.persoB_state == 1) {  // "normal" state
+                this.move(this.keyO, this.keyL, this.keyK, this.keyM, this.player2, 150)
+
+                //vertical
+                if (this.keyO.isDown && this.player2.body.blocked.down && this.keyI.isUp) {
+                    this.gravityB = -200
+                }
+                else if (this.player2.body.blocked.down) { this.gravityB = 30 }
+                else {
+                    this.player2.setVelocityY(this.gravityB)
+                    if (this.gravityB < 500) { this.gravityB += 20 }
+                }
+                if (Phaser.Input.Keyboard.JustDown(this.keyP)) {
+                    this.gloomJ2 = this.placeGadget(this.gadgetSelected2, this.player2, this.gloomJ2)
+                    this.afk2 = 0
+                }
+
+            }
+
+            else if (this.persoB_state == 2) {  // ladder state
+
+                this.ladder_state(this.keyO, this.keyL, this.player2, 150)
+                this.physics.world.remove(this.chain_COL2)
+
+                this.plateformeCOL2.active = false
+                this.chain_COL2 = 0
+                this.gravityB = - 50
+
+                if (!this.physics.overlap(this.player2, this.chain)) { this.persoB_state = 1; this.plateformeCOL2.active = true }
+
+                if (this.keyO.isDown || this.keyL.isDown) {
+                    this.player2.anims.play('PersoB_climb', true);
+                }
+
+                if (this.keyM.isDown || this.keyK.isDown) {
+
+                    this.persoB_state = 1;
+                    this.gravityB = -200
+                    this.time.addEvent({
+                        delay: 250, callback: () => {
+                            this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
+                            this.plateformeCOL2.active = true
+                        },
+                    })
+                }
+            }
+            else if (this.persoB_state == 3) {  // mini game state
+            }
+
+
+            // - - - drill 2 - - - 
+            this.moveDrill(this.LRb, this.player2, this.keyO, this.keyL, this.keyI, this.dridrill2)
+            if (this.keyI.isDown) { this.drillingB.active = true } else { this.drillingB.active = false }
+
+            // - - - inventory - - - 
+            this.stockB.body.x = this.player2.body.x; this.stockB.body.x = this.player2.body.x
+
+            if (this.Inventory2_ID == 0) { this.storageB = 0 };
+
+            if (this.Inventory2_ID == 1) {
+                if (this.Inventory2_Amount == 1) { this.storageB = 4 }
+                if (this.Inventory2_Amount == 2) { this.storageB = 5 }
+                if (this.Inventory2_Amount == 3) { this.storageB = 6 }
+            }
+            if (this.Inventory2_ID == 2) {
+                if (this.Inventory2_Amount == 1) { this.storageB = 1 }
+                if (this.Inventory2_Amount == 2) { this.storageB = 2 }
+                if (this.Inventory2_Amount == 3) { this.storageB = 3 }
+            }
+            if (this.Inventory1_ID == 3) {
+                if (this.Inventory2_Amount == 1) { this.storageB = 7 }
+                if (this.Inventory2_Amount == 2) { this.storageB = 8 }
+                if (this.Inventory2_Amount == 3) { this.storageB = 9 }
+            }
+            if (!this.LRb) { this.stockB.setFrame(this.storageB); this.stockB.body.x = this.player2.body.x - 8; this.stockB.body.y = this.player2.body.y - 8 }
+            else { this.stockB.setFrame(this.storageB + 10); this.stockB.body.x = this.player2.body.x + 8; this.stockB.body.y = this.player2.body.y - 8 }
+
+
+
+            // - - - UI - - - 
+            this.vieJ2.body.x = this.player2.body.x - 10; this.vieJ2.body.y = this.player2.body.y + 24;
+            this.jauneJ2.body.x = this.player2.body.x - 10; this.jauneJ2.body.y = this.player2.body.y + 18;
+
+            this.vieJ2.setFrame(this.pvJ2)
+            this.jauneJ2.setFrame(this.gloomJ2);
+
+            if (this.hurt2 < 20) {
+                this.tweens.add({
+                    targets: this.vieJ2,
+                    alpha: 1,
+                    duration: 200,
+                });
+            }
+            if (this.afk2 < 20) {
+                this.tweens.add({
+                    targets: this.jauneJ2,
+                    alpha: 1,
+                    duration: 200,
+                });
+            }
+
+            if (this.hurt2 < 170) { this.hurt2++ } else {
+                this.tweens.add({
+                    targets: this.vieJ2,
+                    alpha: 0,
+                    duration: 400,
+                });
+            }
+            if (this.afk2 < 170) { this.afk2++ } else {
+                this.tweens.add({
+                    targets: this.jauneJ2,
+                    alpha: 0,
+                    duration: 400,
+                });
+            }
+        }
+
 
 
         // ====== CAM CENTER =====
@@ -890,9 +1102,9 @@ class Caves extends Phaser.Scene {
         if (this.biome == 9 || this.biome == 10) {
             this.ground.add(this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(22, 25))).setPipeline('Light2D')) // rock
         }
-        if (this.ore_red && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore1.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(34).setDepth(1).setPipeline('Light2D')) }
-        else if (this.ore_blue && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore2.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(35).setDepth(1).setPipeline('Light2D')) }
-        else if (this.ore_green && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore3.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(36).setDepth(1).setPipeline('Light2D')) }
+        if (this.ore_red && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore1.add(this.physics.add.sprite(x, y, "Tiles").setSize(14, 14).setFrame(34).setDepth(1).setPipeline('Light2D')) }
+        else if (this.ore_blue && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore2.add(this.physics.add.sprite(x, y, "Tiles").setSize(14, 14).setFrame(35).setDepth(1).setPipeline('Light2D')) }
+        else if (this.ore_green && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore3.add(this.physics.add.sprite(x, y, "Tiles").setSize(14, 14).setFrame(36).setDepth(1).setPipeline('Light2D')) }
     }
 
     onTop(x, y) {
@@ -926,7 +1138,7 @@ class Caves extends Phaser.Scene {
             }
         }
         //crystal
-        if (Phaser.Math.Between(0, this.ore_Rarity / 8) == 0) {
+        if (Phaser.Math.Between(0, this.ore_Rarity / 9) == 0) {
             this.ore4.add(this.physics.add.sprite(x, y - 16, "crystal").setFrame(1))
             this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
         }
@@ -958,7 +1170,7 @@ class Caves extends Phaser.Scene {
             }
         }
         else {
-            if (Phaser.Math.Between(0, this.ore_Rarity / 10) == 0) {
+            if (Phaser.Math.Between(0, this.ore_Rarity / 8) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y, "crystal"))
                 this.lights.addLight(x, y - 16, 90).setIntensity(0.95).setColor(0x7eadd6);
             }
@@ -969,25 +1181,30 @@ class Caves extends Phaser.Scene {
     moveDrill(lr, player, up, down, go, drill) {
         if (go.isDown) { // if mining
             if (up.isDown) {
-                this.dridrill1.anims.play("dridrillC1", true).setSize(3, 8)
+                if (player == this.player1) { this.dridrill1.anims.play("dridrillC1", true).setSize(3, 8) }
+                if (player == this.player2) { this.dridrill2.anims.play("dridrillC1", true).setSize(3, 8) }
+
                 drill.body.x = player.body.x + 4
                 drill.body.y = player.body.y - 6
             }
             else if (down.isDown) {
                 //anim drill bas
-                this.dridrill1.anims.play("dridrillD1", true).setSize(3, 8)
+                if (player == this.player1) { this.dridrill1.anims.play("dridrillD1", true).setSize(3, 8) }
+                if (player == this.player2) { this.dridrill2.anims.play("dridrillD1", true).setSize(3, 8) }
                 drill.body.x = player.body.x + 6
                 drill.body.y = player.body.y + 8
             }
             else {
                 if (lr) {
                     //anim drill droit
-                    this.dridrill1.anims.play("dridrillB1", true).setSize(8, 3)
+                    if (player == this.player1) { this.dridrill1.anims.play("dridrillB1", true).setSize(8, 3) }
+                    if (player == this.player2) { this.dridrill2.anims.play("dridrillB1", true).setSize(8, 3) }
                     drill.body.x = player.body.x - 4
                     drill.body.y = player.body.y + 6
                 }
                 else {
-                    this.dridrill1.anims.play("dridrillA1", true).setSize(8, 3)
+                    if (player == this.player1) { this.dridrill1.anims.play("dridrillA1", true).setSize(8, 3) }
+                    if (player == this.player2) { this.dridrill2.anims.play("dridrillA1", true).setSize(8, 3) }
                     //anim drill guauche
                     drill.body.x = player.body.x + 8
                     drill.body.y = player.body.y + 6
@@ -997,13 +1214,13 @@ class Caves extends Phaser.Scene {
         }
         else {// if not mining
             if (lr) { // idle right
-                this.dridrill1.setFrame(7)
+                drill.setFrame(7)
                 drill.body.x = player.body.x - 4
                 drill.body.y = player.body.y + 6
 
             }
             else { // idle left
-                this.dridrill1.setFrame(4)
+                drill.setFrame(4)
                 drill.body.x = player.body.x + 8
                 drill.body.y = player.body.y + 6
 
@@ -1016,21 +1233,21 @@ class Caves extends Phaser.Scene {
         this.target_y = Phaser.Math.Snap.To(player.body.y + 8, 16);
 
         if (wich == 1) { // scafolding
-            if (this.scafoldingLevel == 0 && gloom >= 10 && !this.physics.overlap(this.players, this.chain && player.body.blocked.down)) { //scafoldin lv 1
+            if (this.scafoldingLevel == 0 && gloom >= 10 && player.body.blocked.down) { //scafoldin lv 1
                 this.chain.add(this.physics.add.sprite(this.target_x, this.target_y - 8, 'scafoldingA').setSize(16, 32).setPipeline('Light2D')) // lader
                 this.plateforme.add(this.physics.add.sprite(this.target_x, this.target_y - 22,).setSize(14, 3))     // step 1
                 gloom -= 10
             }
-            if (this.scafoldingLevel == 1 && gloom >= 15 && !this.physics.overlap(this.players, this.chain) && player.body.blocked.down) { //scafoldin lv 2
+            if (this.scafoldingLevel == 1 && gloom >= 15 && player.body.blocked.down) { //scafoldin lv 2
                 this.chain.add(this.physics.add.sprite(this.target_x, this.target_y - 16, 'scafoldingB').setSize(16, 48).setPipeline('Light2D'))     // ladder
                 this.plateforme.add(this.physics.add.sprite(this.target_x, this.target_y - 40,).setSize(14, 3))         // step 1
                 this.plateforme.add(this.physics.add.sprite(this.target_x, this.target_y - 22,).setSize(14, 3))              // step 2
                 this.plateforme.add(this.physics.add.sprite(this.target_x, this.target_y - 6,).setSize(14, 3))         // step 3
                 gloom -= 15
             }
-            if (this.scafoldingLevel == 2 && gloom >= 20 && !this.physics.overlap(this.players, this.chain) && player.body.blocked.down) { //scafoldin lv 3
+            if (this.scafoldingLevel == 2 && gloom >= 20 && player.body.blocked.down) { //scafoldin lv 3
                 this.chain.add(this.physics.add.sprite(this.target_x, this.target_y - 32, 'scafoldingC').setSize(16, 80).setPipeline('Light2D'))   //lader
-                this.plateforme.add(this.physics.add.sprite(this.target_x, this.target_y - 72,).setSize(14, 3))       //step 1
+                this.plateforme.add(this.physics.add.sprite(this.target_x, this.target_y - 70,).setSize(14, 3))       //step 1
                 gloom -= 20
                 this.lights.addLight(this.target_x, this.target_y - 72, 75).setIntensity(2).setColor(0xfff8cf);
             }
@@ -1042,17 +1259,17 @@ class Caves extends Phaser.Scene {
         else if (wich == 2) { // lamp
             if (this.lampLevel == 0 && gloom >= 5 && !this.physics.overlap(this.players, this.object) && player.body.blocked.down) { // lamp lv 1
                 this.object.add(this.physics.add.sprite(this.target_x, this.target_y - 8, 'lampA').setSize(16, 32).setPipeline('Light2D')) //game object 
-                this.lights.addLight(this.target_x, this.target_y-24, 100).setIntensity(1.5).setColor(0xe8a541);
+                this.lights.addLight(this.target_x, this.target_y - 24, 100).setIntensity(1.5).setColor(0xe8a541);
                 gloom -= 5
             }
             if (this.lampLevel == 1 && gloom >= 15 && !this.physics.overlap(this.players, this.object) && player.body.blocked.down) { // lamp lv 2
-                this.object.add(this.physics.add.sprite(this.target_x, this.target_y-8, 'lampB').setSize(16, 32).setPipeline('Light2D')) //game object 
-                this.lights.addLight(this.target_x, this.target_y -8, 120).setIntensity(1.75).setColor(0xfff8cf);
+                this.object.add(this.physics.add.sprite(this.target_x, this.target_y - 8, 'lampB').setSize(16, 32).setPipeline('Light2D')) //game object 
+                this.lights.addLight(this.target_x, this.target_y - 8, 120).setIntensity(1.75).setColor(0xfff8cf);
                 gloom -= 15
             }
             if (this.lampLevel == 2 && gloom >= 15 && !this.physics.overlap(this.players, this.object)) { // lamp lv 3
                 this.object.add(this.physics.add.sprite(this.target_x, this.target_y, 'lampC').setSize(128, 128).setPipeline('Light2D')) //game object 
-                this.lights.addLight(this.target_x, this.target_y , 110).setIntensity(2).setColor(0xff0000);
+                this.lights.addLight(this.target_x, this.target_y, 110).setIntensity(2).setColor(0xff0000);
                 gloom -= 15
             }
             if (this.lampLevel == 3 && gloom >= 75 && !this.physics.overlap(this.players, this.object) && player.body.blocked.down) { // lamp lv 4
@@ -1108,11 +1325,95 @@ class Caves extends Phaser.Scene {
 
     drilling(drill, tile) {
         this.time.addEvent({
-            delay: 500, callback: () => {
+            delay: (300 + this.biome * 100 - this.drill_Speed * 100), callback: () => {
                 if (this.physics.overlap(drill, tile))
                     tile.destroy()
             },
         })
+    }
+
+    toCave() {
+        this.scene.start("caves", {
+            playerAMOUNT: this.playerAMOUNT,
+            player1READY: this.player1READY,
+            player2READY: this.player2READY,
+            player3READY: this.player3READY,
+            player4READY: this.player4READY,
+            gadgetSelected1: this.gadgetSelected1,
+            gadgetSelected2: this.gadgetSelected2,
+            gadgetSelected3: this.gadgetSelected3,
+            gadgetSelected4: this.gadgetSelected4,
+            Inventory1_ID: this.Inventory1_ID,
+            Inventory2_ID: this.Inventory2_ID,
+            Inventory3_ID: this.Inventory3_ID,
+            Inventory4_ID: this.Inventory4_ID,
+            Inventory1_Amount: this.Inventory1_Amount,
+            Inventory2_Amount: this.Inventory2_Amount,
+            Inventory3_Amount: this.Inventory3_Amount,
+            Inventory4_Amount: this.Inventory4_Amount,
+            afk1: this.afk1,
+            afk2: this.afk2,
+            afk3: this.afk3,
+            afk4: this.afk4,
+            gloomJ1: this.gloomJ1,
+            gloomJ2: this.gloomJ2,
+            gloomJ3: this.gloomJ3,
+            gloomJ4: this.gloomJ4,
+            hurt1: this.hurt1,
+            hurt2: this.hurt2,
+            hurt3: this.hurt3,
+            hurt4: this.hurt4,
+            pvJ1: this.pvJ1,
+            pvJ2: this.pvJ2,
+            pvJ3: this.pvJ3,
+            pvJ4: this.pvJ4,
+            drill_Speed: this.drill_Speed,
+            drill_Yield: this.drill_Yield,
+            lampLevel: this.lampLevel, // 0/3
+            scafoldingLevel: this.scafoldingLevel,  // 0/3
+        });
+    }
+
+    toDrill() {
+        this.scene.start("drill", {
+            playerAMOUNT: this.playerAMOUNT,
+            player1READY: this.player1READY,
+            player2READY: this.player2READY,
+            player3READY: this.player3READY,
+            player4READY: this.player4READY,
+            gadgetSelected1: this.gadgetSelected1,
+            gadgetSelected2: this.gadgetSelected2,
+            gadgetSelected3: this.gadgetSelected3,
+            gadgetSelected4: this.gadgetSelected4,
+            Inventory1_ID: this.Inventory1_ID,
+            Inventory2_ID: this.Inventory2_ID,
+            Inventory3_ID: this.Inventory3_ID,
+            Inventory4_ID: this.Inventory4_ID,
+            Inventory1_Amount: this.Inventory1_Amount,
+            Inventory2_Amount: this.Inventory2_Amount,
+            Inventory3_Amount: this.Inventory3_Amount,
+            Inventory4_Amount: this.Inventory4_Amount,
+            afk1: this.afk1,
+            afk2: this.afk2,
+            afk3: this.afk3,
+            afk4: this.afk4,
+            gloomJ1: this.gloomJ1,
+            gloomJ2: this.gloomJ2,
+            gloomJ3: this.gloomJ3,
+            gloomJ4: this.gloomJ4,
+            hurt1: this.hurt1,
+            hurt2: this.hurt2,
+            hurt3: this.hurt3,
+            hurt4: this.hurt4,
+            pvJ1: this.pvJ1,
+            pvJ2: this.pvJ2,
+            pvJ3: this.pvJ3,
+            pvJ4: this.pvJ4,
+            drill_Speed: this.drill_Speed,
+            drill_Yield: this.drill_Yield,
+            lampLevel: this.lampLevel, // 0/3
+            scafoldingLevel: this.scafoldingLevel,  // 0/3
+        });
     }
 
     pickUpA1(player, ore) {
@@ -1148,9 +1449,47 @@ class Caves extends Phaser.Scene {
     }
     pickUpA4(player, ore) {
         this.afk1 = 0
-        ore.destroy()
-        this.ammount = Phaser.Math.Between(5, 15)
+        this.ammount = Phaser.Math.Between(5 + this.drill_Yield * 2, 15 + this.drill_Yield * 5)
         if (this.ammount + this.gloomJ1 > 99) { this.gloomJ1 = 99 }
-        else { this.gloomJ1 += this.ammount }
+        else { this.gloomJ1 += this.ammount; ore.destroy(); }
+        console.log(this.gloomJ1)
+    }
+
+    pickUpB1(player, ore) {
+        if (this.Inventory2_Amount < 3 && (this.Inventory2_ID == 0 || this.Inventory2_ID == 1)) {
+            this.Inventory2_ID = 1
+            this.Inventory2_Amount += 1
+            ore.destroy()
+            console.log("J1 :\n inv ID: ", this.Inventory2_ID, "\n inv Ammount: ", this.Inventory2_Amount)
+        }
+
+    }
+    pickUpB2(player, ore) {
+
+        if (this.Inventory2_Amount < 3 && (this.Inventory2_ID == 0 || this.Inventory2_ID == 2)) {
+            ore.destroy()
+            this.Inventory2_ID = 2
+            this.Inventory2_Amount += 1
+            ore.destroy()
+            console.log("J1 :\n inv ID: ", this.Inventory2_ID, "\n inv Ammount: ", this.Inventory2_Amount)
+        }
+
+    }
+    pickUpB3(player, ore) {
+
+        if (this.Inventory1_Amount < 3 && (this.Inventory1_ID == 0 || this.Inventory1_ID == 3)) {
+            ore.destroy()
+            this.Inventory1_ID = 3
+            this.Inventory1_Amount += 1
+            ore.destroy()
+            console.log("J1 :\n inv ID: ", this.Inventory1_ID, "\n inv Ammount: ", this.Inventory1_Amount)
+        }
+
+    }
+    pickUpB4(player, ore) {
+        this.afk2 = 0
+        this.ammount = Phaser.Math.Between(5 + this.drill_Yield * 2, 15 + this.drill_Yield * 5)
+        if (this.ammount + this.gloomJ2 > 99) { this.gloomJ2 = 99 }
+        else { this.gloomJ2 += this.ammount; ore.destroy(); }
     }
 }
