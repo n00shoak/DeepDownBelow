@@ -53,27 +53,30 @@ class Drill extends Phaser.Scene {
         this.lampLevel = data.lampLevel // 0/3
         this.scafoldingLevel = data.scafoldingLevel // 0/3
 
+        this.layers = data.layers
+
     }
 
     preload() {
-
         // ====== SPRITE ======
+        console.log("===== SCENE 2 =====")
 
         this.load.spritesheet("persoA", "/asset/sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("persoB", "/asset/sprites/characterB.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("persoC", "/asset/sprites/characterC.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("persoD", "/asset/sprites/characterD.png", { frameWidth: 32, frameHeight: 32 });
 
-        this.load.spritesheet("porteA", "/asset/sprites/mapSprite/spawnDoor.png", { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet("porteB", "/asset/sprites/mapSprite/spawnDoorB.png", { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet("porteC", "/asset/sprites/mapSprite/spawnDoorC.png", { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet("porteD", "/asset/sprites/mapSprite/spawnDoorD.png", { frameWidth: 32, frameHeight: 64 });
         this.load.spritesheet("doorOut", "/asset/sprites/mapSprite/doorOut.png", { frameWidth: 32, frameHeight: 48 });
         this.load.spritesheet("porteDrillA", "/asset/sprites/mapSprite/drillDoorA.png", { frameWidth: 32, frameHeight: 48 });
         this.load.spritesheet("porteDrillB", "/asset/sprites/mapSprite/drillDoorB.png", { frameWidth: 32, frameHeight: 48 });
 
         this.load.spritesheet("ready", "/asset/sprites/startingTXT.png", { frameWidth: 256, frameHeight: 96 });
         this.load.spritesheet("Upgrade_Drill", "/asset/sprites/ui_Upgrade_Drill.png", { frameWidth: 80, frameHeight: 48 });
+        this.load.spritesheet("gadgetStation", "/asset/sprites/mapSprite/gadgetStation.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("selector", "/asset/sprites/mapSprite/caveSelector.png", { frameWidth: 80, frameHeight: 64 });
+        this.load.spritesheet("caveSelect", "/asset/sprites/mapSprite/cavesSelect.png", { frameWidth: 48, frameHeight: 32 });
+        this.load.spritesheet("consumption", "/asset/sprites/mapSprite/consumption.png", { frameWidth: 32, frameHeight: 16 });
+        this.load.spritesheet("layerMeter", "/asset/sprites/mapSprite/layerMeter.png", { frameWidth: 16, frameHeight: 48 });
 
         this.load.spritesheet("Hey", "/asset/sprites/UI/interactible.png", { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet("fuelA", "/asset/sprites/UI/drillUsage.png", { frameWidth: 48, frameHeight: 32 });
@@ -84,8 +87,6 @@ class Drill extends Phaser.Scene {
 
         // - - - add maps - - - 
         this.load.tilemapTiledJSON("drill", "/asset/maps/drill.json");
-
-
 
         // - - - Groups - - - 
         this.players = this.physics.add.group({
@@ -103,6 +104,8 @@ class Drill extends Phaser.Scene {
         });
 
         // ===== VAR =====
+        console.log(this.layers)
+
         // camera
         this.posA_x
         this.posA_y
@@ -121,6 +124,7 @@ class Drill extends Phaser.Scene {
         this.drill_Yield = 0
 
         this.used2 = false
+        this.used3 = false
 
         //players stats :
         this.gravityA = 0
@@ -164,11 +168,16 @@ class Drill extends Phaser.Scene {
 
         // > debug
         this.__debug = false
-        this.__state = true
+        this.__state = false
         this.__cam = false
     }
 
     create() {
+        this.selection3 = 0;
+        this.selection4 == 0;
+        this.layer = 0;
+        this.nextCavesIs = 0
+
         // center the game screen
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
@@ -346,6 +355,13 @@ class Drill extends Phaser.Scene {
             repeat: 0
 
         });
+        this.anims.create({
+            key: 'pshit',
+            frames: this.anims.generateFrameNumbers('selector', { start: 0, end: 2 }),
+            frameRate: 15,
+            repeat: 0
+
+        });
 
 
         // ===== objects =====
@@ -374,14 +390,20 @@ class Drill extends Phaser.Scene {
         this.doorOut = this.physics.add.sprite(224, 504, "doorOut").setDepth(1)
 
         // > ui 
-        this.HeyListen_1 = this.physics.add.sprite(264, 384, "Hey").setDepth(10).setAlpha(0)
+        this.HeyListen_1 = this.physics.add.sprite(264, 400, "Hey").setDepth(10).setAlpha(0)
+        this.HeyListen_2 = this.physics.add.sprite(552, 496, "Hey").setDepth(10).setAlpha(0)
         this.drill_state = this.physics.add.sprite(408, 460, "fuelA").setDepth(10).setAlpha(0)
-
         this.UI_1 = this.physics.add.sprite(264, 334, "Upgrade_Drill").setDepth(10).setAlpha(0)
+        this.caveLayer = this.physics.add.sprite(522, 488, "layerMeter").setDepth(4).setAlpha(0)
+        this.consumption = this.physics.add.sprite(552, 480, "consumption").setDepth(4).setAlpha(0)
+        this.caveSelect = this.physics.add.sprite(552, 496, "caveSelect").setDepth(3).setAlpha(0)
+        this._caves = this.physics.add.sprite(552, 496, "caveSelect").setDepth(4).setAlpha(0).setFrame(3)
 
         // > crafting table 
         this.Upgrade_Drill = this.physics.add.sprite(264, 384).setSize(46, 32);
         this.Drill_bore = this.physics.add.sprite(408, 504).setSize(100, 150);
+        this.CaveSelector = this.physics.add.sprite(568 - 16, 496, "selector");
+
 
         // ===== players ======
         if (this.player1READY) {
@@ -391,6 +413,7 @@ class Drill extends Phaser.Scene {
             this.chain_COL1 = this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
             this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme);
             this.craftA = this.physics.add.overlap(this.player1, this.Upgrade_Drill, this.upgradeA1, null, this)
+            this.physics.add.overlap(this.player1, this.CaveSelector, this.nexLevel, null, this)
             this.persoA_state = 1
         }
         if (this.player2READY) {
@@ -400,6 +423,7 @@ class Drill extends Phaser.Scene {
             this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
             this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme);
             this.craftB = this.physics.add.overlap(this.player2, this.Upgrade_Drill, this.upgradeA2, null, this)
+            this.physics.add.overlap(this.player2, this.CaveSelector, this.nexLevel, null, this)
             this.persoB_state = 1
         }
         if (this.player3READY) {
@@ -409,6 +433,7 @@ class Drill extends Phaser.Scene {
             this.chain_COL3 = this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
             this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme);
             this.craftC = this.physics.add.overlap(this.player3, this.Upgrade_Drill, this.upgradeA3, null, this)
+            this.physics.add.overlap(this.player3, this.CaveSelector, this.nexLevel, null, this)
             this.persoC_state = 1
         }
         if (this.player4READY) {
@@ -418,6 +443,7 @@ class Drill extends Phaser.Scene {
             this.chain_COL4 = this.physics.add.overlap(this.player4, this.chain, this.chainRide, null, this);
             this.plateformeCOL4 = this.physics.add.collider(this.player4, this.plateforme);
             this.craftD = this.physics.add.overlap(this.player4, this.Upgrade_Drill, this.upgradeA4, null, this)
+            this.physics.add.overlap(this.player4, this.CaveSelector, this.nexLevel, null, this)
             this.persoD_state = 1
         }
 
@@ -434,6 +460,8 @@ class Drill extends Phaser.Scene {
 
     update() {
         this.HeyListen_1.anims.play('HeyListen', true);
+        this.HeyListen_2.anims.play('HeyListen', true);
+        this.CaveSelector.anims.play("pshit", true)
         //====== DEBUG ======
         if (this.__state || this.__debug) {
             console.log("states : \n J1 :", this.persoA_state, "\n J2 :", this.persoB_state, "\n J3 :", this.persoC_state, "\n J4 :", this.persoD_state)
@@ -705,7 +733,24 @@ class Drill extends Phaser.Scene {
         if (!this.physics.overlap(this.players, this.doorOut)) {
             this.door_0 = false; this.door_1 = false; this.door_2 = false;
             this.doorOut.setFrame(0)
+        }
 
+        if (this.physics.overlap(this.players, this.CaveSelector) && this.used3 == false) {
+            this.tweens.add({
+                targets: this.HeyListen_2,
+                alpha: 1,
+                duration: 100,
+                ease: 'Linear',
+                repeat: 0
+            });
+        } else {
+            this.tweens.add({
+                targets: this.HeyListen_2,
+                alpha: 0,
+                duration: 100,
+                ease: 'Linear',
+                repeat: 0
+            });
         }
 
     }
@@ -1174,6 +1219,57 @@ class Drill extends Phaser.Scene {
         }
     }
 
+    nexLevel(player) {
+        console.log(this.nextCavesIs)
+        //check who use the device
+        if (player == this.player1 && this.nextCavesIs == 0) {
+            if (this.keyE.isDown) {
+                this.used3 = true; this.persoA_state = 3; this.player1.setVelocityX(0)
+                this.caveLayer.setAlpha(1); this.caveSelect.setAlpha(1); this.consumption.setAlpha(1); this._caves.setAlpha(1)
+            }
+            if (this.used3) {
+                //change selection :
+                //overlay
+                if (Phaser.Input.Keyboard.JustDown(this.keyD) && this.selection3 < 3) { this.selection3++; console.log(" next cave", this.selection3) }
+                if (Phaser.Input.Keyboard.JustDown(this.keyQ) && this.selection3 > 0) { this.selection3--; console.log(" previous cave", this.selection3) }
+                if (this.selection3 == 0) { this.caveSelect.setFrame(0) } else if (this.selection3 == 3) { this.caveSelect.setFrame(2) } else { this.caveSelect.setFrame(1) }
+
+                //representation
+                if (this.selection3 != 3) {
+                    this.selection4 = this.layers[this.layer][this.selection3];
+                    this._caves.setFrame(this.selection4[0] + 3)
+
+                    //show consumption
+                    this.consumption.setFrame(Math.round(this.selection3 / 4) + Math.round(this.layer / 3))
+                    //console.log(Math.round(this.selection3 / 4) + Math.round(this.layer / 3))
+                }
+                else { this._caves.setFrame(12); this.consumption.setFrame(3) }
+
+                this.time.addEvent({
+                    delay: 200, callback: () => {
+                        if (Phaser.Input.Keyboard.JustDown(this.keyE)) {//next layer
+                            if (this.selection3 == 3 && this.layer < 6) { this.layer++; this.selection3 = 0; this.caveLayer.setFrame(this.layer) }//change layer
+                            else {
+                                this.nextCavesIs = this.selection4
+                                this.persoA_state = 1
+                                this.used3 = false
+                            }
+                        }
+                        if (Phaser.Input.Keyboard.JustDown(this.keyA)) {//cancel
+                            if (this.selection3 != 3) {
+                                this.nextCavesIs = 0
+                                this.persoA_state = 1
+                                this.used3 = false
+                            }
+
+                        }
+                    },
+                })
+
+            }
+        }
+    }
+
     refuel1() {
 
         this.tweens.add({
@@ -1286,6 +1382,8 @@ class Drill extends Phaser.Scene {
 
     toCave() {
         this.scene.start("caves", {
+            layers : this.layers,
+
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,
             player2READY: this.player2READY,
@@ -1332,6 +1430,18 @@ class Drill extends Phaser.Scene {
 
             lampLevel: this.lampLevel, // 0/3
             scafoldingLevel: this.scafoldingLevel,  // 0/3
+
+            map_Biome: this.nextCavesIs[0],
+            map_Height: this.nextCavesIs[1],     //3
+            map_Length: this.nextCavesIs[2],   //150
+            map_Noise: this.nextCavesIs[3],   //1
+            map_Smooth: this.nextCavesIs[4],   //3
+            map_clif: this.nextCavesIs[5], //1
+
+            ore_Rarity: this.nextCavesIs[6],
+            //ore_red 
+            //ore_blue 
+            //ore_green 
         });
     }
 }

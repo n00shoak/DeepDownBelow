@@ -6,6 +6,8 @@ class Caves extends Phaser.Scene {
 
     init(data) {
         // ===== DRILL SAVE =====
+        this.layers = data.layers
+
         this.playerAMOUNT = data.playerAMOUNT
         this.player1READY = data.player1READY
         this.player2READY = data.player2READY
@@ -54,7 +56,8 @@ class Caves extends Phaser.Scene {
         this.scafoldingLevel = data.scafoldingLevel // 0/3
 
         //Map
-        this.map_Height = 3.5         //3
+        this.biome = data.map_Biome              // 0 1 2 / 3 4 5 / 6 7 8 / 9 10
+        this.map_Height = data.map_Height        //3
         this.map_Length = 200       //150
         this.map_Noise = 1          //1
         this.map_Smooth = 3         //3
@@ -67,6 +70,7 @@ class Caves extends Phaser.Scene {
     }
 
     preload() {
+        console.log("===== SCENE 3 =====")
 
         // ====== SPRITE ======
 
@@ -113,7 +117,14 @@ class Caves extends Phaser.Scene {
         // - - - add tilset - - -
         this.load.spritesheet("Tiles", "../sprites/tileSet/proceduralGen.png", { frameWidth: 16, frameHeight: 16 });
 
+
+    }
+
+    create() {
+
         // ===== VAR =====
+
+
         // camera
         this.posA_x
         this.posA_y
@@ -168,9 +179,6 @@ class Caves extends Phaser.Scene {
         this.__state = false
         this.__cam = false
         this.__inv = false
-    }
-
-    create() {
 
 
 
@@ -212,13 +220,6 @@ class Caves extends Phaser.Scene {
             allowGravity: false,
             immovable: true
         });
-
-
-        this.biome = 0              // 0 1 2 / 3 4 5 / 6 7 8 / 9 10
-
-        // ===== VAR =====
-
-
         this.rnd
         this.noise = 1
 
@@ -1092,6 +1093,7 @@ class Caves extends Phaser.Scene {
 
         if (this.biome == 0 || this.biome == 1 || this.biome == 2) {
             this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(0, 3)).setPipeline('Light2D')) // rock
+            console.log("PROUT")
         }
         if (this.biome == 3 || this.biome == 4 || this.biome == 5) {
             this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(6, 9)).setPipeline('Light2D')) // rock
@@ -1102,43 +1104,43 @@ class Caves extends Phaser.Scene {
         if (this.biome == 9 || this.biome == 10) {
             this.ground.add(this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(22, 25))).setPipeline('Light2D')) // rock
         }
-        if (this.ore_red && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore1.add(this.physics.add.sprite(x, y, "Tiles").setSize(14, 14).setFrame(34).setDepth(1).setPipeline('Light2D')) }
-        else if (this.ore_blue && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore2.add(this.physics.add.sprite(x, y, "Tiles").setSize(14, 14).setFrame(35).setDepth(1).setPipeline('Light2D')) }
-        else if (this.ore_green && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore3.add(this.physics.add.sprite(x, y, "Tiles").setSize(14, 14).setFrame(36).setDepth(1).setPipeline('Light2D')) }
+        if (this.ore_red && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore1.add(this.physics.add.sprite(x, y, "Tiles").setSize(12, 12).setFrame(34).setDepth(1).setPipeline('Light2D')) }
+        else if (this.ore_blue && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore2.add(this.physics.add.sprite(x, y, "Tiles").setSize(12, 12).setFrame(35).setDepth(1).setPipeline('Light2D')) }
+        else if (this.ore_green && (Phaser.Math.Between(0, this.ore_Rarity) == 0)) { this.ore3.add(this.physics.add.sprite(x, y, "Tiles").setSize(12, 12).setFrame(36).setDepth(1).setPipeline('Light2D')) }
     }
 
     onTop(x, y) {
         //sand && crystal
         if (this.biome == 1) {
-            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(4, 5)))
+            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(4, 5)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 8) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y - 16, "crystal").setFrame(1))
                 this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
-        if (this.biome == 3) {
-            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(10, 11)))
+        else if (this.biome == 3) {
+            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(10, 11)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 8) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y - 16, "crystal").setFrame(1))
                 this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
-        if (this.biome == 6 || this.biome == 7) {
-            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(18, 19)))
+        else if (this.biome == 6 || this.biome == 7) {
+            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(18, 19)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 8) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y - 16, "crystal").setFrame(1))
                 this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
-        if (this.biome == 9) {
-            this.ground.add(this.physics.add.sprite(x, y - 16, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(26, 27)))
+        else if (this.biome == 9) {
+            this.ground.add(this.physics.add.sprite(x, y - 16, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(26, 27)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 8) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y - 16, "crystal").setFrame(1))
                 this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
         //crystal
-        if (Phaser.Math.Between(0, this.ore_Rarity / 9) == 0) {
+        else if (Phaser.Math.Between(0, this.ore_Rarity / 9) == 0) {
             this.ore4.add(this.physics.add.sprite(x, y - 16, "crystal").setFrame(1))
             this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
         }
@@ -1149,21 +1151,21 @@ class Caves extends Phaser.Scene {
 
         //sand
         if (this.biome == 3) {
-            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(12, 13)))
+            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(12, 13)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 10) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y + 16, "crystal"))
                 this.lights.addLight(x, y - 16, 90).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
-        if (this.biome == 6 || this.biome == 7) {
-            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(20, 21)))
+        else if (this.biome == 6 || this.biome == 7) {
+            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(20, 21)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 10) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y + 16, "crystal"))
                 this.lights.addLight(x, y - 16, 90).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
-        if (this.biome == 9 || this.biome == 10) {
-            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(28, 29)))
+        else if (this.biome == 9 || this.biome == 10) {
+            this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(28, 29)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 10) == 0) {
                 this.ore4.add(this.physics.add.sprite(x, y + 16, "crystal"))
                 this.lights.addLight(x, y - 16, 90).setIntensity(0.95).setColor(0x7eadd6);
@@ -1334,6 +1336,7 @@ class Caves extends Phaser.Scene {
 
     toCave() {
         this.scene.start("caves", {
+            layers: this.layers,
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,
             player2READY: this.player2READY,
@@ -1371,11 +1374,14 @@ class Caves extends Phaser.Scene {
             drill_Yield: this.drill_Yield,
             lampLevel: this.lampLevel, // 0/3
             scafoldingLevel: this.scafoldingLevel,  // 0/3
+            map_Height:this.map_Height,
+            map_Biome:this.biome,
         });
     }
 
     toDrill() {
         this.scene.start("drill", {
+            layers: this.layers,
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,
             player2READY: this.player2READY,
@@ -1413,6 +1419,7 @@ class Caves extends Phaser.Scene {
             drill_Yield: this.drill_Yield,
             lampLevel: this.lampLevel, // 0/3
             scafoldingLevel: this.scafoldingLevel,  // 0/3
+
         });
     }
 

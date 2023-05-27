@@ -311,13 +311,13 @@
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.9.2",
+ "tiledversion":"1.10.1",
  "tileheight":16,
  "tilesets":[
         {
          "columns":32,
          "firstgid":1,
-         "image":"..\/sprites\/tileSet\/tileset.png",
+         "image":"D:\/DeepDownBelow\/asset\/sprites\/tileSet\/tileset.png",
          "imageheight":256,
          "imagewidth":512,
          "margin":0,
@@ -1558,7 +1558,7 @@
         {
          "columns":56,
          "firstgid":513,
-         "image":"..\/sprites\/tileSet\/decorTileset.png",
+         "image":"D:\/DeepDownBelow\/asset\/sprites\/tileSet\/decorTileset.png",
          "imageheight":900,
          "imagewidth":900,
          "margin":0,
@@ -1571,6 +1571,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":"1.9",
+ "version":"1.10",
  "width":50
 }
