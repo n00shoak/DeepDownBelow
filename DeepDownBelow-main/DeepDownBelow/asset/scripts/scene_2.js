@@ -198,9 +198,9 @@ class Drill extends Phaser.Scene {
 
         // - - - loading layers - - -
         this.Layer_0 = carteDuNiveau.createLayer("Layer_0", objet);
-        this.Layer_1 = carteDuNiveau.createLayer("Layer_1", tileset).setDepth(1);
-        this.Layer_2 = carteDuNiveau.createLayer("Layer_2", tileset).setDepth(1.1);
-        this.Layer_3 = carteDuNiveau.createLayer("Layer_3", tileset).setDepth(1.2);
+        this.Layer_1 = carteDuNiveau.createLayer("Layer_1", tileset).setDepth(5);
+        this.Layer_2 = carteDuNiveau.createLayer("Layer_2", tileset).setDepth(5.1);
+        this.Layer_3 = carteDuNiveau.createLayer("Layer_3", tileset).setDepth(5.2);
 
         // - - - Anims - - - 
 
@@ -394,10 +394,10 @@ class Drill extends Phaser.Scene {
         this.HeyListen_2 = this.physics.add.sprite(552, 496, "Hey").setDepth(10).setAlpha(0)
         this.drill_state = this.physics.add.sprite(408, 460, "fuelA").setDepth(10).setAlpha(0)
         this.UI_1 = this.physics.add.sprite(264, 334, "Upgrade_Drill").setDepth(10).setAlpha(0)
-        this.caveLayer = this.physics.add.sprite(522, 488, "layerMeter").setDepth(4).setAlpha(0)
-        this.consumption = this.physics.add.sprite(552, 480, "consumption").setDepth(4).setAlpha(0)
-        this.caveSelect = this.physics.add.sprite(552, 496, "caveSelect").setDepth(3).setAlpha(0)
-        this._caves = this.physics.add.sprite(552, 496, "caveSelect").setDepth(4).setAlpha(0).setFrame(3)
+        this.caveLayer = this.physics.add.sprite(520, 488, "layerMeter").setDepth(4).setAlpha(0)
+        this.consumption = this.physics.add.sprite(552, 478, "consumption").setDepth(4).setAlpha(0)
+        this.caveSelect = this.physics.add.sprite(551, 492, "caveSelect").setDepth(3).setAlpha(0)
+        this._caves = this.physics.add.sprite(551, 492, "caveSelect").setDepth(2).setAlpha(0).setFrame(3)
 
         // > crafting table 
         this.Upgrade_Drill = this.physics.add.sprite(264, 384).setSize(46, 32);
@@ -409,7 +409,7 @@ class Drill extends Phaser.Scene {
         if (this.player1READY) {
             this.player1 = this.physics.add.sprite(280, 500, 'persoA');
             this.player1.body.setSize(20, 20);
-            this.players.add(this.player1)
+            this.players.add(this.player1).setDepth(4)
             this.chain_COL1 = this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
             this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme);
             this.craftA = this.physics.add.overlap(this.player1, this.Upgrade_Drill, this.upgradeA1, null, this)
@@ -419,7 +419,7 @@ class Drill extends Phaser.Scene {
         if (this.player2READY) {
             this.player2 = this.physics.add.sprite(280, 500, 'persoB');
             this.player2.body.setSize(20, 20);
-            this.players.add(this.player2)
+            this.players.add(this.player2).setDepth(4)
             this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
             this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme);
             this.craftB = this.physics.add.overlap(this.player2, this.Upgrade_Drill, this.upgradeA2, null, this)
@@ -429,7 +429,7 @@ class Drill extends Phaser.Scene {
         if (this.player3READY) {
             this.player3 = this.physics.add.sprite(280, 500, 'persoC');
             this.player3.body.setSize(20, 20);
-            this.players.add(this.player3)
+            this.players.add(this.player3).setDepth(4)
             this.chain_COL3 = this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
             this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme);
             this.craftC = this.physics.add.overlap(this.player3, this.Upgrade_Drill, this.upgradeA3, null, this)
@@ -439,7 +439,7 @@ class Drill extends Phaser.Scene {
         if (this.player4READY) {
             this.player4 = this.physics.add.sprite(280, 500, 'persoD');
             this.player4.body.setSize(20, 20);
-            this.players.add(this.player4)
+            this.players.add(this.player4).setDepth(4)
             this.chain_COL4 = this.physics.add.overlap(this.player4, this.chain, this.chainRide, null, this);
             this.plateformeCOL4 = this.physics.add.collider(this.player4, this.plateforme);
             this.craftD = this.physics.add.overlap(this.player4, this.Upgrade_Drill, this.upgradeA4, null, this)
@@ -735,7 +735,7 @@ class Drill extends Phaser.Scene {
             this.doorOut.setFrame(0)
         }
 
-        if (this.physics.overlap(this.players, this.CaveSelector) && this.used3 == false) {
+        if (this.physics.overlap(this.players, this.CaveSelector) && this.used3 == false && this.selection4 ==0) {
             this.tweens.add({
                 targets: this.HeyListen_2,
                 alpha: 1,
@@ -1253,6 +1253,10 @@ class Drill extends Phaser.Scene {
                                 this.nextCavesIs = this.selection4
                                 this.persoA_state = 1
                                 this.used3 = false
+                                this.caveLayer.setAlpha(0); this.caveSelect.setAlpha(0); this.consumption.setAlpha(0);
+                                this._caves.body.y -= 4
+                                this._caves.body.x -= 6
+                                this._caves.setScale(1.9, 1.9).setDepth(1)
                             }
                         }
                         if (Phaser.Input.Keyboard.JustDown(this.keyA)) {//cancel
@@ -1260,6 +1264,7 @@ class Drill extends Phaser.Scene {
                                 this.nextCavesIs = 0
                                 this.persoA_state = 1
                                 this.used3 = false
+                                this.caveLayer.setAlpha(0); this.caveSelect.setAlpha(0); this.consumption.setAlpha(0); this._caves.setAlpha(0)
                             }
 
                         }
@@ -1382,7 +1387,7 @@ class Drill extends Phaser.Scene {
 
     toCave() {
         this.scene.start("caves", {
-            layers : this.layers,
+            layers: this.layers,
 
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,

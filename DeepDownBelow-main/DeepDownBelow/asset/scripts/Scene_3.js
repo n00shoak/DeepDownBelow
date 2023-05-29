@@ -59,11 +59,11 @@ class Caves extends Phaser.Scene {
         this.biome = data.map_Biome              // 0 1 2 / 3 4 5 / 6 7 8 / 9 10
         this.map_Height = data.map_Height        //3
         this.map_Length = 200       //150
-        this.map_Noise = 1          //1
-        this.map_Smooth = 3         //3
-        this.map_clif = 2           //1
+        this.map_Noise = data.map_Noise        //1
+        this.map_Smooth = data.map_Smooth      //3
+        this.map_clif = data.map_clif          //1
 
-        this.ore_Rarity = 150        //40
+        this.ore_Rarity = data.ore_Rarity        //40
         this.ore_red = true
         this.ore_blue = true
         this.ore_green = true
@@ -71,7 +71,6 @@ class Caves extends Phaser.Scene {
 
     preload() {
         console.log("===== SCENE 3 =====")
-
         // ====== SPRITE ======
 
         this.load.spritesheet("persoA", "../sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
@@ -234,9 +233,15 @@ class Caves extends Phaser.Scene {
 
 
         console.log(" BOTOP TO TOP")
+
         this.layer0 = []; for (var i = 0; i < this.map_Length; i += Phaser.Math.Between(1, this.map_Smooth)) { if (Phaser.Math.Between(0, 1) > 0 && this.noise < this.map_Height * 3) { this.noise += Phaser.Math.Between(1, this.map_clif) } /* add value */else if (this.noise != 0) { this.noise -= 1 } /* retrieve value*/this.layer0[i] = this.noise + this.map_Height /*apply base value*/ };// generate raw value 
         console.log(this.layer0)
-        for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null) { this.layer0[i] = this.layer0[i - 1] } } // apply raw value to nearby null value
+        if (this.biome != 4) {
+            for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null) { this.layer0[i] = this.layer0[i - 1] } } // apply raw value to nearby null value
+        } else {
+            for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null){this.layer0[i] = 0}}
+        }
+
         console.log(this.layer0)
 
         // other layer
@@ -290,7 +295,12 @@ class Caves extends Phaser.Scene {
         // first layer 
         this.layer40 = []; for (var i = 0; i < this.map_Length; i += Phaser.Math.Between(1, this.map_Smooth)) { if (Phaser.Math.Between(0, 1) > 0 && this.noise < this.map_Height * 3) { this.noise += Phaser.Math.Between(1, this.map_clif) } /* add value */else if (this.noise != 0) { this.noise -= 1 } /* retrieve value*/this.layer40[i] = this.noise + this.map_Height /*apply base value*/ };// generate raw value 
         console.log(this.layer40)
-        for (var i = 0; i < this.map_Length; i++) { if (this.layer40[i] == null) { this.layer40[i] = this.layer40[i - 1] } } // apply raw value to nearby null value
+
+        if (this.biome != 4) {
+            for (var i = 0; i < this.map_Length; i++) { if (this.layer40[i] == null) { this.layer40[i] = this.layer40[i - 1] } }
+        } else {
+            for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null){this.layer0[i] = 0}}
+        }// apply raw value to nearby null value
         console.log(this.layer40)
 
         this.layer41 = []; for (var i = 0; i < this.map_Length; i++) { this.rnd = Phaser.Math.Between(1, this.map_Noise); if (this.layer40[i] - this.rnd > 0) { this.layer41[i] = this.layer40[i] - this.rnd } else { this.layer41[i] = 0 } }; console.log("layer 21", this.layer41)
@@ -374,7 +384,7 @@ class Caves extends Phaser.Scene {
         this.line37 = []; for (var i = 0; i < this.map_Length; i++) { this.line37[i] = this.layer37[i] + this.layer43[i] }; console.log("line 1", this.line37)
         this.line38 = []; for (var i = 0; i < this.map_Length; i++) { this.line38[i] = this.layer38[i] + this.layer42[i] }; console.log("line 1", this.line38)
         this.line39 = []; for (var i = 0; i < this.map_Length; i++) { this.line39[i] = this.layer39[i] + this.layer41[i] }; console.log("line 1", this.line39)
-        this.line40 = []; for (var i = 0; i < this.map_Length; i++) { this.line40[i] = this.layer40[i] + this.layer40[i] }; console.log("line 1", this.line40)
+        //this.line40 = []; for (var i = 0; i < this.map_Length; i++) { this.line40[i] = this.layer40[i] + this.layer40[i] }; console.log("line 1", this.line40)
 
 
 
@@ -382,7 +392,7 @@ class Caves extends Phaser.Scene {
 
 
         // > show results
-        for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile((16 * i), 16 * 50) } }
+        //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile((16 * i), 16 * 50) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0) { this.addTile((16 * i), 16 * 49) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0) { this.addTile((16 * i), 16 * 48) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0) { this.addTile((16 * i), 16 * 47) } }
@@ -421,7 +431,7 @@ class Caves extends Phaser.Scene {
         for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0) { this.addTile((16 * i), 16 * 14) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0) { this.addTile((16 * i), 16 * 13) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0) { this.addTile((16 * i), 16 * 12) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile((16 * i), 16 * 11) } }
+        //for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile((16 * i), 16 * 11) } }
 
         /*
         for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile(16 * 50,(16 * i) ) } }
@@ -468,7 +478,7 @@ class Caves extends Phaser.Scene {
 
 
         //find free space on ground
-        for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0 && this.line2[i] <= 0) { this.onTop(16 * i, 16 * 50) } }
+        //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0 && this.line2[i] <= 0) { this.onTop(16 * i, 16 * 50) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0 && this.line3[i] <= 0) { this.onTop(16 * i, 16 * 49) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0 && this.line4[i] <= 0) { this.onTop(16 * i, 16 * 48) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0 && this.line5[i] <= 0) { this.onTop(16 * i, 16 * 47) } }
@@ -506,10 +516,10 @@ class Caves extends Phaser.Scene {
         for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0 && this.line37[i] <= 0) { this.onTop(16 * i, 16 * 15) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0 && this.line38[i] <= 0) { this.onTop(16 * i, 16 * 14) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0 && this.line39[i] <= 0) { this.onTop(16 * i, 16 * 13) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0 && this.line40[i] <= 0) { this.onTop(16 * i, 16 * 12) } }
+        //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0 && this.line40[i] <= 0) { this.onTop(16 * i, 16 * 12) } }
 
         //find free space on roof
-        for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] <= 0 && this.lin40[i] > 0) { this.under(16 * i, 16 * 12) } }
+        //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] <= 0 && this.lin40[i] > 0) { this.under(16 * i, 16 * 12) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] <= 0 && this.line39[i] > 0) { this.under(16 * i, 16 * 13) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] <= 0 && this.line38[i] > 0) { this.under(16 * i, 16 * 14) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] <= 0 && this.line37[i] > 0) { this.under(16 * i, 16 * 15) } }
@@ -547,7 +557,7 @@ class Caves extends Phaser.Scene {
         for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] <= 0 && this.line5[i] > 0) { this.under(16 * i, 16 * 47) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] <= 0 && this.line4[i] > 0) { this.under(16 * i, 16 * 48) } }
         for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] <= 0 && this.line3[i] > 0) { this.under(16 * i, 16 * 49) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] <= 0 && this.line2[i] > 0) { this.under(16 * i, 16 * 50) } }
+        //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] <= 0 && this.line2[i] > 0) { this.under(16 * i, 16 * 50) } }
 
 
         // center the game screen
@@ -1093,7 +1103,6 @@ class Caves extends Phaser.Scene {
 
         if (this.biome == 0 || this.biome == 1 || this.biome == 2) {
             this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(0, 3)).setPipeline('Light2D')) // rock
-            console.log("PROUT")
         }
         if (this.biome == 3 || this.biome == 4 || this.biome == 5) {
             this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(6, 9)).setPipeline('Light2D')) // rock
@@ -1118,6 +1127,7 @@ class Caves extends Phaser.Scene {
                 this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
+        else if (this.biome == 2) { this.placeStalagA(x, y - 16) }
         else if (this.biome == 3) {
             this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(10, 11)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 8) == 0) {
@@ -1139,16 +1149,15 @@ class Caves extends Phaser.Scene {
                 this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
-        //crystal
-        else if (Phaser.Math.Between(0, this.ore_Rarity / 9) == 0) {
+        if (Phaser.Math.Between(0, this.ore_Rarity / 9) == 0) {//crystal
             this.ore4.add(this.physics.add.sprite(x, y - 16, "crystal").setFrame(1))
             this.lights.addLight(x, y - 16, 65).setIntensity(0.95).setColor(0x7eadd6);
         }
+
+
     }
 
     under(x, y) {
-
-
         //sand
         if (this.biome == 3) {
             this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(12, 13)).setPipeline('Light2D'))
@@ -1157,6 +1166,8 @@ class Caves extends Phaser.Scene {
                 this.lights.addLight(x, y - 16, 90).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
+        else if (this.biome == 1) { this.placeRootsFruits(x, y) }
+        else if (this.biome == 2) { this.placeStalagB(x, y) }
         else if (this.biome == 6 || this.biome == 7) {
             this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(20, 21)).setPipeline('Light2D'))
             if (Phaser.Math.Between(0, this.ore_Rarity / 10) == 0) {
@@ -1178,6 +1189,52 @@ class Caves extends Phaser.Scene {
             }
         }
 
+    }
+
+    placeStalagA(x, y) {
+        if (Phaser.Math.Between(0, 3) == 0) {
+            this.length = Phaser.Math.Between(2, 5)
+            this.chain.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(37).setPipeline('Light2D'))
+            if (this.length > 2) {
+                for (var i = 0; i < this.length - 1; i++) {
+                    this.chain.add(this.physics.add.sprite(x, y - i * 16, "Tiles").setSize(16, 16).setFrame(39).setPipeline('Light2D'))
+                }
+            }
+            this.chain.add(this.physics.add.sprite(x, y - (this.length * 16) + 16, "Tiles").setSize(16, 16).setFrame(38).setPipeline('Light2D'))
+        }
+    }
+    placeStalagB(x, y) {
+        if (Phaser.Math.Between(0, 3) == 0) {
+            this.length = Phaser.Math.Between(2, 5)
+            this.chain.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(41).setPipeline('Light2D'))
+            if (this.length > 2) {
+                for (var i = 0; i < this.length + 1; i++) {
+                    this.chain.add(this.physics.add.sprite(x, y + i * 16, "Tiles").setSize(16, 16).setFrame(39).setPipeline('Light2D'))
+                }
+                this.chain.add(this.physics.add.sprite(x, y + (this.length * 16) + 16, "Tiles").setSize(16, 16).setFrame(40).setPipeline('Light2D'))
+            }
+            else { this.chain.add(this.physics.add.sprite(x, y + (this.length * 16) - 16, "Tiles").setSize(16, 16).setFrame(40).setPipeline('Light2D')) }
+        }
+    }
+
+    placeRootsFruits(x, y) {
+        if (Phaser.Math.Between(0, 4) == 0) {
+            this.length = Phaser.Math.Between(3, 7)
+            this.chain.add(this.physics.add.sprite(x, y - 16, "Tiles").setSize(16, 16).setFrame(42).setDepth(2).setPipeline('Light2D'))
+            if (this.length > 2) {
+                for (var i = 0; i < this.length + 1; i++) {
+                    if (Phaser.Math.Between(0, 5) <= 4) {
+                        this.chain.add(this.physics.add.sprite(x, y + i * 16, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(43, 45)).setPipeline('Light2D'))
+                    } else {
+                        this.chain.add(this.physics.add.sprite(x, y + i * 16, "Tiles").setSize(16, 16).setFrame(46).setPipeline('Light2D'))
+                        this.lights.addLight(x, y, 65).setIntensity(1).setColor(0xf09f1d);
+                    }
+
+                }
+                this.chain.add(this.physics.add.sprite(x, y + (this.length * 16) + 16, "Tiles").setSize(16, 16).setFrame(47).setPipeline('Light2D'))
+            }
+            else { this.chain.add(this.physics.add.sprite(x, y + (this.length * 16) - 16, "Tiles").setSize(16, 16).setFrame(47).setPipeline('Light2D')) }
+        }
     }
 
     moveDrill(lr, player, up, down, go, drill) {
@@ -1374,8 +1431,12 @@ class Caves extends Phaser.Scene {
             drill_Yield: this.drill_Yield,
             lampLevel: this.lampLevel, // 0/3
             scafoldingLevel: this.scafoldingLevel,  // 0/3
-            map_Height:this.map_Height,
-            map_Biome:this.biome,
+            map_Height: this.map_Height,
+            map_Biome: this.biome,
+            map_Noise: this.map_Noise,
+            map_Smooth: this.map_Smooth,
+            map_clif: this.map_clif,
+            ore_Rarity: this.ore_Rarity,
         });
     }
 

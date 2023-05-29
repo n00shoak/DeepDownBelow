@@ -388,7 +388,7 @@ class lobby extends Phaser.Scene {
         this.map_Smooth = 3         //3
         this.map_clif = 2           //1
 
-        this.ore_Rarity = 150        //40
+        this.ore_Rarity = 50        //40
         this.ore_red = true
         this.ore_blue = true
         this.ore_green = true
@@ -403,17 +403,17 @@ class lobby extends Phaser.Scene {
                 var cave;
                 //regulate difficulty over progression
                 if (y < 4) { var rnd1 = Phaser.Math.Between(0, 3); }
-                else if (y < 8) { var rnd1 = Phaser.Math.Between(1, 8); }
+                else if (y < 8) { var rnd1 = Phaser.Math.Between(3, 8); }
 
                 //generate seed
                 if (rnd1 == 0 || rnd1 == 1 || rnd1 == 2) {
-                    cave = [rnd1, Phaser.Math.Between(3, 4), 200, 1, Phaser.Math.Between(2, 3), Phaser.Math.Between(1, 2), Phaser.Math.Between(120, 180), 1];
+                    cave = [rnd1, Phaser.Math.Between(3, 4), 200, 1, Phaser.Math.Between(2, 3), Phaser.Math.Between(1, 2), Phaser.Math.Between(100, 130), 1];
                 } else if (rnd1 == 3 || rnd1 == 4 || rnd1 == 5) {
-                    cave = [rnd1, Phaser.Math.Between(2, 5), 200, 1, Phaser.Math.Between(3, 6), 1, Phaser.Math.Between(100, 160), 2];
+                    cave = [rnd1, Phaser.Math.Between(2, 5), 200, 1, Phaser.Math.Between(3, 6), 1, Phaser.Math.Between(80, 110), 2];
                 } else if (rnd1 == 6 || rnd1 == 7) {
-                    cave = [rnd1, Phaser.Math.Between(2, 4), 200, 1, Phaser.Math.Between(1, 2), Phaser.Math.Between(1, 2), Phaser.Math.Between(100, 140), 4];
+                    cave = [rnd1, Phaser.Math.Between(2, 4), 200, 1, Phaser.Math.Between(1, 2), Phaser.Math.Between(1, 2), Phaser.Math.Between(70, 110), 4];
                 } else if (rnd1 == 8) {
-                    cave = [rnd1, Phaser.Math.Between(5, 7), 200, 3, Phaser.Math.Between(1, 3), Phaser.Math.Between(1, 3), Phaser.Math.Between(80, 120), 3];
+                    cave = [rnd1, Phaser.Math.Between(5, 7), 200, 3, Phaser.Math.Between(1, 3), Phaser.Math.Between(1, 3), Phaser.Math.Between(60, 100), 3];
                 }
 
                 console.log("cave", i, ": ", cave);
