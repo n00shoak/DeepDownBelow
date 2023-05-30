@@ -14,7 +14,7 @@ class Caves extends Phaser.Scene {
         this.player3READY = data.player3READY
         this.player4READY = data.player4READY
 
-        this.gadgetSelected1 = data.gadgetSelected1
+        this.gadgetSelected1 = /*data.gadgetSelected1*/ 2
         this.gadgetSelected2 = data.gadgetSelected2
         this.gadgetSelected3 = data.gadgetSelected3
         this.gadgetSelected4 = data.gadgetSelected4
@@ -52,7 +52,7 @@ class Caves extends Phaser.Scene {
         this.drill_Speed = data.drill_Speed
         this.drill_Yield = data.drill_Yield
 
-        this.lampLevel = data.lampLevel // 0/3
+        this.lampLevel = /*data.lampLevel*/ 2 /// 0/3
         this.scafoldingLevel = data.scafoldingLevel // 0/3
 
         //Map
@@ -110,6 +110,8 @@ class Caves extends Phaser.Scene {
 
         this.load.spritesheet("edgeLeft", "../sprites/mapSprite/edgeLeft.png", { frameWidth: 128, frameHeight: 512 });
         this.load.spritesheet("edgeRight", "../sprites/mapSprite/edgeRight.png", { frameWidth: 128, frameHeight: 512 });
+        this.load.spritesheet("edgeTop", "../sprites/mapSprite/edgeTop.png", { frameWidth: 1600, frameHeight: 160 });
+        this.load.spritesheet("edgeBottom", "../sprites/mapSprite/edgeBottom.png", { frameWidth: 1600, frameHeight: 160 });
         this.load.image("shadow", "../sprites/mapSprite/shadow.png")
 
 
@@ -239,7 +241,7 @@ class Caves extends Phaser.Scene {
         if (this.biome != 4) {
             for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null) { this.layer0[i] = this.layer0[i - 1] } } // apply raw value to nearby null value
         } else {
-            for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null){this.layer0[i] = 0}}
+            for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null) { this.layer0[i] = 0 } }
         }
 
         console.log(this.layer0)
@@ -299,7 +301,7 @@ class Caves extends Phaser.Scene {
         if (this.biome != 4) {
             for (var i = 0; i < this.map_Length; i++) { if (this.layer40[i] == null) { this.layer40[i] = this.layer40[i - 1] } }
         } else {
-            for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null){this.layer0[i] = 0}}
+            for (var i = 0; i < this.map_Length; i++) { if (this.layer0[i] == null) { this.layer0[i] = 0 } }
         }// apply raw value to nearby null value
         console.log(this.layer40)
 
@@ -388,176 +390,258 @@ class Caves extends Phaser.Scene {
 
 
 
-
-
-
         // > show results
-        //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile((16 * i), 16 * 50) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0) { this.addTile((16 * i), 16 * 49) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0) { this.addTile((16 * i), 16 * 48) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0) { this.addTile((16 * i), 16 * 47) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0) { this.addTile((16 * i), 16 * 46) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0) { this.addTile((16 * i), 16 * 45) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0) { this.addTile((16 * i), 16 * 44) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0) { this.addTile((16 * i), 16 * 43) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0) { this.addTile((16 * i), 16 * 42) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0) { this.addTile((16 * i), 16 * 41) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0) { this.addTile((16 * i), 16 * 40) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0) { this.addTile((16 * i), 16 * 39) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0) { this.addTile((16 * i), 16 * 38) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0) { this.addTile((16 * i), 16 * 37) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0) { this.addTile((16 * i), 16 * 36) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0) { this.addTile((16 * i), 16 * 35) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0) { this.addTile((16 * i), 16 * 34) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0) { this.addTile((16 * i), 16 * 33) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0) { this.addTile((16 * i), 16 * 32) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0) { this.addTile((16 * i), 16 * 31) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0) { this.addTile((16 * i), 16 * 30) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0) { this.addTile((16 * i), 16 * 29) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0) { this.addTile((16 * i), 16 * 28) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0) { this.addTile((16 * i), 16 * 27) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0) { this.addTile((16 * i), 16 * 26) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0) { this.addTile((16 * i), 16 * 25) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0) { this.addTile((16 * i), 16 * 24) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0) { this.addTile((16 * i), 16 * 23) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0) { this.addTile((16 * i), 16 * 22) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0) { this.addTile((16 * i), 16 * 21) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0) { this.addTile((16 * i), 16 * 20) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0) { this.addTile((16 * i), 16 * 19) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0) { this.addTile((16 * i), 16 * 18) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0) { this.addTile((16 * i), 16 * 17) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0) { this.addTile((16 * i), 16 * 16) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0) { this.addTile((16 * i), 16 * 15) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0) { this.addTile((16 * i), 16 * 14) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0) { this.addTile((16 * i), 16 * 13) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0) { this.addTile((16 * i), 16 * 12) } }
-        //for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile((16 * i), 16 * 11) } }
+        if (this.biome == 6 || this.biome == 7 || this.biome == 8) {
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile(16 * 50, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0) { this.addTile(16 * 49, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0) { this.addTile(16 * 48, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0) { this.addTile(16 * 47, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0) { this.addTile(16 * 46, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0) { this.addTile(16 * 45, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0) { this.addTile(16 * 44, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0) { this.addTile(16 * 43, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0) { this.addTile(16 * 42, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0) { this.addTile(16 * 41, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0) { this.addTile(16 * 40, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0) { this.addTile(16 * 39, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0) { this.addTile(16 * 38, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0) { this.addTile(16 * 37, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0) { this.addTile(16 * 36, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0) { this.addTile(16 * 35, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0) { this.addTile(16 * 34, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0) { this.addTile(16 * 33, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0) { this.addTile(16 * 32, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0) { this.addTile(16 * 31, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0) { this.addTile(16 * 30, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0) { this.addTile(16 * 29, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0) { this.addTile(16 * 28, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0) { this.addTile(16 * 27, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0) { this.addTile(16 * 26, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0) { this.addTile(16 * 25, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0) { this.addTile(16 * 24, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0) { this.addTile(16 * 23, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0) { this.addTile(16 * 22, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0) { this.addTile(16 * 21, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0) { this.addTile(16 * 20, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0) { this.addTile(16 * 19, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0) { this.addTile(16 * 18, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0) { this.addTile(16 * 17, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0) { this.addTile(16 * 16, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0) { this.addTile(16 * 15, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0) { this.addTile(16 * 14, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0) { this.addTile(16 * 13, (16 * i)) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0) { this.addTile(16 * 12, (16 * i)) } }
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile(16 * 11, (16 * i)) } }
 
-        /*
-        for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile(16 * 50,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0) { this.addTile(16 * 49,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0) { this.addTile(16 * 48,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0) { this.addTile(16 * 47,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0) { this.addTile(16 * 46,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0) { this.addTile(16 * 45,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0) { this.addTile(16 * 44,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0) { this.addTile(16 * 43,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0) { this.addTile(16 * 42,(16 * i) ) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0) { this.addTile( 16 * 41,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0) { this.addTile( 16 * 40,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0) { this.addTile( 16 * 39,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0) { this.addTile( 16 * 38,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0) { this.addTile( 16 * 37,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0) { this.addTile( 16 * 36,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0) { this.addTile( 16 * 35,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0) { this.addTile( 16 * 34,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0) { this.addTile( 16 * 33,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0) { this.addTile( 16 * 32,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0) { this.addTile( 16 * 31,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0) { this.addTile( 16 * 30,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0) { this.addTile( 16 * 29,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0) { this.addTile( 16 * 28,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0) { this.addTile( 16 * 27,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0) { this.addTile( 16 * 26,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0) { this.addTile( 16 * 25,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0) { this.addTile( 16 * 24,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0) { this.addTile( 16 * 23,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0) { this.addTile( 16 * 22,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0) { this.addTile( 16 * 21,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0) { this.addTile( 16 * 20,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0) { this.addTile( 16 * 19,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0) { this.addTile( 16 * 18,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0) { this.addTile( 16 * 17,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0) { this.addTile( 16 * 16,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0) { this.addTile( 16 * 15,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0) { this.addTile( 16 * 14,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0) { this.addTile( 16 * 13,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0) { this.addTile( 16 * 12,(16 * i)) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile( 16 * 11,(16 * i)) } }
-        */
+            //find free space on the right
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0 && this.line2[i] <= 0) { this.onTop(16 * i, 16 * 50) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0 && this.line3[i] <= 0) { this.onRight(16 * i, 16 * 49) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0 && this.line4[i] <= 0) { this.onRight(16 * i, 16 * 48) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0 && this.line5[i] <= 0) { this.onRight(16 * i, 16 * 47) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0 && this.line6[i] <= 0) { this.onRight(16 * i, 16 * 46) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0 && this.line7[i] <= 0) { this.onRight(16 * i, 16 * 45) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0 && this.line8[i] <= 0) { this.onRight(16 * i, 16 * 44) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0 && this.line9[i] <= 0) { this.onRight(16 * i, 16 * 43) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0 && this.line10[i] <= 0) { this.onRight(16 * i, 16 * 42) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0 && this.line11[i] <= 0) { this.onRight(16 * i, 16 * 41) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0 && this.line12[i] <= 0) { this.onRight(16 * i, 16 * 40) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0 && this.line13[i] <= 0) { this.onRight(16 * i, 16 * 39) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0 && this.line14[i] <= 0) { this.onRight(16 * i, 16 * 38) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0 && this.line15[i] <= 0) { this.onRight(16 * i, 16 * 37) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0 && this.line16[i] <= 0) { this.onRight(16 * i, 16 * 36) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0 && this.line17[i] <= 0) { this.onRight(16 * i, 16 * 35) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0 && this.line18[i] <= 0) { this.onRight(16 * i, 16 * 34) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0 && this.line19[i] <= 0) { this.onRight(16 * i, 16 * 33) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0 && this.line20[i] <= 0) { this.onRight(16 * i, 16 * 32) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0 && this.line21[i] <= 0) { this.onRight(16 * i, 16 * 31) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0 && this.line22[i] <= 0) { this.onRight(16 * i, 16 * 30) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0 && this.line23[i] <= 0) { this.onRight(16 * i, 16 * 29) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0 && this.line24[i] <= 0) { this.onRight(16 * i, 16 * 28) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0 && this.line25[i] <= 0) { this.onRight(16 * i, 16 * 27) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0 && this.line26[i] <= 0) { this.onRight(16 * i, 16 * 26) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0 && this.line27[i] <= 0) { this.onRight(16 * i, 16 * 25) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0 && this.line28[i] <= 0) { this.onRight(16 * i, 16 * 24) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0 && this.line29[i] <= 0) { this.onRight(16 * i, 16 * 23) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0 && this.line30[i] <= 0) { this.onRight(16 * i, 16 * 22) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0 && this.line31[i] <= 0) { this.onRight(16 * i, 16 * 21) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0 && this.line32[i] <= 0) { this.onRight(16 * i, 16 * 20) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0 && this.line33[i] <= 0) { this.onRight(16 * i, 16 * 19) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0 && this.line34[i] <= 0) { this.onRight(16 * i, 16 * 18) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0 && this.line35[i] <= 0) { this.onRight(16 * i, 16 * 17) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0 && this.line36[i] <= 0) { this.onRight(16 * i, 16 * 16) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0 && this.line37[i] <= 0) { this.onRight(16 * i, 16 * 15) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0 && this.line38[i] <= 0) { this.onRight(16 * i, 16 * 14) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0 && this.line39[i] <= 0) { this.onRight(16 * i, 16 * 13) } }
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0 && this.line40[i] <= 0) { this.onTop(16 * i, 16 * 12) } }
+
+            //find free space on left
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] <= 0 && this.lin40[i] > 0) { this.under(16 * i, 16 * 12) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] <= 0 && this.line39[i] > 0) { this.onLeft(16 * i, 16 * 13) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] <= 0 && this.line38[i] > 0) { this.onLeft(16 * i, 16 * 14) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] <= 0 && this.line37[i] > 0) { this.onLeft(16 * i, 16 * 15) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] <= 0 && this.line36[i] > 0) { this.onLeft(16 * i, 16 * 16) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] <= 0 && this.line35[i] > 0) { this.onLeft(16 * i, 16 * 17) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] <= 0 && this.line34[i] > 0) { this.onLeft(16 * i, 16 * 18) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] <= 0 && this.line33[i] > 0) { this.onLeft(16 * i, 16 * 19) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] <= 0 && this.line32[i] > 0) { this.onLeft(16 * i, 16 * 20) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] <= 0 && this.line31[i] > 0) { this.onLeft(16 * i, 16 * 21) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] <= 0 && this.line30[i] > 0) { this.onLeft(16 * i, 16 * 22) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] <= 0 && this.line29[i] > 0) { this.onLeft(16 * i, 16 * 23) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] <= 0 && this.line28[i] > 0) { this.onLeft(16 * i, 16 * 24) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] <= 0 && this.line27[i] > 0) { this.onLeft(16 * i, 16 * 25) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] <= 0 && this.line26[i] > 0) { this.onLeft(16 * i, 16 * 26) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] <= 0 && this.line25[i] > 0) { this.onLeft(16 * i, 16 * 27) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] <= 0 && this.line24[i] > 0) { this.onLeft(16 * i, 16 * 28) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] <= 0 && this.line23[i] > 0) { this.onLeft(16 * i, 16 * 29) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] <= 0 && this.line22[i] > 0) { this.onLeft(16 * i, 16 * 30) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] <= 0 && this.line21[i] > 0) { this.onLeft(16 * i, 16 * 31) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] <= 0 && this.line20[i] > 0) { this.onLeft(16 * i, 16 * 32) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] <= 0 && this.line19[i] > 0) { this.onLeft(16 * i, 16 * 33) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] <= 0 && this.line18[i] > 0) { this.onLeft(16 * i, 16 * 34) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] <= 0 && this.line17[i] > 0) { this.onLeft(16 * i, 16 * 35) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] <= 0 && this.line16[i] > 0) { this.onLeft(16 * i, 16 * 36) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] <= 0 && this.line15[i] > 0) { this.onLeft(16 * i, 16 * 37) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] <= 0 && this.line14[i] > 0) { this.onLeft(16 * i, 16 * 38) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] <= 0 && this.line13[i] > 0) { this.onLeft(16 * i, 16 * 39) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] <= 0 && this.line12[i] > 0) { this.onLeft(16 * i, 16 * 40) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] <= 0 && this.line11[i] > 0) { this.onLeft(16 * i, 16 * 41) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] <= 0 && this.line10[i] > 0) { this.onLeft(16 * i, 16 * 42) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] <= 0 && this.line9[i] > 0) { this.onLeft(16 * i, 16 * 43) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] <= 0 && this.line8[i] > 0) { this.onLeft(16 * i, 16 * 44) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] <= 0 && this.line7[i] > 0) { this.onLeft(16 * i, 16 * 45) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] <= 0 && this.line6[i] > 0) { this.onLeft(16 * i, 16 * 46) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] <= 0 && this.line5[i] > 0) { this.onLeft(16 * i, 16 * 47) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] <= 0 && this.line4[i] > 0) { this.onLeft(16 * i, 16 * 48) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] <= 0 && this.line3[i] > 0) { this.under(16 * i, 16 * 49) } }
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] <= 0 && this.line2[i] > 0) { this.under(16 * i, 16 * 50) } }
 
 
-        //find free space on ground
-        //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0 && this.line2[i] <= 0) { this.onTop(16 * i, 16 * 50) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0 && this.line3[i] <= 0) { this.onTop(16 * i, 16 * 49) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0 && this.line4[i] <= 0) { this.onTop(16 * i, 16 * 48) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0 && this.line5[i] <= 0) { this.onTop(16 * i, 16 * 47) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0 && this.line6[i] <= 0) { this.onTop(16 * i, 16 * 46) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0 && this.line7[i] <= 0) { this.onTop(16 * i, 16 * 45) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0 && this.line8[i] <= 0) { this.onTop(16 * i, 16 * 44) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0 && this.line9[i] <= 0) { this.onTop(16 * i, 16 * 43) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0 && this.line10[i] <= 0) { this.onTop(16 * i, 16 * 42) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0 && this.line11[i] <= 0) { this.onTop(16 * i, 16 * 41) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0 && this.line12[i] <= 0) { this.onTop(16 * i, 16 * 40) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0 && this.line13[i] <= 0) { this.onTop(16 * i, 16 * 39) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0 && this.line14[i] <= 0) { this.onTop(16 * i, 16 * 38) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0 && this.line15[i] <= 0) { this.onTop(16 * i, 16 * 37) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0 && this.line16[i] <= 0) { this.onTop(16 * i, 16 * 36) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0 && this.line17[i] <= 0) { this.onTop(16 * i, 16 * 35) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0 && this.line18[i] <= 0) { this.onTop(16 * i, 16 * 34) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0 && this.line19[i] <= 0) { this.onTop(16 * i, 16 * 33) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0 && this.line20[i] <= 0) { this.onTop(16 * i, 16 * 32) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0 && this.line21[i] <= 0) { this.onTop(16 * i, 16 * 31) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0 && this.line22[i] <= 0) { this.onTop(16 * i, 16 * 30) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0 && this.line23[i] <= 0) { this.onTop(16 * i, 16 * 29) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0 && this.line24[i] <= 0) { this.onTop(16 * i, 16 * 28) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0 && this.line25[i] <= 0) { this.onTop(16 * i, 16 * 27) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0 && this.line26[i] <= 0) { this.onTop(16 * i, 16 * 26) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0 && this.line27[i] <= 0) { this.onTop(16 * i, 16 * 25) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0 && this.line28[i] <= 0) { this.onTop(16 * i, 16 * 24) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0 && this.line29[i] <= 0) { this.onTop(16 * i, 16 * 23) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0 && this.line30[i] <= 0) { this.onTop(16 * i, 16 * 22) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0 && this.line31[i] <= 0) { this.onTop(16 * i, 16 * 21) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0 && this.line32[i] <= 0) { this.onTop(16 * i, 16 * 20) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0 && this.line33[i] <= 0) { this.onTop(16 * i, 16 * 19) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0 && this.line34[i] <= 0) { this.onTop(16 * i, 16 * 18) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0 && this.line35[i] <= 0) { this.onTop(16 * i, 16 * 17) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0 && this.line36[i] <= 0) { this.onTop(16 * i, 16 * 16) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0 && this.line37[i] <= 0) { this.onTop(16 * i, 16 * 15) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0 && this.line38[i] <= 0) { this.onTop(16 * i, 16 * 14) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0 && this.line39[i] <= 0) { this.onTop(16 * i, 16 * 13) } }
-        //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0 && this.line40[i] <= 0) { this.onTop(16 * i, 16 * 12) } }
 
-        //find free space on roof
-        //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] <= 0 && this.lin40[i] > 0) { this.under(16 * i, 16 * 12) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] <= 0 && this.line39[i] > 0) { this.under(16 * i, 16 * 13) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] <= 0 && this.line38[i] > 0) { this.under(16 * i, 16 * 14) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] <= 0 && this.line37[i] > 0) { this.under(16 * i, 16 * 15) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] <= 0 && this.line36[i] > 0) { this.under(16 * i, 16 * 16) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] <= 0 && this.line35[i] > 0) { this.under(16 * i, 16 * 17) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] <= 0 && this.line34[i] > 0) { this.under(16 * i, 16 * 18) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] <= 0 && this.line33[i] > 0) { this.under(16 * i, 16 * 19) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] <= 0 && this.line32[i] > 0) { this.under(16 * i, 16 * 20) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] <= 0 && this.line31[i] > 0) { this.under(16 * i, 16 * 21) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] <= 0 && this.line30[i] > 0) { this.under(16 * i, 16 * 22) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] <= 0 && this.line29[i] > 0) { this.under(16 * i, 16 * 23) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] <= 0 && this.line28[i] > 0) { this.under(16 * i, 16 * 24) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] <= 0 && this.line27[i] > 0) { this.under(16 * i, 16 * 25) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] <= 0 && this.line26[i] > 0) { this.under(16 * i, 16 * 26) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] <= 0 && this.line25[i] > 0) { this.under(16 * i, 16 * 27) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] <= 0 && this.line24[i] > 0) { this.under(16 * i, 16 * 28) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] <= 0 && this.line23[i] > 0) { this.under(16 * i, 16 * 29) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] <= 0 && this.line22[i] > 0) { this.under(16 * i, 16 * 30) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] <= 0 && this.line21[i] > 0) { this.under(16 * i, 16 * 31) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] <= 0 && this.line20[i] > 0) { this.under(16 * i, 16 * 32) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] <= 0 && this.line19[i] > 0) { this.under(16 * i, 16 * 33) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] <= 0 && this.line18[i] > 0) { this.under(16 * i, 16 * 34) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] <= 0 && this.line17[i] > 0) { this.under(16 * i, 16 * 35) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] <= 0 && this.line16[i] > 0) { this.under(16 * i, 16 * 36) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] <= 0 && this.line15[i] > 0) { this.under(16 * i, 16 * 37) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] <= 0 && this.line14[i] > 0) { this.under(16 * i, 16 * 38) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] <= 0 && this.line13[i] > 0) { this.under(16 * i, 16 * 39) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] <= 0 && this.line12[i] > 0) { this.under(16 * i, 16 * 40) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] <= 0 && this.line11[i] > 0) { this.under(16 * i, 16 * 41) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] <= 0 && this.line10[i] > 0) { this.under(16 * i, 16 * 42) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] <= 0 && this.line9[i] > 0) { this.under(16 * i, 16 * 43) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] <= 0 && this.line8[i] > 0) { this.under(16 * i, 16 * 44) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] <= 0 && this.line7[i] > 0) { this.under(16 * i, 16 * 45) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] <= 0 && this.line6[i] > 0) { this.under(16 * i, 16 * 46) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] <= 0 && this.line5[i] > 0) { this.under(16 * i, 16 * 47) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] <= 0 && this.line4[i] > 0) { this.under(16 * i, 16 * 48) } }
-        for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] <= 0 && this.line3[i] > 0) { this.under(16 * i, 16 * 49) } }
-        //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] <= 0 && this.line2[i] > 0) { this.under(16 * i, 16 * 50) } }
+        } else {
+
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0) { this.addTile((16 * i), 16 * 50) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0) { this.addTile((16 * i), 16 * 49) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0) { this.addTile((16 * i), 16 * 48) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0) { this.addTile((16 * i), 16 * 47) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0) { this.addTile((16 * i), 16 * 46) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0) { this.addTile((16 * i), 16 * 45) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0) { this.addTile((16 * i), 16 * 44) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0) { this.addTile((16 * i), 16 * 43) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0) { this.addTile((16 * i), 16 * 42) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0) { this.addTile((16 * i), 16 * 41) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0) { this.addTile((16 * i), 16 * 40) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0) { this.addTile((16 * i), 16 * 39) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0) { this.addTile((16 * i), 16 * 38) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0) { this.addTile((16 * i), 16 * 37) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0) { this.addTile((16 * i), 16 * 36) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0) { this.addTile((16 * i), 16 * 35) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0) { this.addTile((16 * i), 16 * 34) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0) { this.addTile((16 * i), 16 * 33) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0) { this.addTile((16 * i), 16 * 32) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0) { this.addTile((16 * i), 16 * 31) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0) { this.addTile((16 * i), 16 * 30) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0) { this.addTile((16 * i), 16 * 29) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0) { this.addTile((16 * i), 16 * 28) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0) { this.addTile((16 * i), 16 * 27) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0) { this.addTile((16 * i), 16 * 26) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0) { this.addTile((16 * i), 16 * 25) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0) { this.addTile((16 * i), 16 * 24) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0) { this.addTile((16 * i), 16 * 23) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0) { this.addTile((16 * i), 16 * 22) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0) { this.addTile((16 * i), 16 * 21) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0) { this.addTile((16 * i), 16 * 20) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0) { this.addTile((16 * i), 16 * 19) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0) { this.addTile((16 * i), 16 * 18) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0) { this.addTile((16 * i), 16 * 17) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0) { this.addTile((16 * i), 16 * 16) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0) { this.addTile((16 * i), 16 * 15) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0) { this.addTile((16 * i), 16 * 14) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0) { this.addTile((16 * i), 16 * 13) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0) { this.addTile((16 * i), 16 * 12) } }
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line40[i] > 0) { this.addTile((16 * i), 16 * 11) } }
+
+            //find free space on ground
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] > 0 && this.line2[i] <= 0) { this.onTop(16 * i, 16 * 50) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] > 0 && this.line3[i] <= 0) { this.onTop(16 * i, 16 * 49) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] > 0 && this.line4[i] <= 0) { this.onTop(16 * i, 16 * 48) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] > 0 && this.line5[i] <= 0) { this.onTop(16 * i, 16 * 47) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] > 0 && this.line6[i] <= 0) { this.onTop(16 * i, 16 * 46) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] > 0 && this.line7[i] <= 0) { this.onTop(16 * i, 16 * 45) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] > 0 && this.line8[i] <= 0) { this.onTop(16 * i, 16 * 44) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] > 0 && this.line9[i] <= 0) { this.onTop(16 * i, 16 * 43) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] > 0 && this.line10[i] <= 0) { this.onTop(16 * i, 16 * 42) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] > 0 && this.line11[i] <= 0) { this.onTop(16 * i, 16 * 41) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] > 0 && this.line12[i] <= 0) { this.onTop(16 * i, 16 * 40) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] > 0 && this.line13[i] <= 0) { this.onTop(16 * i, 16 * 39) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] > 0 && this.line14[i] <= 0) { this.onTop(16 * i, 16 * 38) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] > 0 && this.line15[i] <= 0) { this.onTop(16 * i, 16 * 37) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] > 0 && this.line16[i] <= 0) { this.onTop(16 * i, 16 * 36) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] > 0 && this.line17[i] <= 0) { this.onTop(16 * i, 16 * 35) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] > 0 && this.line18[i] <= 0) { this.onTop(16 * i, 16 * 34) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] > 0 && this.line19[i] <= 0) { this.onTop(16 * i, 16 * 33) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] > 0 && this.line20[i] <= 0) { this.onTop(16 * i, 16 * 32) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] > 0 && this.line21[i] <= 0) { this.onTop(16 * i, 16 * 31) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] > 0 && this.line22[i] <= 0) { this.onTop(16 * i, 16 * 30) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] > 0 && this.line23[i] <= 0) { this.onTop(16 * i, 16 * 29) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] > 0 && this.line24[i] <= 0) { this.onTop(16 * i, 16 * 28) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] > 0 && this.line25[i] <= 0) { this.onTop(16 * i, 16 * 27) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] > 0 && this.line26[i] <= 0) { this.onTop(16 * i, 16 * 26) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] > 0 && this.line27[i] <= 0) { this.onTop(16 * i, 16 * 25) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] > 0 && this.line28[i] <= 0) { this.onTop(16 * i, 16 * 24) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] > 0 && this.line29[i] <= 0) { this.onTop(16 * i, 16 * 23) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] > 0 && this.line30[i] <= 0) { this.onTop(16 * i, 16 * 22) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] > 0 && this.line31[i] <= 0) { this.onTop(16 * i, 16 * 21) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] > 0 && this.line32[i] <= 0) { this.onTop(16 * i, 16 * 20) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] > 0 && this.line33[i] <= 0) { this.onTop(16 * i, 16 * 19) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] > 0 && this.line34[i] <= 0) { this.onTop(16 * i, 16 * 18) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] > 0 && this.line35[i] <= 0) { this.onTop(16 * i, 16 * 17) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] > 0 && this.line36[i] <= 0) { this.onTop(16 * i, 16 * 16) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] > 0 && this.line37[i] <= 0) { this.onTop(16 * i, 16 * 15) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] > 0 && this.line38[i] <= 0) { this.onTop(16 * i, 16 * 14) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] > 0 && this.line39[i] <= 0) { this.onTop(16 * i, 16 * 13) } }
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] > 0 && this.line40[i] <= 0) { this.onTop(16 * i, 16 * 12) } }
+
+            //find free space on roof
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line39[i] <= 0 && this.lin40[i] > 0) { this.under(16 * i, 16 * 12) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line38[i] <= 0 && this.line39[i] > 0) { this.under(16 * i, 16 * 13) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line37[i] <= 0 && this.line38[i] > 0) { this.under(16 * i, 16 * 14) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line36[i] <= 0 && this.line37[i] > 0) { this.under(16 * i, 16 * 15) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line35[i] <= 0 && this.line36[i] > 0) { this.under(16 * i, 16 * 16) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line34[i] <= 0 && this.line35[i] > 0) { this.under(16 * i, 16 * 17) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line33[i] <= 0 && this.line34[i] > 0) { this.under(16 * i, 16 * 18) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line32[i] <= 0 && this.line33[i] > 0) { this.under(16 * i, 16 * 19) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line31[i] <= 0 && this.line32[i] > 0) { this.under(16 * i, 16 * 20) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line30[i] <= 0 && this.line31[i] > 0) { this.under(16 * i, 16 * 21) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line29[i] <= 0 && this.line30[i] > 0) { this.under(16 * i, 16 * 22) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line28[i] <= 0 && this.line29[i] > 0) { this.under(16 * i, 16 * 23) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line27[i] <= 0 && this.line28[i] > 0) { this.under(16 * i, 16 * 24) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line26[i] <= 0 && this.line27[i] > 0) { this.under(16 * i, 16 * 25) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line25[i] <= 0 && this.line26[i] > 0) { this.under(16 * i, 16 * 26) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line24[i] <= 0 && this.line25[i] > 0) { this.under(16 * i, 16 * 27) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line23[i] <= 0 && this.line24[i] > 0) { this.under(16 * i, 16 * 28) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line22[i] <= 0 && this.line23[i] > 0) { this.under(16 * i, 16 * 29) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line21[i] <= 0 && this.line22[i] > 0) { this.under(16 * i, 16 * 30) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line20[i] <= 0 && this.line21[i] > 0) { this.under(16 * i, 16 * 31) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line19[i] <= 0 && this.line20[i] > 0) { this.under(16 * i, 16 * 32) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line18[i] <= 0 && this.line19[i] > 0) { this.under(16 * i, 16 * 33) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line17[i] <= 0 && this.line18[i] > 0) { this.under(16 * i, 16 * 34) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line16[i] <= 0 && this.line17[i] > 0) { this.under(16 * i, 16 * 35) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line15[i] <= 0 && this.line16[i] > 0) { this.under(16 * i, 16 * 36) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line14[i] <= 0 && this.line15[i] > 0) { this.under(16 * i, 16 * 37) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line13[i] <= 0 && this.line14[i] > 0) { this.under(16 * i, 16 * 38) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line12[i] <= 0 && this.line13[i] > 0) { this.under(16 * i, 16 * 39) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line11[i] <= 0 && this.line12[i] > 0) { this.under(16 * i, 16 * 40) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line10[i] <= 0 && this.line11[i] > 0) { this.under(16 * i, 16 * 41) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line9[i] <= 0 && this.line10[i] > 0) { this.under(16 * i, 16 * 42) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line8[i] <= 0 && this.line9[i] > 0) { this.under(16 * i, 16 * 43) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line7[i] <= 0 && this.line8[i] > 0) { this.under(16 * i, 16 * 44) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line6[i] <= 0 && this.line7[i] > 0) { this.under(16 * i, 16 * 45) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line5[i] <= 0 && this.line6[i] > 0) { this.under(16 * i, 16 * 46) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line4[i] <= 0 && this.line5[i] > 0) { this.under(16 * i, 16 * 47) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line3[i] <= 0 && this.line4[i] > 0) { this.under(16 * i, 16 * 48) } }
+            for (var i = 0; i < this.map_Length; i++) { if (this.line2[i] <= 0 && this.line3[i] > 0) { this.under(16 * i, 16 * 49) } }
+            //for (var i = 0; i < this.map_Length; i++) { if (this.line1[i] <= 0 && this.line2[i] > 0) { this.under(16 * i, 16 * 50) } }
+        }
 
 
         // center the game screen
@@ -678,14 +762,25 @@ class Caves extends Phaser.Scene {
 
         // ===== objects =====
         // > camera 
-        this.camCNTR = this.physics.add.sprite(8, 552).setSize(16, 16)
-        this.edgeLeft = this.physics.add.sprite(-40, 552, "edgeLeft").setPipeline('Light2D').setSize(64, 512).setImmovable(true);
+        if (this.biome == 6 || this.biome == 7 || this.biome == 8) {
+            this.camCNTR = this.physics.add.sprite(500, 0).setSize(16, 16)
+            this.edgeLeft = this.physics.add.sprite(496, -24, "edgeTop").setPipeline('Light2D').setSize(1600, 64).setImmovable(true);
+            this.edgeRight = this.physics.add.sprite(496, 3208 - 16 * 24, "edgeBottom").setPipeline('Light2D').setSize(1600, 64).setImmovable(true).setDepth(5);
+            this.plateforme.add(this.physics.add.sprite(504, 48).setPipeline('Light2D').setSize(48, 16).setImmovable(true));
+            this.backToDrill = this.physics.add.sprite(496, 3208 - 16 * 20).setSize(64, 64)
+            //this.beginAGAIN = this.physics.add.sprite(496, 656, "shadow").setPipeline('Light2D').setSize(48, 96).setImmovable(true).setDepth(5);
+        }
+        else {
+            this.camCNTR = this.physics.add.sprite(8, 552).setSize(16, 16)
+            this.edgeLeft = this.physics.add.sprite(-40, 552, "edgeLeft").setPipeline('Light2D').setSize(64, 512).setImmovable(true);
+            this.edgeRight = this.physics.add.sprite(3208, 552, "edgeRight").setPipeline('Light2D').setSize(32, 512).setImmovable(true).setDepth(5);
+            this.edgeRightA = this.physics.add.sprite(3208 + 16, 552 - 64,).setPipeline('Light2D').setSize(64, 254).setImmovable(true);
+            this.edgeRightB = this.physics.add.sprite(3208 + 32, 824).setPipeline('Light2D').setSize(96, 254).setImmovable(true);
+            this.backToDrill = this.physics.add.sprite(3168, 502).setSize(64, 64)
+            this.beginAGAIN = this.physics.add.sprite(3232, 656, "shadow").setPipeline('Light2D').setSize(48, 96).setImmovable(true).setDepth(5);
+        }
 
-        this.edgeRight = this.physics.add.sprite(3208, 552, "edgeRight").setPipeline('Light2D').setSize(32, 512).setImmovable(true).setDepth(5);
-        this.edgeRightA = this.physics.add.sprite(3208 + 16, 552 - 64,).setPipeline('Light2D').setSize(64, 254).setImmovable(true);
-        this.edgeRightB = this.physics.add.sprite(3208 + 32, 824).setPipeline('Light2D').setSize(96, 254).setImmovable(true);
-        this.backToDrill = this.physics.add.sprite(3168, 502).setSize(64, 64)
-        this.beginAGAIN = this.physics.add.sprite(3232, 656, "shadow").setPipeline('Light2D').setSize(48, 96).setImmovable(true).setDepth(5);
+
         this.plateforme.add(this.physics.add.sprite(0, 576).setSize(48, 16)) // spawn plateforme
         this.plateforme.add(this.physics.add.sprite(3168, 544).setSize(48, 16)) // end plateforme
         this.chain.add(this.physics.add.sprite(3168, 662).setSize(16, 256))
@@ -697,7 +792,8 @@ class Caves extends Phaser.Scene {
 
         // ===== players ======
         if (this.player1READY) {
-            this.player1 = this.physics.add.sprite(8, 552, 'persoA').setScale(0.95, 0.95).setDepth(3);
+            if (this.biome == 6 || this.biome == 7 || this.biome == 8) { this.player1 = this.physics.add.sprite(500, 0, 'persoA').setScale(0.95, 0.95).setDepth(3); }
+            else { this.player1 = this.physics.add.sprite(8, 552, 'persoA').setScale(0.95, 0.95).setDepth(3); }
             this.dridrill1 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill1)
             this.stockA = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
             this.player1.setPipeline('Light2D');
@@ -709,7 +805,8 @@ class Caves extends Phaser.Scene {
             this.drillingA = this.physics.add.overlap(this.dridrill1, this.ground, this.drilling, null, this); this.drillingA.active = false
             this.vieJ1 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
             this.jauneJ1 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
-            this.lumiere1 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf);
+            if (this.biome == 6 || this.biome == 8 || this.biome == 7) { this.lumiere1 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0x3d4aff); }
+            else { this.lumiere1 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf); }
 
             this.physics.add.overlap(this.player1, this.ore1, this.pickUpA1, null, this);
             this.physics.add.overlap(this.player1, this.ore2, this.pickUpA2, null, this);
@@ -763,13 +860,15 @@ class Caves extends Phaser.Scene {
         // ===== LIGHT ====
         this.startLight = this.lights.addLight(-20, 544, 75).setIntensity(2).setColor(0xfff8cf);
         this.endLight = this.lights.addLight(3228, 502, 140).setIntensity(2).setColor(0xfff8cf);
-
-        this.lights.enable().setAmbientColor(0x000000); // quand c'est pas éclairé
+        if (this.biome == 6 || this.biome == 8 || this.biome == 7) { this.lights.enable().setAmbientColor(0x07031a); }
+        else { this.lights.enable().setAmbientColor(0x000000); }
+        // quand c'est pas éclairé
 
         // ===== COllIDER =====
 
         this.physics.add.collider(this.players, this.ground);
         this.physics.add.collider(this.players, this.edgeLeft);
+        this.physics.add.collider(this.players, this.edgeRight);
         this.physics.add.collider(this.players, this.edgeRightA);
         this.physics.add.collider(this.players, this.edgeRightB);
         this.physics.add.overlap(this.players, this.beginAGAIN, this.toCave, null, this);
@@ -819,22 +918,33 @@ class Caves extends Phaser.Scene {
 
             }
             else if (this.persoA_state == 1) {  // "normal" state
-                this.move(this.keyZ, this.keyS, this.keyQ, this.keyD, this.player1, 150)
+                if (this.biome == 6 || this.biome == 7 || this.biome == 8) {
+                    this.move(this.keyZ, this.keyS, this.keyQ, this.keyD, this.player1, 100)
+                    if (this.keyZ.isDown && this.keyA.isUp) {
+                        this.gravityA = -70
+                    }
+                    if (this.player1.body.blocked.down) { this.gravityA = 30 }
+                    else {
+                        this.player1.setVelocityY(this.gravityA)
+                        if (this.gravityA < 50) { this.gravityA += 5 }
+                    }
+                } else {
+                    this.move(this.keyZ, this.keyS, this.keyQ, this.keyD, this.player1, 150)
+                    if (Phaser.Input.Keyboard.JustDown(this.keyZ) && this.player1.body.blocked.down && this.keyA.isUp) {
+                        this.gravityA = -200
+                    }
+                    else if (this.player1.body.blocked.down) { this.gravityA = 30 }
+                    else {
+                        this.player1.setVelocityY(this.gravityA)
+                        if (this.gravityA < 500) { this.gravityA += 20 }
+                    }
 
-                //vertical
-                if (this.keyZ.isDown && this.player1.body.blocked.down && this.keyA.isUp) {
-                    this.gravityA = -200
                 }
-                else if (this.player1.body.blocked.down) { this.gravityA = 30 }
-                else {
-                    this.player1.setVelocityY(this.gravityA)
-                    if (this.gravityA < 500) { this.gravityA += 20 }
-                }
+
                 if (Phaser.Input.Keyboard.JustDown(this.keyE)) {
                     this.gloomJ1 = this.placeGadget(this.gadgetSelected1, this.player1, this.gloomJ1)
                     this.afk1 = 0
                 }
-
             }
 
             else if (this.persoA_state == 2) {  // ladder state
@@ -1188,7 +1298,24 @@ class Caves extends Phaser.Scene {
                 this.lights.addLight(x, y - 16, 90).setIntensity(0.95).setColor(0x7eadd6);
             }
         }
+    }
 
+    onRight(y, x) {
+        //sand
+        this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(20, 21)).setPipeline('Light2D'))
+        if (Phaser.Math.Between(0, this.ore_Rarity / 10) == 0) {
+            this.ore4.add(this.physics.add.sprite(x - 16, y, "crystal").setFrame(4))
+            this.lights.addLight(x - 16, y, 90).setIntensity(0.95).setColor(0xf5c84e);
+        }
+    }
+
+    onLeft(y, x) {
+        //sand
+        this.ground.add(this.physics.add.sprite(x, y, "Tiles").setSize(16, 16).setFrame(Phaser.Math.Between(18, 19)).setPipeline('Light2D'))
+        if (Phaser.Math.Between(0, this.ore_Rarity / 10) == 0) {
+            this.ore4.add(this.physics.add.sprite(x + 16, y, "crystal").setFrame(5))
+            this.lights.addLight(x + 16, y, 90).setIntensity(0.95).setColor(0xf5c84e);
+        }
     }
 
     placeStalagA(x, y) {
