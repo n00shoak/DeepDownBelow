@@ -114,7 +114,7 @@ class Caves extends Phaser.Scene {
         this.load.spritesheet("edgeBottom", "../sprites/mapSprite/edgeBottom.png", { frameWidth: 1600, frameHeight: 160 });
         this.load.image("shadow", "../sprites/mapSprite/shadow.png")
 
-
+        this.load.spritesheet("scarabae", "../sprites/character/Ennemis/scarabae.png",{ frameWidth: 16, frameHeight: 16 })
         // - - - add tilset - - -
         this.load.spritesheet("Tiles", "../sprites/tileSet/proceduralGen.png", { frameWidth: 16, frameHeight: 16 });
 
@@ -143,6 +143,7 @@ class Caves extends Phaser.Scene {
         this.gravityD = 0
 
         //map var :
+        this.spawn = true
 
         this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
         this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
@@ -213,6 +214,11 @@ class Caves extends Phaser.Scene {
         });
 
         this.plateforme = this.physics.add.group({
+            allowGravity: false,
+            immovable: true
+        });
+
+        this.ennemis = this.physics.add.group({
             allowGravity: false,
             immovable: true
         });
@@ -1167,7 +1173,24 @@ class Caves extends Phaser.Scene {
             }
         }
 
+        //===== FOE =====
+        if (this.spawn) {
+            this.spawn = false
+            var rnd = Phaser.Math.Between(10000, 5000)
+            this.time.addEvent({
+                delay: rnd, callback: () => {
+                    if (this.player1READY) { this.spawnPlaceA = this.spawnOutGround(this.player1); if (this.spawnPlaceA != false) { this.spawnFoe(this.spawnPlaceA[0], this.spawnPlaceA[1],1) } }//check for free space and create ennemi
+                    if (this.player2READY) { this.spawnPlaceB = this.spawnOutGround(this.player2); if (this.spawnPlaceB != false) { this.spawnFoe(this.spawnPlaceB[0], this.spawnPlaceB[1],1) } }
+                    if (this.player3READY) { this.spawnPlaceC = this.spawnOutGround(this.player3); if (this.spawnPlaceC != false) { this.spawnFoe(this.spawnPlaceC[0], this.spawnPlaceC[1],1) } }
+                    if (this.player4READY) { this.spawnPlaceD = this.spawnOutGround(this.player4); if (this.spawnPlaceD != false) { this.spawnFoe(this.spawnPlaceD[0], this.spawnPlaceD[1],1) } }
 
+                    this.spawn = true
+                },
+            })
+        }
+
+
+        //this.scarabe(this.ennemis)
 
         // ====== CAM CENTER =====
         if (this.player1READY == true) { this.posA_x = this.player1.body.x; this.posA_y = this.player1.body.y; } else { this.posA_x = 0; this.posA_y = 0 }
@@ -1437,10 +1460,6 @@ class Caves extends Phaser.Scene {
                 gloom -= 20
                 this.lights.addLight(this.target_x, this.target_y - 72, 75).setIntensity(2).setColor(0xfff8cf);
             }
-            //if (this.scafoldingLevel == 0 && gloom >= 50 && !this.physics.overlap(this.players, this.chain) && player.body.blocked.down) { //scafoldin lv 4
-            //    this.scafMAX.add(this.physics.add.sprite(this.target_x, this.target_y - 16, 'scafoldingD').setSize(32, 32)) // elevator
-            //    gloom -= 50
-            //}
         }
         else if (wich == 2) { // lamp
             if (this.lampLevel == 0 && gloom >= 5 && !this.physics.overlap(this.players, this.object) && player.body.blocked.down) { // lamp lv 1
@@ -1509,6 +1528,7 @@ class Caves extends Phaser.Scene {
     }
 
     spawnOutGround(player) {
+
         this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 320, player.x + 320), Phaser.Math.Between(player.y - 64, player.y + 64)).setSize(16, 16)
         if (!this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
         else { return (false) }
@@ -1518,32 +1538,37 @@ class Caves extends Phaser.Scene {
         if (this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
         else { return (false) }
     }
-    spawnWater(player) {
+    spawnInWater(player) {
         this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 64, player.x + 64), Phaser.Math.Between(player.y - 128, player.y + 400)).setSize(16, 16)
         if (!this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
         else { return (false) }
     }
 
 
-    spawnFoe(id, x, y, hp, dmg) {
+    spawnFoe(x, y, id) {
         if (id == 1) { //scarabae
-            
+            var foe = this.physics.add.sprite(x, y, 'scarabae').setDepth(3).setFrame(3)
+            this.ennemis.add(foe)
+            //this.scarabe(this.foe)
+            console.log("ennemis apear", foe.body.x, foe.body.y)
         }
     }
 
-    scarabe(ennemi){
-        if(this.player1READY){var distA = Phaser.Math.Distance.Between(this.player1.x, this.player1.y, ennemi.x,ennemi.y)}else{var distA = 0}//get distance
-        if(this.player2READY){var distB = Phaser.Math.Distance.Between(this.player2.x, this.player2.y, ennemi.x,ennemi.y)}else{var distB = 0}
-        if(this.player3READY){var distC = Phaser.Math.Distance.Between(this.player3.x, this.player3.y, ennemi.x,ennemi.y)}else{var distC = 0}
-        if(this.player4READY){var distD = Phaser.Math.Distance.Between(this.player4.x, this.player4.y, ennemi.x,ennemi.y)}else{var distD = 0}
+    /*scarabe(ennemi, hp, dmg) {
 
-        if(distA> distB && distA > distC && distA > distD){var target = this.player1}//check who's nearest
-        else if(distB> distA && distB > distC && distB > distD){var target = this.player2}
-        else if(distC> distB && distC > distA && distC > distD){var target = this.player3}
-        else if(distD> distB && distD > distC && distD > distD){var target = this.player4}
+        if (this.player1READY) { var distA = Phaser.Math.Distance.Between(this.player1.body.x, this.player1.body.y, ennemi.body.x, ennemi.body.y) } else { var distA = 0 }//get distance
+        if (this.player2READY) { var distB = Phaser.Math.Distance.Between(this.player2.body.x, this.player2.body.y, ennemi.body.x, ennemi.body.y) } else { var distB = 0 }
+        if (this.player3READY) { var distC = Phaser.Math.Distance.Between(this.player3.body.x, this.player3.body.y, ennemi.body.x, ennemi.body.y) } else { var distC = 0 }
+        if (this.player4READY) { var distD = Phaser.Math.Distance.Between(this.player4.body.x, this.player4.body.y, ennemi.body.x, ennemi.body.y) } else { var distD = 0 }
+        console.log("dist", distA, distB, distC, distD)
+        if (distA > distB && distA > distC && distA > distD) { var target = this.player1 }//check who's nearest
+        else if (distB > distA && distB > distC && distB > distD) { var target = this.player2 }
+        else if (distC > distB && distC > distA && distC > distD) { var target = this.player3 }
+        else if (distD > distB && distD > distC && distD > distD) { var target = this.player4 }
 
-        if(target.body.x > ennemi.body.x){ennemi.setVelocityX(100)}else{ennemi.setVelocityX(-100)}//move to player
-    }
+        console.log("target", target)
+        if (target.body.x > ennemi.body.x) { ennemi.setVelocityX(100) } else { ennemi.setVelocityX(-100) }//move to player
+    }*/
 
 
     drilling(drill, tile) {
@@ -1676,7 +1701,7 @@ class Caves extends Phaser.Scene {
         this.ammount = Phaser.Math.Between(5 + this.drill_Yield * 2, 15 + this.drill_Yield * 5)
         if (this.ammount + this.gloomJ1 > 99) { this.gloomJ1 = 99 }
         else { this.gloomJ1 += this.ammount; ore.destroy(); }
-        console.log(this.gloomJ1)
+        console.log('gloomJ1:', this.gloomJ1)
     }
     pickUpB1(player, ore) {
         if (this.Inventory2_Amount < 3 && (this.Inventory2_ID == 0 || this.Inventory2_ID == 1)) {
