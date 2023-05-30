@@ -64,9 +64,9 @@ class Caves extends Phaser.Scene {
         this.map_clif = data.map_clif          //1
 
         this.ore_Rarity = data.ore_Rarity        //40
-        this.ore_red = true
-        this.ore_blue = true
-        this.ore_green = true
+        this.ore_red = data.ore_rgb[0]
+        this.ore_blue = data.ore_rgb[1]
+        this.ore_green = data.ore_rgb[2]
     }
 
     preload() {
@@ -765,10 +765,8 @@ class Caves extends Phaser.Scene {
         if (this.biome == 6 || this.biome == 7 || this.biome == 8) {
             this.camCNTR = this.physics.add.sprite(500, 0).setSize(16, 16)
             this.edgeLeft = this.physics.add.sprite(496, -24, "edgeTop").setPipeline('Light2D').setSize(1600, 64).setImmovable(true);
-            this.edgeRight = this.physics.add.sprite(496, 3208 - 16 * 24, "edgeBottom").setPipeline('Light2D').setSize(1600, 64).setImmovable(true).setDepth(5);
-            this.plateforme.add(this.physics.add.sprite(504, 48).setPipeline('Light2D').setSize(48, 16).setImmovable(true));
-            this.backToDrill = this.physics.add.sprite(496, 3208 - 16 * 20).setSize(64, 64)
-            //this.beginAGAIN = this.physics.add.sprite(496, 656, "shadow").setPipeline('Light2D').setSize(48, 96).setImmovable(true).setDepth(5);
+            this.edgeRight = this.physics.add.sprite(496 - 32, 3208 - 16 * 10, "edgeBottom").setPipeline('Light2D').setSize(1600, 64).setImmovable(true).setDepth(5);
+            this.backToDrill = this.physics.add.sprite(496 - 32, 3208 - 16 * 14).setSize(64, 64)
         }
         else {
             this.camCNTR = this.physics.add.sprite(8, 552).setSize(16, 16)
@@ -910,6 +908,8 @@ class Caves extends Phaser.Scene {
 
         if (this.playerAMOUNT > 0) { this.cameras.main.setZoom(this.zoom); }
 
+        // ===== SPAWN FOE =====
+
         // ====== PLAYER 1 ======
 
         // - - - moving - - -
@@ -930,7 +930,7 @@ class Caves extends Phaser.Scene {
                     }
                 } else {
                     this.move(this.keyZ, this.keyS, this.keyQ, this.keyD, this.player1, 150)
-                    if (Phaser.Input.Keyboard.JustDown(this.keyZ) && this.player1.body.blocked.down && this.keyA.isUp) {
+                    if (this.keyZ.isDown && this.player1.body.blocked.down && this.keyA.isUp) {
                         this.gravityA = -200
                     }
                     else if (this.player1.body.blocked.down) { this.gravityA = 30 }
@@ -1508,6 +1508,43 @@ class Caves extends Phaser.Scene {
 
     }
 
+    spawnOutGround(player) {
+        this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 320, player.x + 320), Phaser.Math.Between(player.y - 64, player.y + 64)).setSize(16, 16)
+        if (!this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
+        else { return (false) }
+    }
+    spawnInGround(player) {
+        this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 320, player.x + 320), Phaser.Math.Between(player.y - 64, player.y + 64)).setSize(16, 16)
+        if (this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
+        else { return (false) }
+    }
+    spawnWater(player) {
+        this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 64, player.x + 64), Phaser.Math.Between(player.y - 128, player.y + 400)).setSize(16, 16)
+        if (!this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
+        else { return (false) }
+    }
+
+
+    spawnFoe(id, x, y, hp, dmg) {
+        if (id == 1) { //scarabae
+            
+        }
+    }
+
+    scarabe(ennemi){
+        if(this.player1READY){var distA = Phaser.Math.Distance.Between(this.player1.x, this.player1.y, ennemi.x,ennemi.y)}else{var distA = 0}//get distance
+        if(this.player2READY){var distB = Phaser.Math.Distance.Between(this.player2.x, this.player2.y, ennemi.x,ennemi.y)}else{var distB = 0}
+        if(this.player3READY){var distC = Phaser.Math.Distance.Between(this.player3.x, this.player3.y, ennemi.x,ennemi.y)}else{var distC = 0}
+        if(this.player4READY){var distD = Phaser.Math.Distance.Between(this.player4.x, this.player4.y, ennemi.x,ennemi.y)}else{var distD = 0}
+
+        if(distA> distB && distA > distC && distA > distD){var target = this.player1}//check who's nearest
+        else if(distB> distA && distB > distC && distB > distD){var target = this.player2}
+        else if(distC> distB && distC > distA && distC > distD){var target = this.player3}
+        else if(distD> distB && distD > distC && distD > distD){var target = this.player4}
+
+        if(target.body.x > ennemi.body.x){ennemi.setVelocityX(100)}else{ennemi.setVelocityX(-100)}//move to player
+    }
+
 
     drilling(drill, tile) {
         this.time.addEvent({
@@ -1566,7 +1603,6 @@ class Caves extends Phaser.Scene {
             ore_Rarity: this.ore_Rarity,
         });
     }
-
     toDrill() {
         this.scene.start("drill", {
             layers: this.layers,
@@ -1607,10 +1643,8 @@ class Caves extends Phaser.Scene {
             drill_Yield: this.drill_Yield,
             lampLevel: this.lampLevel, // 0/3
             scafoldingLevel: this.scafoldingLevel,  // 0/3
-
         });
     }
-
     pickUpA1(player, ore) {
         if (this.Inventory1_Amount < 3 && (this.Inventory1_ID == 0 || this.Inventory1_ID == 1)) {
             this.Inventory1_ID = 1
@@ -1618,10 +1652,8 @@ class Caves extends Phaser.Scene {
             ore.destroy()
             console.log("J1 :\n inv ID: ", this.Inventory1_ID, "\n inv Ammount: ", this.Inventory1_Amount)
         }
-
     }
     pickUpA2(player, ore) {
-
         if (this.Inventory1_Amount < 3 && (this.Inventory1_ID == 0 || this.Inventory1_ID == 2)) {
             ore.destroy()
             this.Inventory1_ID = 2
@@ -1629,10 +1661,8 @@ class Caves extends Phaser.Scene {
             ore.destroy()
             console.log("J1 :\n inv ID: ", this.Inventory1_ID, "\n inv Ammount: ", this.Inventory1_Amount)
         }
-
     }
     pickUpA3(player, ore) {
-
         if (this.Inventory1_Amount < 3 && (this.Inventory1_ID == 0 || this.Inventory1_ID == 3)) {
             ore.destroy()
             this.Inventory1_ID = 3
@@ -1640,7 +1670,6 @@ class Caves extends Phaser.Scene {
             ore.destroy()
             console.log("J1 :\n inv ID: ", this.Inventory1_ID, "\n inv Ammount: ", this.Inventory1_Amount)
         }
-
     }
     pickUpA4(player, ore) {
         this.afk1 = 0
@@ -1649,7 +1678,6 @@ class Caves extends Phaser.Scene {
         else { this.gloomJ1 += this.ammount; ore.destroy(); }
         console.log(this.gloomJ1)
     }
-
     pickUpB1(player, ore) {
         if (this.Inventory2_Amount < 3 && (this.Inventory2_ID == 0 || this.Inventory2_ID == 1)) {
             this.Inventory2_ID = 1
@@ -1657,10 +1685,8 @@ class Caves extends Phaser.Scene {
             ore.destroy()
             console.log("J1 :\n inv ID: ", this.Inventory2_ID, "\n inv Ammount: ", this.Inventory2_Amount)
         }
-
     }
     pickUpB2(player, ore) {
-
         if (this.Inventory2_Amount < 3 && (this.Inventory2_ID == 0 || this.Inventory2_ID == 2)) {
             ore.destroy()
             this.Inventory2_ID = 2
@@ -1668,10 +1694,8 @@ class Caves extends Phaser.Scene {
             ore.destroy()
             console.log("J1 :\n inv ID: ", this.Inventory2_ID, "\n inv Ammount: ", this.Inventory2_Amount)
         }
-
     }
     pickUpB3(player, ore) {
-
         if (this.Inventory1_Amount < 3 && (this.Inventory1_ID == 0 || this.Inventory1_ID == 3)) {
             ore.destroy()
             this.Inventory1_ID = 3
@@ -1679,7 +1703,6 @@ class Caves extends Phaser.Scene {
             ore.destroy()
             console.log("J1 :\n inv ID: ", this.Inventory1_ID, "\n inv Ammount: ", this.Inventory1_Amount)
         }
-
     }
     pickUpB4(player, ore) {
         this.afk2 = 0

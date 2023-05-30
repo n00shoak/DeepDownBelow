@@ -407,13 +407,13 @@ class lobby extends Phaser.Scene {
 
                 //generate seed
                 if (rnd1 == 0 || rnd1 == 1 || rnd1 == 2) {
-                    cave = [rnd1, Phaser.Math.Between(3, 4), 200, 1, Phaser.Math.Between(2, 3), Phaser.Math.Between(1, 2), Phaser.Math.Between(100, 130), 1];
+                    cave = [rnd1, Phaser.Math.Between(3, 4), 200, 1, Phaser.Math.Between(2, 3), Phaser.Math.Between(1, 2), Phaser.Math.Between(110, 130), [true,false,false]];
                 } else if (rnd1 == 3 || rnd1 == 4 || rnd1 == 5) {
-                    cave = [rnd1, Phaser.Math.Between(2, 5), 200, 1, Phaser.Math.Between(3, 6), 1, Phaser.Math.Between(80, 110), 2];
+                    cave = [rnd1, Phaser.Math.Between(4, 6), 200, 1, Phaser.Math.Between(3, 6), 1, Phaser.Math.Between(80, 110), [true,true,false]];
                 } else if (rnd1 == 6 || rnd1 == 7) {
-                    cave = [rnd1, Phaser.Math.Between(4, 5), 200, 1, Phaser.Math.Between(1, 2), Phaser.Math.Between(1, 2), Phaser.Math.Between(70, 110), 4];
+                    cave = [rnd1, Phaser.Math.Between(4, 5), 200, 1, Phaser.Math.Between(1, 2), Phaser.Math.Between(1, 2), Phaser.Math.Between(70, 110), [true,true,true]];
                 } else if (rnd1 == 8) {
-                    cave = [rnd1, Phaser.Math.Between(3, 5), 200, 3, Phaser.Math.Between(1, 3), Phaser.Math.Between(1, 3), Phaser.Math.Between(60, 100), 3];
+                    cave = [rnd1, Phaser.Math.Between(3, 5), 200, 3, Phaser.Math.Between(1, 3), Phaser.Math.Between(1, 3), Phaser.Math.Between(60, 100),[false,true,true]];
                 }
 
                 console.log("cave", i, ": ", cave);

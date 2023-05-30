@@ -1444,6 +1444,7 @@ class Drill extends Phaser.Scene {
             map_clif: this.nextCavesIs[5], //1
 
             ore_Rarity: this.nextCavesIs[6],
+            ore_rgb: this.nextCavesIs
             //ore_red 
             //ore_blue 
             //ore_green 
