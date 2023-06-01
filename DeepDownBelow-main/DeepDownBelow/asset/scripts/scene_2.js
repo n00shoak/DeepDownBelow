@@ -415,6 +415,7 @@ class Drill extends Phaser.Scene {
             this.craftA = this.physics.add.overlap(this.player1, this.Upgrade_Drill, this.upgradeA1, null, this)
             this.physics.add.overlap(this.player1, this.CaveSelector, this.nexLevel, null, this)
             this.persoA_state = 1
+
         }
         if (this.player2READY) {
             this.player2 = this.physics.add.sprite(280, 500, 'persoB');
@@ -425,6 +426,8 @@ class Drill extends Phaser.Scene {
             this.craftB = this.physics.add.overlap(this.player2, this.Upgrade_Drill, this.upgradeA2, null, this)
             this.physics.add.overlap(this.player2, this.CaveSelector, this.nexLevel, null, this)
             this.persoB_state = 1
+
+            if(this.pvJ2 = null){this.pvJ2 = 99}
         }
         if (this.player3READY) {
             this.player3 = this.physics.add.sprite(280, 500, 'persoC');
@@ -435,6 +438,8 @@ class Drill extends Phaser.Scene {
             this.craftC = this.physics.add.overlap(this.player3, this.Upgrade_Drill, this.upgradeA3, null, this)
             this.physics.add.overlap(this.player3, this.CaveSelector, this.nexLevel, null, this)
             this.persoC_state = 1
+
+            if(this.pvJ3 = null){this.pvJ3 = 99}
         }
         if (this.player4READY) {
             this.player4 = this.physics.add.sprite(280, 500, 'persoD');
@@ -445,6 +450,8 @@ class Drill extends Phaser.Scene {
             this.craftD = this.physics.add.overlap(this.player4, this.Upgrade_Drill, this.upgradeA4, null, this)
             this.physics.add.overlap(this.player4, this.CaveSelector, this.nexLevel, null, this)
             this.persoD_state = 1
+
+            if(this.pvJ4 = null){this.pvJ4 = 99}
         }
 
         // ===== COllIDER =====
@@ -1425,10 +1432,10 @@ class Drill extends Phaser.Scene {
             hurt3: this.hurt3,
             hurt4: this.hurt4,
 
-            pvJ1: this.pvJ1,
-            pvJ2: this.pvJ2,
-            pvJ3: this.pvJ3,
-            pvJ4: this.pvJ4,
+            pvJ1: 99,
+            pvJ2: 99,
+            pvJ3: 99,
+            pvJ4: 99,
 
             drill_Speed: this.drill_Speed,
             drill_Yield: this.drill_Yield,

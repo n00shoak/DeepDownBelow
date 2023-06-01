@@ -52,7 +52,7 @@ class Caves extends Phaser.Scene {
         this.drill_Speed = data.drill_Speed
         this.drill_Yield = data.drill_Yield
 
-        this.lampLevel = /*data.lampLevel*/ 2 /// 0/3
+        this.lampLevel = /*data.lampLevel*/ 1 /// 0/3
         this.scafoldingLevel = data.scafoldingLevel // 0/3
 
         //Map
@@ -114,7 +114,7 @@ class Caves extends Phaser.Scene {
         this.load.spritesheet("edgeBottom", "../sprites/mapSprite/edgeBottom.png", { frameWidth: 1600, frameHeight: 160 });
         this.load.image("shadow", "../sprites/mapSprite/shadow.png")
 
-        this.load.spritesheet("scarabae", "../sprites/character/Ennemis/scarabae.png",{ frameWidth: 16, frameHeight: 16 })
+        this.load.spritesheet("scarabae", "../sprites/character/Ennemis/scarabae.png", { frameWidth: 16, frameHeight: 16 })
         // - - - add tilset - - -
         this.load.spritesheet("Tiles", "../sprites/tileSet/proceduralGen.png", { frameWidth: 16, frameHeight: 16 });
 
@@ -220,7 +220,7 @@ class Caves extends Phaser.Scene {
 
         this.ennemis = this.physics.add.group({
             allowGravity: false,
-            immovable: true
+            immovable: false
         });
 
         this.chain = this.physics.add.group({
@@ -765,6 +765,39 @@ class Caves extends Phaser.Scene {
             repeat: 0
         });
 
+        //ennnemy
+        this.anims.create({
+            key: 'spawn',
+            frames: this.anims.generateFrameNumbers('scarabae', { start: 0, end: 2 }),
+            frameRate: 15,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'scarabe_left',
+            frames: this.anims.generateFrameNumbers('scarabae', { start: 3, end: 4 }),
+            frameRate: 15,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'scarabe_right',
+            frames: this.anims.generateFrameNumbers('scarabae', { start: 5, end: 6 }),
+            frameRate: 15,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'scarabe_ClimbLeft',
+            frames: this.anims.generateFrameNumbers('scarabae', { start: 7, end: 8 }),
+            frameRate: 15,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'scarabe_ClimbRight',
+            frames: this.anims.generateFrameNumbers('scarabae', { start: 9, end: 10 }),
+            frameRate: 15,
+            repeat: 0
+        });
+
 
         // ===== objects =====
         // > camera 
@@ -797,22 +830,24 @@ class Caves extends Phaser.Scene {
         // ===== players ======
         if (this.player1READY) {
             if (this.biome == 6 || this.biome == 7 || this.biome == 8) { this.player1 = this.physics.add.sprite(500, 0, 'persoA').setScale(0.95, 0.95).setDepth(3); }
-            else { this.player1 = this.physics.add.sprite(8, 552, 'persoA').setScale(0.95, 0.95).setDepth(3); }
-            this.dridrill1 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill1)
-            this.stockA = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
-            this.player1.setPipeline('Light2D');
-            this.player1.body.setSize(16, 16);
-            this.players.add(this.player1)
-            this.chain_COL1 = this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
-            this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme); this.plateformeCOL1.active = true
-            this.persoA_state = 1
-            this.drillingA = this.physics.add.overlap(this.dridrill1, this.ground, this.drilling, null, this); this.drillingA.active = false
-            this.vieJ1 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
-            this.jauneJ1 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
-            if (this.biome == 6 || this.biome == 8 || this.biome == 7) { this.lumiere1 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0x3d4aff); }
+            else { this.player1 = this.physics.add.sprite(8, 552, 'persoA').setScale(0.95, 0.95).setDepth(3); }                                                          // create player
+            this.dridrill1 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill1)        // add drill
+            this.stockA = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);                                                                            // show inventory
+            this.player1.setPipeline('Light2D');                                                                                                                         // add to light system
+            this.player1.body.setSize(15, 15);                                                                                                                           // resize
+            this.players.add(this.player1)                                                                                                                               // add player to the group players
+            this.chain_COL1 = this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);                                                            // make player1 detect chians / ladder
+            this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme); this.plateformeCOL1.active = true                                            // collide with platform
+            this.persoA_state = 1                                                                                                                                        // first state
+            this.drillingA = this.physics.add.overlap(this.dridrill1, this.ground, this.drilling, null, this); this.drillingA.active = false                             // collision for the drill
+            this.attackA = this.physics.add.overlap(this.dridrill1, this.ennemis, this.killing, null, this); this.attackA.active = false                                 // collision for the attack
+            this.vieJ1 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);                                                                      // show health
+            this.jauneJ1 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);                                                                 // show gloom
+            if (this.biome == 6 || this.biome == 8 || this.biome == 7) { this.lumiere1 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0x3d4aff); }       // add light
             else { this.lumiere1 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf); }
+            this.player1.pv = this.pvJ1
 
-            this.physics.add.overlap(this.player1, this.ore1, this.pickUpA1, null, this);
+            this.physics.add.overlap(this.player1, this.ore1, this.pickUpA1, null, this);                                                                                //pick up ores
             this.physics.add.overlap(this.player1, this.ore2, this.pickUpA2, null, this);
             this.physics.add.overlap(this.player1, this.ore3, this.pickUpA3, null, this);
             this.physics.add.overlap(this.player1, this.ore4, this.pickUpA4, null, this);
@@ -823,7 +858,7 @@ class Caves extends Phaser.Scene {
             this.dridrill2 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill2)
             this.stockB = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
             this.player2.setPipeline('Light2D');
-            this.player2.body.setSize(16, 16);
+            this.player2.body.setSize(15, 15);
             this.players.add(this.player2)
             this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
             this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme); this.plateformeCOL2.active = true
@@ -832,6 +867,7 @@ class Caves extends Phaser.Scene {
             this.vieJ2 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
             this.jauneJ2 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
             this.lumiere2 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf);
+            this.player1.pv = this.pvJ2
 
             this.physics.add.overlap(this.player2, this.ore1, this.pickUpB1, null, this);
             this.physics.add.overlap(this.player2, this.ore2, this.pickUpB2, null, this);
@@ -844,7 +880,7 @@ class Caves extends Phaser.Scene {
             this.dridrill3 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill3)
             this.stockC = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
             this.player3.setPipeline('Light2D');
-            this.player3.body.setSize(16, 16);
+            this.player3.body.setSize(15, 15);
             this.players.add(this.player3)
             this.chain_COL3 = this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
             this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme); this.plateformeCOL3.active = true
@@ -869,7 +905,7 @@ class Caves extends Phaser.Scene {
         // quand c'est pas éclairé
 
         // ===== COllIDER =====
-
+        //players
         this.physics.add.collider(this.players, this.ground);
         this.physics.add.collider(this.players, this.edgeLeft);
         this.physics.add.collider(this.players, this.edgeRight);
@@ -877,7 +913,9 @@ class Caves extends Phaser.Scene {
         this.physics.add.collider(this.players, this.edgeRightB);
         this.physics.add.overlap(this.players, this.beginAGAIN, this.toCave, null, this);
         this.physics.add.overlap(this.players, this.backToDrill, this.toDrill, null, this);
-
+        this.takeDamage = this.physics.add.overlap(this.players, this.ennemis, this.dying, null, this); this.takeDamage.active = true
+        //ennemis
+        this.physics.add.collider(this.ennemis, this.ground);
 
         // ===== UI =====
 
@@ -986,7 +1024,7 @@ class Caves extends Phaser.Scene {
 
             // - - - drill 1 - - - 
             this.moveDrill(this.LRa, this.player1, this.keyZ, this.keyS, this.keyA, this.dridrill1)
-            if (this.keyA.isDown) { this.drillingA.active = true } else { this.drillingA.active = false }
+            if (this.keyA.isDown) { this.drillingA.active = true; this.attackA.active = true } else { this.drillingA.active = false; this.attackA.active = false }
 
             // - - - inventory - - - 
             this.stockA.body.x = this.player1.body.x; this.stockA.body.x = this.player1.body.x
@@ -1015,7 +1053,7 @@ class Caves extends Phaser.Scene {
             this.vieJ1.body.x = this.player1.body.x - 10; this.vieJ1.body.y = this.player1.body.y + 24;
             this.jauneJ1.body.x = this.player1.body.x - 10; this.jauneJ1.body.y = this.player1.body.y + 18;
 
-            this.vieJ1.setFrame(this.pvJ1)
+            this.vieJ1.setFrame(this.player1.pv)
             this.jauneJ1.setFrame(this.gloomJ1);
 
             if (this.hurt1 < 20) {
@@ -1179,18 +1217,26 @@ class Caves extends Phaser.Scene {
             var rnd = Phaser.Math.Between(10000, 5000)
             this.time.addEvent({
                 delay: rnd, callback: () => {
-                    if (this.player1READY) { this.spawnPlaceA = this.spawnOutGround(this.player1); if (this.spawnPlaceA != false) { this.spawnFoe(this.spawnPlaceA[0], this.spawnPlaceA[1],1) } }//check for free space and create ennemi
-                    if (this.player2READY) { this.spawnPlaceB = this.spawnOutGround(this.player2); if (this.spawnPlaceB != false) { this.spawnFoe(this.spawnPlaceB[0], this.spawnPlaceB[1],1) } }
-                    if (this.player3READY) { this.spawnPlaceC = this.spawnOutGround(this.player3); if (this.spawnPlaceC != false) { this.spawnFoe(this.spawnPlaceC[0], this.spawnPlaceC[1],1) } }
-                    if (this.player4READY) { this.spawnPlaceD = this.spawnOutGround(this.player4); if (this.spawnPlaceD != false) { this.spawnFoe(this.spawnPlaceD[0], this.spawnPlaceD[1],1) } }
-
+                    if (this.player1READY) { this.spawnPlaceA = this.spawnOutGround(this.player1); if (this.spawnPlaceA != false) { this.spawnFoe(this.spawnPlaceA[0], this.spawnPlaceA[1], 1) } }//check for free space and create ennemi
+                    if (this.player2READY) { this.spawnPlaceB = this.spawnOutGround(this.player2); if (this.spawnPlaceB != false) { this.spawnFoe(this.spawnPlaceB[0], this.spawnPlaceB[1], 1) } }
+                    if (this.player3READY) { this.spawnPlaceC = this.spawnOutGround(this.player3); if (this.spawnPlaceC != false) { this.spawnFoe(this.spawnPlaceC[0], this.spawnPlaceC[1], 1) } }
+                    if (this.player4READY) { this.spawnPlaceD = this.spawnOutGround(this.player4); if (this.spawnPlaceD != false) { this.spawnFoe(this.spawnPlaceD[0], this.spawnPlaceD[1], 1) } }
+                    this.checkPlace.destroy()
                     this.spawn = true
                 },
             })
         }
 
-
-        //this.scarabe(this.ennemis)
+        this.ennemis.getChildren(this).forEach((child) => {
+            if (child.type = 'scarabae') {
+                if (child.freez == false) {
+                    if (this.player1.body.x > child.body.x) { child.setVelocityX(40); child.anims.play('scarabe_right', true) } else { child.setVelocityX(-40); child.anims.play('scarabe_left', true) } // walk
+                }
+                if (child.body.blocked.right) { child.setVelocityY(-20); child.anims.play('scarabe_ClimbRight', true) }//climb
+                else if (child.body.blocked.left) { child.setVelocityY(-20); child.anims.play('scarabe_ClimbLeft', true); }
+                else { if (child.body.blocked.down) { child.setVelocityY(0) } else { child.setVelocityY(200) } } // fall 
+            }
+        })
 
         // ====== CAM CENTER =====
         if (this.player1READY == true) { this.posA_x = this.player1.body.x; this.posA_y = this.player1.body.y; } else { this.posA_x = 0; this.posA_y = 0 }
@@ -1390,30 +1436,30 @@ class Caves extends Phaser.Scene {
     moveDrill(lr, player, up, down, go, drill) {
         if (go.isDown) { // if mining
             if (up.isDown) {
-                if (player == this.player1) { this.dridrill1.anims.play("dridrillC1", true).setSize(3, 8) }
-                if (player == this.player2) { this.dridrill2.anims.play("dridrillC1", true).setSize(3, 8) }
+                if (player == this.player1) { this.dridrill1.anims.play("dridrillC1", true).setSize(5, 10) }
+                if (player == this.player2) { this.dridrill2.anims.play("dridrillC1", true).setSize(5, 10) }
 
                 drill.body.x = player.body.x + 4
                 drill.body.y = player.body.y - 6
             }
             else if (down.isDown) {
                 //anim drill bas
-                if (player == this.player1) { this.dridrill1.anims.play("dridrillD1", true).setSize(3, 8) }
-                if (player == this.player2) { this.dridrill2.anims.play("dridrillD1", true).setSize(3, 8) }
+                if (player == this.player1) { this.dridrill1.anims.play("dridrillD1", true).setSize(5, 10) }
+                if (player == this.player2) { this.dridrill2.anims.play("dridrillD1", true).setSize(5, 10) }
                 drill.body.x = player.body.x + 6
                 drill.body.y = player.body.y + 8
             }
             else {
                 if (lr) {
                     //anim drill droit
-                    if (player == this.player1) { this.dridrill1.anims.play("dridrillB1", true).setSize(8, 3) }
-                    if (player == this.player2) { this.dridrill2.anims.play("dridrillB1", true).setSize(8, 3) }
+                    if (player == this.player1) { this.dridrill1.anims.play("dridrillB1", true).setSize(10, 5) }
+                    if (player == this.player2) { this.dridrill2.anims.play("dridrillB1", true).setSize(10, 5) }
                     drill.body.x = player.body.x - 4
                     drill.body.y = player.body.y + 6
                 }
                 else {
-                    if (player == this.player1) { this.dridrill1.anims.play("dridrillA1", true).setSize(8, 3) }
-                    if (player == this.player2) { this.dridrill2.anims.play("dridrillA1", true).setSize(8, 3) }
+                    if (player == this.player1) { this.dridrill1.anims.play("dridrillA1", true).setSize(10, 5) }
+                    if (player == this.player2) { this.dridrill2.anims.play("dridrillA1", true).setSize(10, 5) }
                     //anim drill guauche
                     drill.body.x = player.body.x + 8
                     drill.body.y = player.body.y + 6
@@ -1528,10 +1574,9 @@ class Caves extends Phaser.Scene {
     }
 
     spawnOutGround(player) {
-
         this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 320, player.x + 320), Phaser.Math.Between(player.y - 64, player.y + 64)).setSize(16, 16)
         if (!this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
-        else { return (false) }
+        else { this.checkPlace.destroy(); return (false) }
     }
     spawnInGround(player) {
         this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 320, player.x + 320), Phaser.Math.Between(player.y - 64, player.y + 64)).setSize(16, 16)
@@ -1547,14 +1592,17 @@ class Caves extends Phaser.Scene {
 
     spawnFoe(x, y, id) {
         if (id == 1) { //scarabae
-            var foe = this.physics.add.sprite(x, y, 'scarabae').setDepth(3).setFrame(3)
+            var foe = this.physics.add.sprite(x, y, 'scarabae').setDepth(3).setFrame(3).setSize(12, 8).setPipeline('Light2D')
             this.ennemis.add(foe)
-            //this.scarabe(this.foe)
+            this.physics.add.collider(this.ennemis, this.ground);
+            foe.type = 'scarabae'
+            foe.HP = 2; foe.dmg = 10
+            foe.freez = false
             console.log("ennemis apear", foe.body.x, foe.body.y)
         }
     }
 
-    /*scarabe(ennemi, hp, dmg) {
+    scarabe(ennemi) {
 
         if (this.player1READY) { var distA = Phaser.Math.Distance.Between(this.player1.body.x, this.player1.body.y, ennemi.body.x, ennemi.body.y) } else { var distA = 0 }//get distance
         if (this.player2READY) { var distB = Phaser.Math.Distance.Between(this.player2.body.x, this.player2.body.y, ennemi.body.x, ennemi.body.y) } else { var distB = 0 }
@@ -1568,7 +1616,7 @@ class Caves extends Phaser.Scene {
 
         console.log("target", target)
         if (target.body.x > ennemi.body.x) { ennemi.setVelocityX(100) } else { ennemi.setVelocityX(-100) }//move to player
-    }*/
+    }
 
 
     drilling(drill, tile) {
@@ -1578,6 +1626,123 @@ class Caves extends Phaser.Scene {
                     tile.destroy()
             },
         })
+    }
+
+    killing(drill, foe) {
+        if (foe.HP > 0) {
+            foe.HP -= 1
+            this.attackA.active = false
+            foe.freez = true
+
+            this.time.addEvent({ // invicibility frame
+                delay: 300, callback: () => {
+                    this.attackA.active = true
+                    foe.freez = false
+                },
+            })
+
+            if (drill.body.x > foe.body.x) { foe.setVelocityX(-500); foe.setVelocityY(-50) }
+            else { foe.setVelocityX(200); foe.setVelocityY(-50) }
+           
+            //annim :
+            this.tweens.add({
+                targets: foe,
+                alpha: 0,
+                duration: 100,
+            });
+            this.time.addEvent({                                 
+                delay: 100, callback: () => {
+                    this.tweens.add({
+                        targets: foe,
+                        alpha: 1,
+                        duration: 100,
+                    });
+
+                    this.time.addEvent({                                  
+                        delay: 100, callback: () => {
+                            this.tweens.add({
+                                targets: foe,
+                                alpha: 0,
+                                duration: 100,
+                            });
+
+                            this.time.addEvent({                                  
+                                delay: 100, callback: () => {
+                                   
+                                    this.tweens.add({
+                                        targets: foe,
+                                        alpha: 1,
+                                        duration: 100,
+                                    });
+                                },
+                            })
+
+                        },
+                    })
+                },
+            })
+
+        }
+        else {
+            foe.destroy()
+        }
+    }
+
+    dying(player, foe) {
+        if (player.pv > 0) {
+            player.pv -= foe.dmg
+            this.takeDamage.active = false
+            if (foe.body.x > player.body.x) { player.setVelocityX(-200); player.setVelocityY(-50) }
+            else { player.setVelocityX(200); player.setVelocityY(-50) }
+
+            this.time.addEvent({                                  // invicibility frame
+                delay: 400, callback: () => {
+                    this.takeDamage.active = true
+                },
+            })
+
+            //annim :
+            this.tweens.add({
+                targets: player,
+                alpha: 0,
+                duration: 100,
+            });
+            this.time.addEvent({                                 
+                delay: 100, callback: () => {
+                    this.tweens.add({
+                        targets: player,
+                        alpha: 1,
+                        duration: 100,
+                    });
+
+                    this.time.addEvent({                                  
+                        delay: 100, callback: () => {
+                            this.tweens.add({
+                                targets: player,
+                                alpha: 0,
+                                duration: 100,
+                            });
+
+                            this.time.addEvent({                                  
+                                delay: 100, callback: () => {
+                                   
+                                    this.tweens.add({
+                                        targets: player,
+                                        alpha: 1,
+                                        duration: 100,
+                                    });
+                                },
+                            })
+
+                        },
+                    })
+                },
+            })
+
+            this.hurt1 = 0; this.hurt2 = 0; this.hurt3 = 0; this.hurt4 = 0
+        }
+        else { console.log("DEATH") }
+
     }
 
     toCave() {

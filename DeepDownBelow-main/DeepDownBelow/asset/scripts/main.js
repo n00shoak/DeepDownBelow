@@ -14,8 +14,8 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false
-        }
+            debug: false 
+        },
     },
 
     // Ajout des differentes scenes dans le jeu
