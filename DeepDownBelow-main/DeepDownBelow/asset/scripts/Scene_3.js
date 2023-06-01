@@ -797,6 +797,18 @@ class Caves extends Phaser.Scene {
             frameRate: 15,
             repeat: 0
         });
+        this.anims.create({
+            key: 'turtle_walk',
+            frames: this.anims.generateFrameNumbers('scarabae', { start: 11, end: 16 }),
+            frameRate: 15,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'jellyFish',
+            frames: this.anims.generateFrameNumbers('scarabae', { start: 17, end: 21 }),
+            frameRate: 15,
+            repeat: 0
+        });
 
 
         // ===== objects =====
@@ -1217,10 +1229,25 @@ class Caves extends Phaser.Scene {
             var rnd = Phaser.Math.Between(10000, 5000)
             this.time.addEvent({
                 delay: rnd, callback: () => {
-                    if (this.player1READY) { this.spawnPlaceA = this.spawnOutGround(this.player1); if (this.spawnPlaceA != false) { this.spawnFoe(this.spawnPlaceA[0], this.spawnPlaceA[1], 1) } }//check for free space and create ennemi
-                    if (this.player2READY) { this.spawnPlaceB = this.spawnOutGround(this.player2); if (this.spawnPlaceB != false) { this.spawnFoe(this.spawnPlaceB[0], this.spawnPlaceB[1], 1) } }
-                    if (this.player3READY) { this.spawnPlaceC = this.spawnOutGround(this.player3); if (this.spawnPlaceC != false) { this.spawnFoe(this.spawnPlaceC[0], this.spawnPlaceC[1], 1) } }
-                    if (this.player4READY) { this.spawnPlaceD = this.spawnOutGround(this.player4); if (this.spawnPlaceD != false) { this.spawnFoe(this.spawnPlaceD[0], this.spawnPlaceD[1], 1) } }
+                    if (this.biome == 0 || this.biome == 1 || this.biome == 2) {
+                        if (this.player1READY) { this.spawnPlaceA = this.spawnOutGround(this.player1); if (this.spawnPlaceA != false) { this.spawnFoe(this.spawnPlaceA[0], this.spawnPlaceA[1], 1) } }//check for free space and create ennemi
+                        if (this.player2READY) { this.spawnPlaceB = this.spawnOutGround(this.player2); if (this.spawnPlaceB != false) { this.spawnFoe(this.spawnPlaceB[0], this.spawnPlaceB[1], 1) } }
+                        if (this.player3READY) { this.spawnPlaceC = this.spawnOutGround(this.player3); if (this.spawnPlaceC != false) { this.spawnFoe(this.spawnPlaceC[0], this.spawnPlaceC[1], 1) } }
+                        if (this.player4READY) { this.spawnPlaceD = this.spawnOutGround(this.player4); if (this.spawnPlaceD != false) { this.spawnFoe(this.spawnPlaceD[0], this.spawnPlaceD[1], 1) } }
+                    }
+                    else if (this.biome == 3 || this.biome == 4 || this.biome == 5) {
+                        if (this.player1READY) { this.spawnPlaceA = this.spawnOutGround(this.player1); if (this.spawnPlaceA != false) { this.spawnFoe(this.spawnPlaceA[0], this.spawnPlaceA[1], 2) } }
+                        if (this.player2READY) { this.spawnPlaceB = this.spawnOutGround(this.player2); if (this.spawnPlaceB != false) { this.spawnFoe(this.spawnPlaceB[0], this.spawnPlaceB[1], 2) } }
+                        if (this.player3READY) { this.spawnPlaceC = this.spawnOutGround(this.player3); if (this.spawnPlaceC != false) { this.spawnFoe(this.spawnPlaceC[0], this.spawnPlaceC[1], 2) } }
+                        if (this.player4READY) { this.spawnPlaceD = this.spawnOutGround(this.player4); if (this.spawnPlaceD != false) { this.spawnFoe(this.spawnPlaceD[0], this.spawnPlaceD[1], 2) } }
+                    }
+                    else if (this.biome == 6 || this.biome == 7 || this.biome == 8) {
+                        if (this.player1READY) { this.spawnPlaceA = this.spawnInWater(this.player1); if (this.spawnPlaceA != false) { this.spawnFoe(this.spawnPlaceA[0], this.spawnPlaceA[1], 3) } }
+                        if (this.player2READY) { this.spawnPlaceB = this.spawnInWater(this.player2); if (this.spawnPlaceB != false) { this.spawnFoe(this.spawnPlaceB[0], this.spawnPlaceB[1], 3) } }
+                        if (this.player3READY) { this.spawnPlaceC = this.spawnInWater(this.player3); if (this.spawnPlaceC != false) { this.spawnFoe(this.spawnPlaceC[0], this.spawnPlaceC[1], 3) } }
+                        if (this.player4READY) { this.spawnPlaceD = this.spawnInWater(this.player4); if (this.spawnPlaceD != false) { this.spawnFoe(this.spawnPlaceD[0], this.spawnPlaceD[1], 3) } }
+                    }
+
                     this.checkPlace.destroy()
                     this.spawn = true
                 },
@@ -1228,13 +1255,14 @@ class Caves extends Phaser.Scene {
         }
 
         this.ennemis.getChildren(this).forEach((child) => {
-            if (child.type = 'scarabae') {
-                if (child.freez == false) {
-                    if (this.player1.body.x > child.body.x) { child.setVelocityX(40); child.anims.play('scarabe_right', true) } else { child.setVelocityX(-40); child.anims.play('scarabe_left', true) } // walk
-                }
-                if (child.body.blocked.right) { child.setVelocityY(-20); child.anims.play('scarabe_ClimbRight', true) }//climb
-                else if (child.body.blocked.left) { child.setVelocityY(-20); child.anims.play('scarabe_ClimbLeft', true); }
-                else { if (child.body.blocked.down) { child.setVelocityY(0) } else { child.setVelocityY(200) } } // fall 
+            if (child.type == 'scarabae') {
+                this.scarabe(child)
+            }
+            else if (child.type == 'turtle') {
+                this.turtle(child)
+            }
+            else if (child.type == 'meduse') {
+                this.jellyFish(child)
             }
         })
 
@@ -1524,8 +1552,8 @@ class Caves extends Phaser.Scene {
                 gloom -= 15
             }
             if (this.lampLevel == 3 && gloom >= 75 && !this.physics.overlap(this.players, this.object) && player.body.blocked.down) { // lamp lv 4
-                this.object.add(this.physics.add.sprite(this.target_x, this.target_y, 'lampD').setSize(16, 64).setPipeline('Light2D')) //game object 
-                this.lights.addLight(this.target_x, this.target_y - 72, 75).setIntensity(2).setColor(0xfff8cf);
+                var crystal = this.object.add(this.physics.add.sprite(this.target_x, this.target_y, 'lampD').setSize(16, 64).setPipeline('Light2D')) //game object 
+                crystal.light = this.lights.addLight(this.target_x, this.target_y - 72, 75).setIntensity(2).setColor(0xfff8cf);
                 gloom -= 75
             }
         }
@@ -1584,7 +1612,7 @@ class Caves extends Phaser.Scene {
         else { return (false) }
     }
     spawnInWater(player) {
-        this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 64, player.x + 64), Phaser.Math.Between(player.y - 128, player.y + 400)).setSize(16, 16)
+        this.checkPlace = this.physics.add.sprite(Phaser.Math.Between(player.x - 64, player.x + 64), Phaser.Math.Between(player.y + 100, player.y + 200)).setSize(16, 16)
         if (!this.physics.overlap(this.checkPlace, this.ground)) { return ([this.checkPlace.body.x, this.checkPlace.body.y]) }
         else { return (false) }
     }
@@ -1598,7 +1626,27 @@ class Caves extends Phaser.Scene {
             foe.type = 'scarabae'
             foe.HP = 2; foe.dmg = 10
             foe.freez = false
-            console.log("ennemis apear", foe.body.x, foe.body.y)
+            console.log(" a scarabe apear", foe.body.x, foe.body.y)
+        }
+        if (id == 2) {
+            var foe = this.physics.add.sprite(x, y, 'scarabae').setDepth(3).setFrame(3).setSize(12, 8).setPipeline('Light2D')
+            this.ennemis.add(foe)
+            this.physics.add.collider(this.ennemis, this.ground);
+            foe.type = 'turtle'
+            foe.HP = 1; foe.dmg = 15
+            foe.freez = false
+            console.log(" a turtle apear", foe.body.x, foe.body.y)
+        }
+        if (id == 3) {
+            var foe = this.physics.add.sprite(x, y, 'scarabae').setDepth(3).setFrame(17).setSize(12, 8).setPipeline('Light2D')
+            this.ennemis.add(foe)
+            this.physics.add.collider(this.ennemis, this.ground);
+            foe.type = 'meduse'
+            foe.HP = 5; foe.dmg = 5
+            foe.light = this.lights.addLight(foe.x, foe.y, 100).setIntensity(2).setColor(0x85ffed);
+            foe.power = 2
+            foe.freez = false
+            console.log(" a jelly fish apear", foe.body.x, foe.body.y)
         }
     }
 
@@ -1608,15 +1656,89 @@ class Caves extends Phaser.Scene {
         if (this.player2READY) { var distB = Phaser.Math.Distance.Between(this.player2.body.x, this.player2.body.y, ennemi.body.x, ennemi.body.y) } else { var distB = 0 }
         if (this.player3READY) { var distC = Phaser.Math.Distance.Between(this.player3.body.x, this.player3.body.y, ennemi.body.x, ennemi.body.y) } else { var distC = 0 }
         if (this.player4READY) { var distD = Phaser.Math.Distance.Between(this.player4.body.x, this.player4.body.y, ennemi.body.x, ennemi.body.y) } else { var distD = 0 }
-        console.log("dist", distA, distB, distC, distD)
         if (distA > distB && distA > distC && distA > distD) { var target = this.player1 }//check who's nearest
         else if (distB > distA && distB > distC && distB > distD) { var target = this.player2 }
         else if (distC > distB && distC > distA && distC > distD) { var target = this.player3 }
         else if (distD > distB && distD > distC && distD > distD) { var target = this.player4 }
 
-        console.log("target", target)
-        if (target.body.x > ennemi.body.x) { ennemi.setVelocityX(100) } else { ennemi.setVelocityX(-100) }//move to player
+
+        //console.log("target", target)
+        if (ennemi.freez == false) {
+            if (target.body.x > ennemi.body.x) { ennemi.setVelocityX(40); ennemi.anims.play('scarabe_right', true) } else { ennemi.setVelocityX(-40); ennemi.anims.play('scarabe_left', true) } // walk
+        }
+        if (ennemi.body.blocked.right) { ennemi.setVelocityY(-20); ennemi.anims.play('scarabe_ClimbRight', true) }//climb
+        else if (ennemi.body.blocked.left) { ennemi.setVelocityY(-20); ennemi.anims.play('scarabe_ClimbLeft', true); }
+        else { if (ennemi.body.blocked.down) { ennemi.setVelocityY(0) } else { ennemi.setVelocityY(200) } } // fall 
     }
+
+    turtle(ennemi) {
+        if (this.player1READY) { var distA = Phaser.Math.Distance.Between(this.player1.body.x, this.player1.body.y, ennemi.body.x, ennemi.body.y) } else { var distA = 0 }//get distance
+        if (this.player2READY) { var distB = Phaser.Math.Distance.Between(this.player2.body.x, this.player2.body.y, ennemi.body.x, ennemi.body.y) } else { var distB = 0 }
+        if (this.player3READY) { var distC = Phaser.Math.Distance.Between(this.player3.body.x, this.player3.body.y, ennemi.body.x, ennemi.body.y) } else { var distC = 0 }
+        if (this.player4READY) { var distD = Phaser.Math.Distance.Between(this.player4.body.x, this.player4.body.y, ennemi.body.x, ennemi.body.y) } else { var distD = 0 }
+
+        var target = distA > distB && distA > distC && distA > distD ? this.player1 :
+            distB > distA && distB > distC && distB > distD ? this.player2 :
+                distC > distB && distC > distA && distC > distD ? this.player3 :
+                    distD > distB && distD > distC && distD > distD ? this.player4 :
+                        null;
+
+        if (ennemi.freez == false) {
+            var angle = Phaser.Math.Angle.Between(ennemi.x, ennemi.y, target.x, target.y);
+            var rotation = Phaser.Math.Angle.Wrap(angle);
+
+            const directionX = Math.cos(angle);
+            const directionY = Math.sin(angle);
+
+            ennemi.setVelocity(directionX * 20, directionY * 20);
+            ennemi.rotation = rotation;
+        }
+
+        ennemi.anims.play('turtle_walk', true);
+    }
+
+    jellyFish(ennemi) {
+
+        if (this.player1READY) { var distA = Phaser.Math.Distance.Between(this.player1.body.x, this.player1.body.y, ennemi.body.x, ennemi.body.y) } else { var distA = 0 }//get distance
+        if (this.player2READY) { var distB = Phaser.Math.Distance.Between(this.player2.body.x, this.player2.body.y, ennemi.body.x, ennemi.body.y) } else { var distB = 0 }
+        if (this.player3READY) { var distC = Phaser.Math.Distance.Between(this.player3.body.x, this.player3.body.y, ennemi.body.x, ennemi.body.y) } else { var distC = 0 }
+        if (this.player4READY) { var distD = Phaser.Math.Distance.Between(this.player4.body.x, this.player4.body.y, ennemi.body.x, ennemi.body.y) } else { var distD = 0 }
+        if (distA > distB && distA > distC && distA > distD) { var target = this.player1 }//check who's nearest
+        else if (distB > distA && distB > distC && distB > distD) { var target = this.player2 }
+        else if (distC > distB && distC > distA && distC > distD) { var target = this.player3 }
+        else if (distD > distB && distD > distC && distD > distD) { var target = this.player4 }
+
+        ennemi.light.x = ennemi.body.x; ennemi.light.y = ennemi.body.y;
+
+        if (ennemi.freez == false && ennemi.body.y > target.body.y) {
+            if (target.body.x + 5 > ennemi.body.x) { ennemi.setVelocityX(20.2) } else if (target.body.x - 5 < ennemi.body.x) { ennemi.setVelocityX(-20.2) } // walk
+            ennemi.setVelocityY(-10)
+        }
+
+        ennemi.anims.play('jellyFish', true)
+        ennemi.power -= 0.0001
+        ennemi.light.setIntensity(ennemi.power)
+
+        this.time.addEvent({
+            delay: 10000, callback: () => {
+
+                this.tweens.add({
+                    targets: ennemi,
+                    alpha: 0,
+                    duration: 2000,
+                });
+                this.time.addEvent({
+                    delay: 2000, callback: () => {
+                        this.lights.removeLight(ennemi.light)
+                        ennemi.destroy()
+                    },
+                })
+            },
+        })
+
+    }
+
+
 
 
     drilling(drill, tile) {
@@ -1643,14 +1765,14 @@ class Caves extends Phaser.Scene {
 
             if (drill.body.x > foe.body.x) { foe.setVelocityX(-500); foe.setVelocityY(-50) }
             else { foe.setVelocityX(200); foe.setVelocityY(-50) }
-           
+
             //annim :
             this.tweens.add({
                 targets: foe,
                 alpha: 0,
                 duration: 100,
             });
-            this.time.addEvent({                                 
+            this.time.addEvent({
                 delay: 100, callback: () => {
                     this.tweens.add({
                         targets: foe,
@@ -1658,7 +1780,7 @@ class Caves extends Phaser.Scene {
                         duration: 100,
                     });
 
-                    this.time.addEvent({                                  
+                    this.time.addEvent({
                         delay: 100, callback: () => {
                             this.tweens.add({
                                 targets: foe,
@@ -1666,9 +1788,9 @@ class Caves extends Phaser.Scene {
                                 duration: 100,
                             });
 
-                            this.time.addEvent({                                  
+                            this.time.addEvent({
                                 delay: 100, callback: () => {
-                                   
+
                                     this.tweens.add({
                                         targets: foe,
                                         alpha: 1,
@@ -1707,7 +1829,7 @@ class Caves extends Phaser.Scene {
                 alpha: 0,
                 duration: 100,
             });
-            this.time.addEvent({                                 
+            this.time.addEvent({
                 delay: 100, callback: () => {
                     this.tweens.add({
                         targets: player,
@@ -1715,7 +1837,7 @@ class Caves extends Phaser.Scene {
                         duration: 100,
                     });
 
-                    this.time.addEvent({                                  
+                    this.time.addEvent({
                         delay: 100, callback: () => {
                             this.tweens.add({
                                 targets: player,
@@ -1723,9 +1845,9 @@ class Caves extends Phaser.Scene {
                                 duration: 100,
                             });
 
-                            this.time.addEvent({                                  
+                            this.time.addEvent({
                                 delay: 100, callback: () => {
-                                   
+
                                     this.tweens.add({
                                         targets: player,
                                         alpha: 1,
@@ -1863,6 +1985,7 @@ class Caves extends Phaser.Scene {
     }
     pickUpA4(player, ore) {
         this.afk1 = 0
+        this.lights.removeLight(ore.light)
         this.ammount = Phaser.Math.Between(5 + this.drill_Yield * 2, 15 + this.drill_Yield * 5)
         if (this.ammount + this.gloomJ1 > 99) { this.gloomJ1 = 99 }
         else { this.gloomJ1 += this.ammount; ore.destroy(); }
