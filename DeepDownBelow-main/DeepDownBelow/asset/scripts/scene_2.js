@@ -424,6 +424,7 @@ class Drill extends Phaser.Scene {
             this.physics.add.overlap(this.player1, this.gadgetSelect, this.upgradeB1, null, this)
             this.persoA_state = 1
 
+            if (this.pvJ1 = null) { this.pvJ1 = 99 }
         }
         if (this.player2READY) {
             this.player2 = this.physics.add.sprite(280, 500, 'persoB');
@@ -1320,6 +1321,57 @@ class Drill extends Phaser.Scene {
                             if (this.selection3 != 3) {
                                 this.nextCavesIs = 0
                                 this.persoA_state = 1
+                                this.used3 = false
+                                this.caveLayer.setAlpha(0); this.caveSelect.setAlpha(0); this.consumption.setAlpha(0); this._caves.setAlpha(0)
+                            }
+
+                        }
+                    },
+                })
+
+            }
+        }
+        if (player == this.player2 && this.nextCavesIs == 0) {
+            if (this.keyP.isDown) {
+                this.used3 = true; this.persoB_state = 3; this.player2.setVelocityX(0)
+                this.caveLayer.setAlpha(1); this.caveSelect.setAlpha(1); this.consumption.setAlpha(1); this._caves.setAlpha(1)
+            }
+            if (this.used3) {
+                //change selection :
+                //overlay
+                if (Phaser.Input.Keyboard.JustDown(this.keyM) && this.selection3 < 3) { this.selection3++; console.log(" next cave", this.selection3) }
+                if (Phaser.Input.Keyboard.JustDown(this.keyK) && this.selection3 > 0) { this.selection3--; console.log(" previous cave", this.selection3) }
+                if (this.selection3 == 0) { this.caveSelect.setFrame(0) } else if (this.selection3 == 3) { this.caveSelect.setFrame(2) } else { this.caveSelect.setFrame(1) }
+
+                //representation
+                if (this.selection3 != 3) {
+                    this.selection4 = this.layers[this.layer][this.selection3];
+                    this._caves.setFrame(this.selection4[0] + 3)
+
+                    //show consumption
+                    this.consumption.setFrame(Math.round(this.selection3 / 4) + Math.round(this.layer / 3))
+                    //console.log(Math.round(this.selection3 / 4) + Math.round(this.layer / 3))
+                }
+                else { this._caves.setFrame(12); this.consumption.setFrame(3) }
+
+                this.time.addEvent({
+                    delay: 200, callback: () => {
+                        if (Phaser.Input.Keyboard.JustDown(this.keyP)) {//next layer
+                            if (this.selection3 == 3 && this.layer < 6) { this.layer++; this.selection3 = 0; this.caveLayer.setFrame(this.layer) }//change layer
+                            else {
+                                this.nextCavesIs = this.selection4
+                                this.persoB_state = 1
+                                this.used3 = false
+                                this.caveLayer.setAlpha(0); this.caveSelect.setAlpha(0); this.consumption.setAlpha(0);
+                                this._caves.body.y -= 4
+                                this._caves.body.x -= 6
+                                this._caves.setScale(1.9, 1.9).setDepth(1)
+                            }
+                        }
+                        if (Phaser.Input.Keyboard.JustDown(this.keyI)) {//cancel
+                            if (this.selection3 != 3) {
+                                this.nextCavesIs = 0
+                                this.persoB_state = 1
                                 this.used3 = false
                                 this.caveLayer.setAlpha(0); this.caveSelect.setAlpha(0); this.consumption.setAlpha(0); this._caves.setAlpha(0)
                             }

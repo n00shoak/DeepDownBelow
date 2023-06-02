@@ -866,47 +866,29 @@ class Caves extends Phaser.Scene {
             this.physics.add.overlap(this.player1, this.chain, this.chainRide, null, this);
         }
         if (this.player2READY) {
-            this.player2 = this.physics.add.sprite(8, 552, 'persoB').setScale(0.95, 0.95).setDepth(3);
-            this.dridrill2 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill2)
-            this.stockB = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
-            this.player2.setPipeline('Light2D');
-            this.player2.body.setSize(15, 15);
-            this.players.add(this.player2)
-            this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
-            this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme); this.plateformeCOL2.active = true
-            this.persoB_state = 1
-            this.drillingB = this.physics.add.overlap(this.dridrill2, this.ground, this.drilling, null, this); this.drillingB.active = false
-            this.vieJ2 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
-            this.jauneJ2 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
-            this.lumiere2 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf);
-            this.player1.pv = this.pvJ2
+            if (this.biome == 6 || this.biome == 7 || this.biome == 8) { this.player2 = this.physics.add.sprite(500, 0, 'persoB').setScale(0.95, 0.95).setDepth(3); }
+            else { this.player2 = this.physics.add.sprite(8, 552, 'persoB').setScale(0.95, 0.95).setDepth(3); }                                                          // create player
+            this.dridrill2 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill2)        // add drill
+            this.stockB = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);                                                                            // show inventory
+            this.player2.setPipeline('Light2D');                                                                                                                         // add to light system
+            this.player2.body.setSize(15, 15);                                                                                                                           // resize
+            this.players.add(this.player2)                                                                                                                               // add player to the group players
+            this.chain_COL2 = this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);                                                            // make player1 detect chians / ladder
+            this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme); this.plateformeCOL2.active = true                                            // collide with platform
+            this.persoB_state = 1                                                                                                                                        // first state
+            this.drillingB = this.physics.add.overlap(this.dridrill2, this.ground, this.drilling, null, this); this.drillingB.active = false                             // collision for the drill
+            this.attackB = this.physics.add.overlap(this.dridrill2, this.ennemis, this.killing, null, this); this.attackB.active = false                                 // collision for the attack
+            this.vieJ2 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);                                                                      // show health
+            this.jauneJ2 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);                                                                 // show gloom
+            if (this.biome == 6 || this.biome == 8 || this.biome == 7) { this.lumiere2 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0x3d4aff); }       // add light
+            else { this.lumiere2 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf); }
+            this.player2.pv = this.pvJ2
 
             this.physics.add.overlap(this.player2, this.ore1, this.pickUpB1, null, this);
             this.physics.add.overlap(this.player2, this.ore2, this.pickUpB2, null, this);
             this.physics.add.overlap(this.player2, this.ore3, this.pickUpB3, null, this);
             this.physics.add.overlap(this.player2, this.ore4, this.pickUpB4, null, this);
             this.physics.add.overlap(this.player2, this.chain, this.chainRide, null, this);
-        }
-        if (this.player3READY) {
-            this.player3 = this.physics.add.sprite(8, 552, 'persoC').setScale(0.95, 0.95).setDepth(3);
-            this.dridrill3 = this.physics.add.sprite(280, 500, 'Dridrill').setDepth(4).setSize(16, 10).setPipeline('Light2D'); this.dridrills.add(this.dridrill3)
-            this.stockC = this.physics.add.sprite(280, 500, 'stock').setDepth(5).setFrame(1);
-            this.player3.setPipeline('Light2D');
-            this.player3.body.setSize(15, 15);
-            this.players.add(this.player3)
-            this.chain_COL3 = this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
-            this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme); this.plateformeCOL3.active = true
-            this.persoC_state = 1
-            this.drillingC = this.physics.add.overlap(this.dridrill3, this.ground, this.drilling, null, this); this.drillingC.active = false
-            this.vieJ3 = this.physics.add.sprite(280, 500, 'pv').setScale(0.35, 0.35).setDepth(10);
-            this.jauneJ3 = this.physics.add.sprite(280, 500, 'gloom').setScale(0.35, 0.35).setDepth(10);
-            this.lumiere3 = this.lights.addLight(3228, 502, 95).setIntensity(1).setColor(0xfff8cf);
-
-            this.physics.add.overlap(this.player3, this.ore1, this.pickUpC1, null, this);
-            this.physics.add.overlap(this.player3, this.ore2, this.pickUpC2, null, this);
-            this.physics.add.overlap(this.player3, this.ore3, this.pickUpC3, null, this);
-            this.physics.add.overlap(this.player3, this.ore4, this.pickUpC4, null, this);
-            this.physics.add.overlap(this.player3, this.chain, this.chainRide, null, this);
         }
 
         // ===== LIGHT ====
