@@ -77,6 +77,8 @@ class Drill extends Phaser.Scene {
         this.load.spritesheet("caveSelect", "/asset/sprites/mapSprite/cavesSelect.png", { frameWidth: 48, frameHeight: 32 });
         this.load.spritesheet("consumption", "/asset/sprites/mapSprite/consumption.png", { frameWidth: 32, frameHeight: 16 });
         this.load.spritesheet("layerMeter", "/asset/sprites/mapSprite/layerMeter.png", { frameWidth: 16, frameHeight: 48 });
+        this.load.spritesheet("gadgetUpgrade", "/asset/sprites/mapSprite/gadgetUgrade.png", { frameWidth: 16, frameHeight: 48 });
+
 
         this.load.spritesheet("Hey", "/asset/sprites/UI/interactible.png", { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet("fuelA", "/asset/sprites/UI/drillUsage.png", { frameWidth: 48, frameHeight: 32 });
@@ -122,6 +124,7 @@ class Drill extends Phaser.Scene {
         this.selection1 = 0
         this.drill_Speed = 0
         this.drill_Yield = 0
+        this.selection2 = 0
 
         this.used2 = false
         this.used3 = false
@@ -137,6 +140,8 @@ class Drill extends Phaser.Scene {
         this.door_2 = false
         this.door_1 = false
         this.door_0 = false
+        this.selection4 = 0
+        this.used4 = false
 
         this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z)
         this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
@@ -390,8 +395,9 @@ class Drill extends Phaser.Scene {
         this.doorOut = this.physics.add.sprite(224, 504, "doorOut").setDepth(1)
 
         // > ui 
-        this.HeyListen_1 = this.physics.add.sprite(264, 400, "Hey").setDepth(10).setAlpha(0)
+        this.HeyListen_1 = this.physics.add.sprite(264, 400 - 16, "Hey").setDepth(10).setAlpha(0)
         this.HeyListen_2 = this.physics.add.sprite(552, 496, "Hey").setDepth(10).setAlpha(0)
+        this.HeyListen_3 = this.physics.add.sprite(384, 184, "Hey").setDepth(10).setAlpha(0)
         this.drill_state = this.physics.add.sprite(408, 460, "fuelA").setDepth(10).setAlpha(0)
         this.UI_1 = this.physics.add.sprite(264, 334, "Upgrade_Drill").setDepth(10).setAlpha(0)
         this.caveLayer = this.physics.add.sprite(520, 488, "layerMeter").setDepth(4).setAlpha(0)
@@ -403,6 +409,7 @@ class Drill extends Phaser.Scene {
         this.Upgrade_Drill = this.physics.add.sprite(264, 384).setSize(46, 32);
         this.Drill_bore = this.physics.add.sprite(408, 504).setSize(100, 150);
         this.CaveSelector = this.physics.add.sprite(568 - 16, 496, "selector");
+        this.gadgetSelect = this.physics.add.sprite(384, 184, "gadgetStation");
 
 
         // ===== players ======
@@ -414,6 +421,7 @@ class Drill extends Phaser.Scene {
             this.plateformeCOL1 = this.physics.add.collider(this.player1, this.plateforme);
             this.craftA = this.physics.add.overlap(this.player1, this.Upgrade_Drill, this.upgradeA1, null, this)
             this.physics.add.overlap(this.player1, this.CaveSelector, this.nexLevel, null, this)
+            this.physics.add.overlap(this.player1, this.gadgetSelect, this.upgradeB1, null, this)
             this.persoA_state = 1
 
         }
@@ -425,9 +433,10 @@ class Drill extends Phaser.Scene {
             this.plateformeCOL2 = this.physics.add.collider(this.player2, this.plateforme);
             this.craftB = this.physics.add.overlap(this.player2, this.Upgrade_Drill, this.upgradeA2, null, this)
             this.physics.add.overlap(this.player2, this.CaveSelector, this.nexLevel, null, this)
+            this.physics.add.overlap(this.player2, this.gadgetSelect, this.upgradeB1, null, this)
             this.persoB_state = 1
 
-            if(this.pvJ2 = null){this.pvJ2 = 99}
+            if (this.pvJ2 = null) { this.pvJ2 = 99 }
         }
         if (this.player3READY) {
             this.player3 = this.physics.add.sprite(280, 500, 'persoC');
@@ -437,9 +446,10 @@ class Drill extends Phaser.Scene {
             this.plateformeCOL3 = this.physics.add.collider(this.player3, this.plateforme);
             this.craftC = this.physics.add.overlap(this.player3, this.Upgrade_Drill, this.upgradeA3, null, this)
             this.physics.add.overlap(this.player3, this.CaveSelector, this.nexLevel, null, this)
+            this.physics.add.overlap(this.player3, this.gadgetSelect, this.upgradeB1, null, this)
             this.persoC_state = 1
 
-            if(this.pvJ3 = null){this.pvJ3 = 99}
+            if (this.pvJ3 = null) { this.pvJ3 = 99 }
         }
         if (this.player4READY) {
             this.player4 = this.physics.add.sprite(280, 500, 'persoD');
@@ -449,9 +459,10 @@ class Drill extends Phaser.Scene {
             this.plateformeCOL4 = this.physics.add.collider(this.player4, this.plateforme);
             this.craftD = this.physics.add.overlap(this.player4, this.Upgrade_Drill, this.upgradeA4, null, this)
             this.physics.add.overlap(this.player4, this.CaveSelector, this.nexLevel, null, this)
+            this.physics.add.overlap(this.player4, this.gadgetSelect, this.upgradeB1, null, this)
             this.persoD_state = 1
 
-            if(this.pvJ4 = null){this.pvJ4 = 99}
+            if (this.pvJ4 = null) { this.pvJ4 = 99 }
         }
 
         // ===== COllIDER =====
@@ -468,6 +479,7 @@ class Drill extends Phaser.Scene {
     update() {
         this.HeyListen_1.anims.play('HeyListen', true);
         this.HeyListen_2.anims.play('HeyListen', true);
+        this.HeyListen_3.anims.play('HeyListen', true);
         this.CaveSelector.anims.play("pshit", true)
         //====== DEBUG ======
         if (this.__state || this.__debug) {
@@ -742,7 +754,7 @@ class Drill extends Phaser.Scene {
             this.doorOut.setFrame(0)
         }
 
-        if (this.physics.overlap(this.players, this.CaveSelector) && this.used3 == false && this.selection4 ==0) {
+        if (this.physics.overlap(this.players, this.CaveSelector) && this.used3 == false && this.selection4 == 0) {
             this.tweens.add({
                 targets: this.HeyListen_2,
                 alpha: 1,
@@ -753,6 +765,24 @@ class Drill extends Phaser.Scene {
         } else {
             this.tweens.add({
                 targets: this.HeyListen_2,
+                alpha: 0,
+                duration: 100,
+                ease: 'Linear',
+                repeat: 0
+            });
+        }
+
+        if (this.physics.overlap(this.players, this.gadgetSelect) && this.used4 == false) {
+            this.tweens.add({
+                targets: this.HeyListen_3,
+                alpha: 1,
+                duration: 100,
+                ease: 'Linear',
+                repeat: 0
+            });
+        } else {
+            this.tweens.add({
+                targets: this.HeyListen_3,
                 alpha: 0,
                 duration: 100,
                 ease: 'Linear',
@@ -1223,6 +1253,26 @@ class Drill extends Phaser.Scene {
                 });
             }
 
+        }
+    }
+
+    upgradeB1(player) {
+        if (player == this.player1 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+            this.used4 = true
+            this.persoA_state = 3
+            player.setVelocityX(0)
+
+            if (Phaser.Input.Keyboard.JustDown(this.keyD) && this.selection2 == 0) {
+                this.selection2(this.selection2 = 1)
+            }
+            if (Phaser.Input.Keyboard.JustDown(this.keyQ) && this.selection2 == 1) {
+                this.selection2(this.selection2 = 0)
+            }
+
+            if (Phaser.Input.Keyboard.JustDown(this.keyA)) {
+                this.used4 = false
+                this.persoA_state = 1
+            }
         }
     }
 
