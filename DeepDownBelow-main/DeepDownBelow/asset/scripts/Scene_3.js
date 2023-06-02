@@ -7,6 +7,7 @@ class Caves extends Phaser.Scene {
     init(data) {
         // ===== DRILL SAVE =====
         this.layers = data.layers
+        this.layer = data.layer
 
         this.playerAMOUNT = data.playerAMOUNT
         this.player1READY = data.player1READY
@@ -14,7 +15,7 @@ class Caves extends Phaser.Scene {
         this.player3READY = data.player3READY
         this.player4READY = data.player4READY
 
-        this.gadgetSelected1 = /*data.gadgetSelected1*/ 2
+        this.gadgetSelected1 = data.gadgetSelected1
         this.gadgetSelected2 = data.gadgetSelected2
         this.gadgetSelected3 = data.gadgetSelected3
         this.gadgetSelected4 = data.gadgetSelected4
@@ -52,7 +53,7 @@ class Caves extends Phaser.Scene {
         this.drill_Speed = data.drill_Speed
         this.drill_Yield = data.drill_Yield
 
-        this.lampLevel = /*data.lampLevel*/ 1 /// 0/3
+        this.lampLevel = data.lampLevel /// 0/3
         this.scafoldingLevel = data.scafoldingLevel // 0/3
 
         //Map
@@ -71,6 +72,7 @@ class Caves extends Phaser.Scene {
 
     preload() {
         console.log("===== SCENE 3 =====")
+        console.log(this.layer)
         // ====== SPRITE ======
 
         this.load.spritesheet("persoA", "../sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
@@ -921,7 +923,7 @@ class Caves extends Phaser.Scene {
             console.log("states : \n J1 :", this.persoA_state, "\n J2 :", this.persoB_state, "\n J3 :", this.persoC_state, "\n J4 :", this.persoD_state)
         }
         if (this.__inv || this.__debug) {
-            //console.log("J1 :\n inv ID: ",this.Inventory1_ID,"\n inv Ammount: ",this.Inventory1_Amount)
+            console.log("J1 :\n inv ID: ", this.Inventory1_ID, "\n inv Ammount: ", this.Inventory1_Amount)
         }
         if (this.keyB.isDown) { this.player1.body.x = -40 + 16 * 200 }
 
@@ -1089,22 +1091,33 @@ class Caves extends Phaser.Scene {
 
             }
             else if (this.persoB_state == 1) {  // "normal" state
-                this.move(this.keyO, this.keyL, this.keyK, this.keyM, this.player2, 150)
+                if (this.biome == 6 || this.biome == 7 || this.biome == 8) {
+                    this.move(this.keyO, this.keyL, this.keyK, this.keyM, this.player2, 100)
+                    if (this.keyO.isDown && this.keyI.isUp) {
+                        this.gravityB = -70
+                    }
+                    if (this.player2.body.blocked.down) { this.gravityB = 30 }
+                    else {
+                        this.player2.setVelocityY(this.gravityB)
+                        if (this.gravityB < 50) { this.gravityB += 5 }
+                    }
+                } else {
+                    this.move(this.keyO, this.keyL, this.keyK, this.keyM, this.player2, 150)
+                    if (this.keyO.isDown && this.player2.body.blocked.down && this.keyI.isUp) {
+                        this.gravityB = -200
+                    }
+                    else if (this.player2.body.blocked.down) { this.gravityB = 30 }
+                    else {
+                        this.player2.setVelocityY(this.gravityB)
+                        if (this.gravityB < 500) { this.gravityB += 20 }
+                    }
 
-                //vertical
-                if (this.keyO.isDown && this.player2.body.blocked.down && this.keyI.isUp) {
-                    this.gravityB = -200
                 }
-                else if (this.player2.body.blocked.down) { this.gravityB = 30 }
-                else {
-                    this.player2.setVelocityY(this.gravityB)
-                    if (this.gravityB < 500) { this.gravityB += 20 }
-                }
+
                 if (Phaser.Input.Keyboard.JustDown(this.keyP)) {
                     this.gloomJ2 = this.placeGadget(this.gadgetSelected2, this.player2, this.gloomJ2)
                     this.afk2 = 0
                 }
-
             }
 
             else if (this.persoB_state == 2) {  // ladder state
@@ -1140,7 +1153,7 @@ class Caves extends Phaser.Scene {
 
             // - - - drill 2 - - - 
             this.moveDrill(this.LRb, this.player2, this.keyO, this.keyL, this.keyI, this.dridrill2)
-            if (this.keyI.isDown) { this.drillingB.active = true } else { this.drillingB.active = false }
+            if (this.keyI.isDown) { this.drillingB.active = true; this.attackB.active = true } else { this.drillingB.active = false; this.attackB.active = false }
 
             // - - - inventory - - - 
             this.stockB.body.x = this.player2.body.x; this.stockB.body.x = this.player2.body.x
@@ -1157,7 +1170,7 @@ class Caves extends Phaser.Scene {
                 if (this.Inventory2_Amount == 2) { this.storageB = 2 }
                 if (this.Inventory2_Amount == 3) { this.storageB = 3 }
             }
-            if (this.Inventory1_ID == 3) {
+            if (this.Inventory2_ID == 3) {
                 if (this.Inventory2_Amount == 1) { this.storageB = 7 }
                 if (this.Inventory2_Amount == 2) { this.storageB = 8 }
                 if (this.Inventory2_Amount == 3) { this.storageB = 9 }
@@ -1165,13 +1178,11 @@ class Caves extends Phaser.Scene {
             if (!this.LRb) { this.stockB.setFrame(this.storageB); this.stockB.body.x = this.player2.body.x - 8; this.stockB.body.y = this.player2.body.y - 8 }
             else { this.stockB.setFrame(this.storageB + 10); this.stockB.body.x = this.player2.body.x + 8; this.stockB.body.y = this.player2.body.y - 8 }
 
-
-
             // - - - UI - - - 
             this.vieJ2.body.x = this.player2.body.x - 10; this.vieJ2.body.y = this.player2.body.y + 24;
             this.jauneJ2.body.x = this.player2.body.x - 10; this.jauneJ2.body.y = this.player2.body.y + 18;
 
-            this.vieJ2.setFrame(this.pvJ2)
+            this.vieJ2.setFrame(this.player2.pv)
             this.jauneJ2.setFrame(this.gloomJ2);
 
             if (this.hurt2 < 20) {
@@ -1735,12 +1746,10 @@ class Caves extends Phaser.Scene {
     killing(drill, foe) {
         if (foe.HP > 0) {
             foe.HP -= 1
-            this.attackA.active = false
             foe.freez = true
 
             this.time.addEvent({ // invicibility frame
                 delay: 300, callback: () => {
-                    this.attackA.active = true
                     foe.freez = false
                 },
             })
@@ -1900,6 +1909,7 @@ class Caves extends Phaser.Scene {
     toDrill() {
         this.scene.start("drill", {
             layers: this.layers,
+            layer : this.layer,
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,
             player2READY: this.player2READY,
@@ -1935,7 +1945,7 @@ class Caves extends Phaser.Scene {
             pvJ4: this.pvJ4,
             drill_Speed: this.drill_Speed,
             drill_Yield: this.drill_Yield,
-            lampLevel: this.lampLevel, // 0/3
+            lampLevel: this.lampLevel -1, // 0/3
             scafoldingLevel: this.scafoldingLevel,  // 0/3
         });
     }

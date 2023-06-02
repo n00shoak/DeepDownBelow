@@ -6,6 +6,8 @@ class Drill extends Phaser.Scene {
 
     init(data) {
         // ===== DRILL SAVE =====
+        this.layer = data.layer
+
         this.playerAMOUNT = data.playerAMOUNT
         this.player1READY = data.player1READY
         this.player2READY = data.player2READY
@@ -55,12 +57,13 @@ class Drill extends Phaser.Scene {
 
         this.layers = data.layers
 
+        this.fuel = data.fuel
+
     }
 
     preload() {
         // ====== SPRITE ======
         console.log("===== SCENE 2 =====")
-
         this.load.spritesheet("persoA", "/asset/sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("persoB", "/asset/sprites/characterB.png", { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet("persoC", "/asset/sprites/characterC.png", { frameWidth: 32, frameHeight: 32 });
@@ -77,7 +80,7 @@ class Drill extends Phaser.Scene {
         this.load.spritesheet("caveSelect", "/asset/sprites/mapSprite/cavesSelect.png", { frameWidth: 48, frameHeight: 32 });
         this.load.spritesheet("consumption", "/asset/sprites/mapSprite/consumption.png", { frameWidth: 32, frameHeight: 16 });
         this.load.spritesheet("layerMeter", "/asset/sprites/mapSprite/layerMeter.png", { frameWidth: 16, frameHeight: 48 });
-        this.load.spritesheet("gadgetUpgrade", "/asset/sprites/mapSprite/gadgetUgrade.png", { frameWidth: 16, frameHeight: 48 });
+        this.load.spritesheet("gadgetUpgrade", "/asset/sprites/mapSprite/gadgetUpgrade.png", { frameWidth: 16 * 5, frameHeight: 48 });
 
 
         this.load.spritesheet("Hey", "/asset/sprites/UI/interactible.png", { frameWidth: 16, frameHeight: 32 });
@@ -180,8 +183,14 @@ class Drill extends Phaser.Scene {
     create() {
         this.selection3 = 0;
         this.selection4 == 0;
-        this.layer = 0;
+
         this.nextCavesIs = 0
+        if (this.layer == null) { this.layer = 0; }
+        if (this.drill_Speed == null) { this.drill_Speed = 0 }
+        if (this.drill_Yield == null) { this.drill_Yield = 0 }
+        if (this.lampLevel == null) { this.lampLevel = -1 }
+        if (this.scafoldingLevel == null) { this.scafoldingLevel = 0 }
+        if(this.fuel == null){this.fuel = 10}
 
         // center the game screen
         this.scale.pageAlignHorizontally = true;
@@ -404,6 +413,7 @@ class Drill extends Phaser.Scene {
         this.consumption = this.physics.add.sprite(552, 478, "consumption").setDepth(4).setAlpha(0)
         this.caveSelect = this.physics.add.sprite(551, 492, "caveSelect").setDepth(3).setAlpha(0)
         this._caves = this.physics.add.sprite(551, 492, "caveSelect").setDepth(2).setAlpha(0).setFrame(3)
+        this.gadgetSelectUI = this.physics.add.sprite(384, 184 - 32, "gadgetUpgrade").setDepth(10).setAlpha(0)
 
         // > crafting table 
         this.Upgrade_Drill = this.physics.add.sprite(264, 384).setSize(46, 32);
@@ -749,6 +759,7 @@ class Drill extends Phaser.Scene {
                 repeat: 0
             });
         }
+        this.drill_state.setFrame(this.fuel)
 
         if (!this.physics.overlap(this.players, this.doorOut)) {
             this.door_0 = false; this.door_1 = false; this.door_2 = false;
@@ -1258,27 +1269,115 @@ class Drill extends Phaser.Scene {
     }
 
     upgradeB1(player) {
-        if (player == this.player1 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
-            this.used4 = true
-            this.persoA_state = 3
-            player.setVelocityX(0)
-
-            if (Phaser.Input.Keyboard.JustDown(this.keyD) && this.selection2 == 0) {
-                this.selection2(this.selection2 = 1)
+        if (player == this.player1) {
+            if (this.used4 == false && this.keyE.isDown) {
+                this.used4 = true
+                this.persoA_state = 3
+                player.setVelocityX(0)
             }
-            if (Phaser.Input.Keyboard.JustDown(this.keyQ) && this.selection2 == 1) {
-                this.selection2(this.selection2 = 0)
-            }
+            if (this.used4 == true) {
+                this.tweens.add({
+                    targets: this.gadgetSelectUI,
+                    alpha: 1,
+                    duration: 300,
+                    ease: 'Linear',
+                    repeat: 0
+                });
+                if (this.keyD.isDown && this.selection2 == 0) {
+                    this.selection2 = 1;
+                }
+                else if (this.keyQ.isDown && this.selection2 == 1) {
+                    this.selection2 = 0;
+                }
 
-            if (Phaser.Input.Keyboard.JustDown(this.keyA)) {
-                this.used4 = false
-                this.persoA_state = 1
+                if (this.keyA.isDown) {
+                    this.used4 = false
+                    this.persoA_state = 1
+
+                    this.tweens.add({
+                        targets: this.gadgetSelectUI,
+                        alpha: 0,
+                        duration: 300,
+                        ease: 'Linear',
+                        repeat: 0
+                    });
+
+                    if (this.selection2 == 0) { this.gadgetSelected1 = 2 }
+                    else { this.gadgetSelected1 = 1 }
+                }
+                if (this.selection2 == 0) {
+                    if (Phaser.Input.Keyboard.JustDown(this.keyE) && this.lampLevel < 2) {
+                        this.lampLevel += 1
+                    }
+                    console.log("lamp level :", this.lampLevel)
+                    this.gadgetSelectUI.setFrame(this.lampLevel + 3)
+
+                } else {
+                    if (Phaser.Input.Keyboard.JustDown(this.keyE) && this.scafoldingLevel < 2) {
+                        this.scafoldingLevel += 1
+                    }
+                    console.log("scaf level :", this.scafoldingLevel)
+                    this.gadgetSelectUI.setFrame(this.scafoldingLevel)
+                }
+            }
+        }
+
+        if (player == this.player2) {
+            if (this.used4 == false && this.keyP.isDown) {
+                this.used4 = true
+                this.persoB_state = 3
+                player.setVelocityX(0)
+            }
+            if (this.used4 == true) {
+                this.tweens.add({
+                    targets: this.gadgetSelectUI,
+                    alpha: 1,
+                    duration: 300,
+                    ease: 'Linear',
+                    repeat: 0
+                });
+                if (this.keyM.isDown && this.selection2 == 0) {
+                    this.selection2 = 1;
+                }
+                else if (this.keyK.isDown && this.selection2 == 1) {
+                    this.selection2 = 0;
+                }
+
+                if (this.keyI.isDown) {
+                    this.used4 = false
+                    this.persoB_state = 1
+
+                    this.tweens.add({
+                        targets: this.gadgetSelectUI,
+                        alpha: 0,
+                        duration: 300,
+                        ease: 'Linear',
+                        repeat: 0
+                    });
+
+                    if (this.selection2 == 0) { this.gadgetSelected2 = 2 }
+                    else { this.gadgetSelected2 = 1 }
+                }
+                if (this.selection2 == 0) {
+                    if (Phaser.Input.Keyboard.JustDown(this.keyP) && this.lampLevel < 2) {
+                        this.lampLevel += 1
+                    }
+                    console.log("lamp level :", this.lampLevel)
+                    this.gadgetSelectUI.setFrame(this.lampLevel + 3)
+
+                } else {
+                    if (Phaser.Input.Keyboard.JustDown(this.keyP) && this.scafoldingLevel < 2) {
+                        this.scafoldingLevel += 1
+                    }
+                    console.log("scaf level :", this.scafoldingLevel)
+                    this.gadgetSelectUI.setFrame(this.scafoldingLevel)
+                }
             }
         }
     }
 
     nexLevel(player) {
-        console.log(this.nextCavesIs)
+        this.caveLayer.setFrame(this.layer)
         //check who use the device
         if (player == this.player1 && this.nextCavesIs == 0) {
             if (this.keyE.isDown) {
@@ -1299,7 +1398,6 @@ class Drill extends Phaser.Scene {
 
                     //show consumption
                     this.consumption.setFrame(Math.round(this.selection3 / 4) + Math.round(this.layer / 3))
-                    //console.log(Math.round(this.selection3 / 4) + Math.round(this.layer / 3))
                 }
                 else { this._caves.setFrame(12); this.consumption.setFrame(3) }
 
@@ -1497,6 +1595,7 @@ class Drill extends Phaser.Scene {
     toCave() {
         this.scene.start("caves", {
             layers: this.layers,
+            layer: this.layer,
 
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,
@@ -1554,9 +1653,7 @@ class Drill extends Phaser.Scene {
 
             ore_Rarity: this.nextCavesIs[6],
             ore_rgb: this.nextCavesIs
-            //ore_red 
-            //ore_blue 
-            //ore_green 
+
         });
     }
 }
