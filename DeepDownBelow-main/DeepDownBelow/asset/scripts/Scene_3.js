@@ -9,6 +9,8 @@ class Caves extends Phaser.Scene {
         this.layers = data.layers
         this.layer = data.layer
 
+        this.fuel = data.fuel
+
         this.playerAMOUNT = data.playerAMOUNT
         this.player1READY = data.player1READY
         this.player2READY = data.player2READY
@@ -1909,7 +1911,8 @@ class Caves extends Phaser.Scene {
     toDrill() {
         this.scene.start("drill", {
             layers: this.layers,
-            layer : this.layer,
+            layer: this.layer,
+            fuel: this.fuel,
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,
             player2READY: this.player2READY,
@@ -1945,8 +1948,9 @@ class Caves extends Phaser.Scene {
             pvJ4: this.pvJ4,
             drill_Speed: this.drill_Speed,
             drill_Yield: this.drill_Yield,
-            lampLevel: this.lampLevel -1, // 0/3
+            lampLevel: this.lampLevel - 1, // 0/3
             scafoldingLevel: this.scafoldingLevel,  // 0/3
+
         });
     }
     pickUpA1(player, ore) {

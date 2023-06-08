@@ -190,7 +190,7 @@ class Drill extends Phaser.Scene {
         if (this.drill_Yield == null) { this.drill_Yield = 0 }
         if (this.lampLevel == null) { this.lampLevel = -1 }
         if (this.scafoldingLevel == null) { this.scafoldingLevel = 0 }
-        if(this.fuel == null){this.fuel = 10}
+        if (this.fuel == null) { this.fuel = 10 }
 
         // center the game screen
         this.scale.pageAlignHorizontally = true;
@@ -1397,7 +1397,9 @@ class Drill extends Phaser.Scene {
                     this._caves.setFrame(this.selection4[0] + 3)
 
                     //show consumption
-                    this.consumption.setFrame(Math.round(this.selection3 / 4) + Math.round(this.layer / 3))
+                    var price = Math.round(this.selection3 / 4) + Math.round(this.layer / 3)
+                    this.consumption.setFrame(price)
+
                 }
                 else { this._caves.setFrame(12); this.consumption.setFrame(3) }
 
@@ -1413,6 +1415,11 @@ class Drill extends Phaser.Scene {
                                 this._caves.body.y -= 4
                                 this._caves.body.x -= 6
                                 this._caves.setScale(1.9, 1.9).setDepth(1)
+
+                                if (price == 0) { this.fuel -= 1 }
+                                if (price == 1) { this.fuel -= 3 }
+                                if (price == 2) { this.fuel -= 4 }
+                                if (price == 3) { this.fuel -= 5 }
                             }
                         }
                         if (Phaser.Input.Keyboard.JustDown(this.keyA)) {//cancel
@@ -1596,6 +1603,8 @@ class Drill extends Phaser.Scene {
         this.scene.start("caves", {
             layers: this.layers,
             layer: this.layer,
+
+            fuel: this.fuel,
 
             playerAMOUNT: this.playerAMOUNT,
             player1READY: this.player1READY,
