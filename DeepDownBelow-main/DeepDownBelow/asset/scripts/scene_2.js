@@ -64,34 +64,34 @@ class Drill extends Phaser.Scene {
     preload() {
         // ====== SPRITE ======
         console.log("===== SCENE 2 =====")
-        this.load.spritesheet("persoA", "/asset/sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet("persoB", "/asset/sprites/characterB.png", { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet("persoC", "/asset/sprites/characterC.png", { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet("persoD", "/asset/sprites/characterD.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoA", "../sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoB", "../sprites/characterB.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoC", "../sprites/characterC.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoD", "../sprites/characterD.png", { frameWidth: 32, frameHeight: 32 });
 
-        this.load.spritesheet("doorOut", "/asset/sprites/mapSprite/doorOut.png", { frameWidth: 32, frameHeight: 48 });
-        this.load.spritesheet("porteDrillA", "/asset/sprites/mapSprite/drillDoorA.png", { frameWidth: 32, frameHeight: 48 });
-        this.load.spritesheet("porteDrillB", "/asset/sprites/mapSprite/drillDoorB.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("doorOut", "../sprites/mapSprite/doorOut.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("porteDrillA", "../sprites/mapSprite/drillDoorA.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("porteDrillB", "../sprites/mapSprite/drillDoorB.png", { frameWidth: 32, frameHeight: 48 });
 
-        this.load.spritesheet("ready", "/asset/sprites/startingTXT.png", { frameWidth: 256, frameHeight: 96 });
-        this.load.spritesheet("Upgrade_Drill", "/asset/sprites/ui_Upgrade_Drill.png", { frameWidth: 80, frameHeight: 48 });
-        this.load.spritesheet("gadgetStation", "/asset/sprites/mapSprite/gadgetStation.png", { frameWidth: 32, frameHeight: 48 });
-        this.load.spritesheet("selector", "/asset/sprites/mapSprite/caveSelector.png", { frameWidth: 80, frameHeight: 64 });
-        this.load.spritesheet("caveSelect", "/asset/sprites/mapSprite/cavesSelect.png", { frameWidth: 48, frameHeight: 32 });
-        this.load.spritesheet("consumption", "/asset/sprites/mapSprite/consumption.png", { frameWidth: 32, frameHeight: 16 });
-        this.load.spritesheet("layerMeter", "/asset/sprites/mapSprite/layerMeter.png", { frameWidth: 16, frameHeight: 48 });
-        this.load.spritesheet("gadgetUpgrade", "/asset/sprites/mapSprite/gadgetUpgrade.png", { frameWidth: 16 * 5, frameHeight: 48 });
+        this.load.spritesheet("ready", "../sprites/startingTXT.png", { frameWidth: 256, frameHeight: 96 });
+        this.load.spritesheet("Upgrade_Drill", "../sprites/ui_Upgrade_Drill.png", { frameWidth: 80, frameHeight: 48 });
+        this.load.spritesheet("gadgetStation", "../sprites/mapSprite/gadgetStation.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("selector", "../sprites/mapSprite/caveSelector.png", { frameWidth: 80, frameHeight: 64 });
+        this.load.spritesheet("caveSelect", "../sprites/mapSprite/cavesSelect.png", { frameWidth: 48, frameHeight: 32 });
+        this.load.spritesheet("consumption", "../sprites/mapSprite/consumption.png", { frameWidth: 32, frameHeight: 16 });
+        this.load.spritesheet("layerMeter", "../sprites/mapSprite/layerMeter.png", { frameWidth: 16, frameHeight: 48 });
+        this.load.spritesheet("gadgetUpgrade", "../sprites/mapSprite/gadgetUpgrade.png", { frameWidth: 16 * 5, frameHeight: 48 });
 
 
-        this.load.spritesheet("Hey", "/asset/sprites/UI/interactible.png", { frameWidth: 16, frameHeight: 32 });
-        this.load.spritesheet("fuelA", "/asset/sprites/UI/drillUsage.png", { frameWidth: 48, frameHeight: 32 });
+        this.load.spritesheet("Hey", "../sprites/UI/interactible.png", { frameWidth: 16, frameHeight: 32 });
+        this.load.spritesheet("fuelA", "../sprites/UI/drillUsage.png", { frameWidth: 48, frameHeight: 32 });
 
         // - - - add tilset - - -
-        this.load.image("object_Tileset", "/asset/sprites/tileSet/decorTileset.png");
-        this.load.image("tileset_lobby", "/asset/sprites/tileSet/tileSet.png");
+        this.load.image("object_Tileset", "../sprites/tileSet/decorTileset.png");
+        this.load.image("tileset_lobby", "../sprites/tileSet/tileSet.png");
 
         // - - - add maps - - - 
-        this.load.tilemapTiledJSON("drill", "/asset/maps/drill.json");
+        this.load.tilemapTiledJSON("drill", "../maps/drill.json");
 
         // - - - Groups - - - 
         this.players = this.physics.add.group({

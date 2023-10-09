@@ -27,25 +27,25 @@ class lobby extends Phaser.Scene {
         // ====== SPRITE ======
         console.log("===== SCENE 1 =====")
 
-        this.load.spritesheet("persoA", "/asset/sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet("persoB", "/asset/sprites/characterB.png", { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet("persoC", "/asset/sprites/characterC.png", { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet("persoD", "/asset/sprites/characterD.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoA", "../sprites/characterA.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoB", "../sprites/characterB.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoC", "../sprites/characterC.png", { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet("persoD", "../sprites/characterD.png", { frameWidth: 32, frameHeight: 32 });
 
-        this.load.spritesheet("porteA", "/asset/sprites/mapSprite/spawnDoor.png", { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet("porteB", "/asset/sprites/mapSprite/spawnDoorB.png", { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet("porteC", "/asset/sprites/mapSprite/spawnDoorC.png", { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet("porteD", "/asset/sprites/mapSprite/spawnDoorD.png", { frameWidth: 32, frameHeight: 64 });
-        this.load.spritesheet("porteDrillA", "/asset/sprites/mapSprite/drillDoorA.png", { frameWidth: 32, frameHeight: 48 });
-        this.load.spritesheet("porteDrillB", "/asset/sprites/mapSprite/drillDoorB.png", { frameWidth: 32, frameHeight: 48 });
-        this.load.spritesheet("ready", "/asset/sprites/startingTXT.png", { frameWidth: 256, frameHeight: 96 });
+        this.load.spritesheet("porteA", "../sprites/mapSprite/spawnDoor.png", { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet("porteB", "../sprites/mapSprite/spawnDoorB.png", { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet("porteC", "../sprites/mapSprite/spawnDoorC.png", { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet("porteD", "../sprites/mapSprite/spawnDoorD.png", { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet("porteDrillA", "../sprites/mapSprite/drillDoorA.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("porteDrillB", "../sprites/mapSprite/drillDoorB.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("ready", "../sprites/startingTXT.png", { frameWidth: 256, frameHeight: 96 });
 
         // - - - add tilset - - -
-        this.load.image("object_Tileset", "/asset/sprites/tileSet/decorTileset.png");
-        this.load.image("tileset_lobby", "/asset/sprites/tileSet/tileSet.png");
+        this.load.image("object_Tileset", "../sprites/tileSet/decorTileset.png");
+        this.load.image("tileset_lobby", "../sprites/tileSet/tileSet.png");
 
         // - - - add maps - - - 
-        this.load.tilemapTiledJSON("lobby", "/asset/maps/lobby2.json");
+        this.load.tilemapTiledJSON("lobby", "../maps/lobby2.json");
 
         // ====== VAR ======
 
